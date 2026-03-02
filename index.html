@@ -1,230 +1,318 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0f1117">
-<title>Daily Routine Planner</title>
-<link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg:#0f1117; --surf:#1a1d27; --surf2:#22263a;
-  --acc:#f0a500; --red:#e05c5c; --text:#e8eaf0;
-  --muted:#7c82a0; --bdr:#2e3350; --r:14px;
-  --hdr:58px; --nav:60px;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;display:flex;flex-direction:column}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-狠translucent">
+    <meta name="theme-color" content="#0f1117">
+    <title>Routine Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f1117; --card: #1a1d27; --accent: #f0a500;
+            --text: #ffffff; --muted: #8e8e93; --red: #ff453a;
+            --green: #34c759; --safe-top: env(safe-area-inset-top);
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); 
+            color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+        }
 
-header{height:var(--hdr);flex-shrink:0;background:var(--surf);border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:relative;z-index:50;}
-.hdr-left h1{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--acc)}
-.clock{font-size:0.78rem;font-weight:600;color:var(--acc);background:rgba(240,165,0,.12);padding:4px 10px;border-radius:20px;border:1px solid rgba(240,165,0,.25)}
-.hbtn{padding:7px 13px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;}
-.hbtn-out{background:transparent;border:1px solid var(--bdr);color:var(--text)}
+        /* HEADER */
+        header {
+            padding: calc(var(--safe-top) + 15px) 20px 15px;
+            background: var(--card); border-bottom: 1px solid #2c2c2e;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        header h1 { margin: 0; font-size: 1.2rem; color: var(--accent); }
+        .clock { font-weight: 700; font-size: 1rem; color: var(--accent); }
 
-.tab-bar{height:var(--nav);flex-shrink:0;background:var(--surf);border-top:1px solid var(--bdr);display:flex;order:99;}
-.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.65rem;font-weight:500;}
-.tab-btn.active{color:var(--acc)}
+        /* TAB SYSTEM */
+        .content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-.content{flex:1;overflow:hidden;display:flex;flex-direction:column}
-.page{display:none;flex:1;overflow-y:auto;padding:16px}
-.page.active{display:flex;flex-direction:column}
+        /* CARDS & INPUTS */
+        .card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 16px; border: 1px solid #2c2c2e; }
+        label { display: block; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
+        input[type="time"], input[type="text"] {
+            width: 100%; background: #000; border: 1px solid #3a3a3c; color: #fff;
+            padding: 12px; border-radius: 10px; font-size: 1rem; margin-bottom: 15px;
+        }
 
-.sec-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--acc);margin-bottom:14px}
-.card{background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;margin-bottom:16px}
-.time-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.time-group{display:flex;flex-direction:column;gap:5px}
-.time-group label{font-size:0.7rem;color:var(--muted);text-transform:uppercase}
-.time-group input{background:var(--bg);border:1px solid var(--bdr);border-radius:8px;color:var(--text);padding:10px;width:100%}
+        /* DAY SELECTOR (WEEKLY FEATURE) */
+        .day-grid { display: flex; justify-content: space-between; gap: 5px; margin-bottom: 15px; }
+        .day-box { flex: 1; position: relative; }
+        .day-box input { position: absolute; opacity: 0; width: 0; height: 0; }
+        .day-box label { 
+            display: block; background: #2c2c2e; text-align: center; padding: 10px 0;
+            border-radius: 8px; font-size: 0.7rem; color: #fff; transition: 0.2s;
+        }
+        .day-box input:checked + label { background: var(--accent); color: #000; font-weight: 700; }
 
-/* NEW DAY SELECTOR */
-.day-selector {display:flex; justify-content:space-between; margin-bottom:15px; gap:4px}
-.day-check {flex:1; text-align:center;}
-.day-check input {display:none;}
-.day-check label {display:block; padding:8px 0; background:var(--bg); border:1px solid var(--bdr); border-radius:6px; font-size:0.7rem; color:var(--muted); cursor:pointer;}
-.day-check input:checked + label {background:var(--acc); color:#111; border-color:var(--acc); font-weight:700;}
+        /* ACTIVITY CHIPS */
+        .chip-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .chip { 
+            padding: 8px 16px; background: #2c2c2e; border-radius: 20px; font-size: 0.85rem; 
+            border: 1px solid transparent; transition: 0.2s;
+        }
+        .chip.selected { border-color: var(--accent); color: var(--accent); background: rgba(240,165,0,0.1); }
 
-.chip-grid{display:flex;flex-wrap:wrap;gap:6px;}
-.chip{padding:6px 12px;border-radius:20px;border:1px solid var(--bdr);background:var(--bg);color:var(--muted);font-size:0.72rem;}
-.chip.sel{background:var(--acc);color:#111;font-weight:600}
+        /* SLOT ITEMS */
+        .slot { 
+            background: var(--card); border-radius: 15px; padding: 16px; margin-bottom: 12px;
+            border-left: 4px solid transparent; position: relative;
+        }
+        .slot.active-now { 
+            border-left-color: var(--accent); background: linear-gradient(90deg, rgba(240,165,0,0.1) 0%, var(--card) 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .slot-time { font-weight: 700; font-size: 0.9rem; color: var(--accent); }
+        .slot-actions button { background: none; border: none; font-size: 1.1rem; margin-left: 10px; cursor: pointer; }
+        .tag-row { display: flex; flex-wrap: wrap; gap: 5px; }
+        .tag { background: #3a3a3c; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; }
 
-.add-btn{width:100%;margin-top:14px;padding:13px;background:var(--acc);color:#111;border:none;border-radius:10px;font-weight:700;}
+        /* NAV BAR */
+        nav {
+            position: fixed; bottom: 0; width: 100%; height: 70px;
+            background: var(--card); border-top: 1px solid #2c2c2e;
+            display: flex; justify-content: space-around; align-items: center;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .nav-btn { background: none; border: none; color: var(--muted); text-align: center; flex: 1; }
+        .nav-btn.active { color: var(--accent); }
+        .nav-btn span { display: block; font-size: 1.2rem; }
+        .nav-btn small { font-size: 0.65rem; font-weight: 600; }
 
-.slot-item{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;margin-bottom:10px;}
-.slot-item.current{border:2px solid var(--acc); background:rgba(240,165,0,.05)}
-.slot-header{display:flex;justify-content:space-between;margin-bottom:10px}
-.slot-time{font-size:0.82rem;font-weight:600;color:var(--acc)}
-.tag-row{display:flex;flex-wrap:wrap;gap:6px}
-.tag{padding:4px 10px;border-radius:20px;font-size:0.7rem;border:1px solid;display:flex;align-items:center;gap:5px}
-.tag .tdel {cursor:pointer; opacity:0.5}
-
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--surf);border:1px solid var(--acc);padding:10px 20px;border-radius:10px;opacity:0;transition:0.3s;z-index:300;}
-.toast.show{opacity:1}
-
-/* COLORS */
-.c0{background:rgba(240,165,0,.1);color:#f0a500;border-color:#f0a500}
-.c1{background:rgba(224,92,92,.1);color:#e05c5c;border-color:#e05c5c}
-.c2{background:rgba(76,175,125,.1);color:#4caf7d;border-color:#4caf7d}
-</style>
+        .btn-primary { 
+            width: 100%; background: var(--accent); color: #000; border: none; 
+            padding: 15px; border-radius: 12px; font-weight: 700; font-size: 1rem;
+        }
+    </style>
 </head>
 <body>
 
 <header>
-  <div class="hdr-left"><h1>🌙 Routine</h1></div>
-  <div class="clock" id="clock">--:--</div>
-  <button class="hbtn hbtn-out" onclick="switchTab(document.querySelector('[data-page=pg-save]'),'pg-save')">💾 Save</button>
+    <h1>Routine Planner</h1>
+    <div class="clock" id="clock">00:00</div>
 </header>
 
 <div class="content">
-  <div class="page active" id="pg-view">
-    <div class="sec-title">📅 Today's Timetable</div>
-    <div id="slotsList"></div>
-  </div>
-
-  <div class="page" id="pg-add">
-    <div class="sec-title">➕ Add Time Slot</div>
-    <div class="card">
-      <div class="time-row">
-        <div class="time-group"><label>From</label><input type="time" id="startTime" value="06:00"></div>
-        <div class="time-group"><label>To</label><input type="time" id="endTime" value="06:30"></div>
-      </div>
-
-      <div style="font-size:0.7rem; color:var(--muted); margin-bottom:8px; text-transform:uppercase;">Repeat on Days:</div>
-      <div class="day-selector" id="daySelector">
-        <div class="day-check"><input type="checkbox" id="d0" value="0" checked><label for="d0">Sun</label></div>
-        <div class="day-check"><input type="checkbox" id="d1" value="1" checked><label for="d1">Mon</label></div>
-        <div class="day-check"><input type="checkbox" id="d2" value="2" checked><label for="d2">Tue</label></div>
-        <div class="day-check"><input type="checkbox" id="d3" value="3" checked><label for="d3">Wed</label></div>
-        <div class="day-check"><input type="checkbox" id="d4" value="4" checked><label for="d4">Thu</label></div>
-        <div class="day-check"><input type="checkbox" id="d5" value="5" checked><label for="d5">Fri</label></div>
-        <div class="day-check"><input type="checkbox" id="d6" value="6" checked><label for="d6">Sat</label></div>
-      </div>
-
-      <div class="chip-grid" id="cg1"></div>
-      <button class="add-btn" onclick="addSlot()">+ Add to Timetable</button>
+    <div id="view" class="page active">
+        <label id="today-label">Today's Schedule</label>
+        <div id="slot-container"></div>
     </div>
-  </div>
 
-  <div class="page" id="pg-save">
-    <div class="sec-title">💾 Settings</div>
-    <div class="card" onclick="clearAll()" style="border-color:var(--red); color:var(--red); text-align:center;">🗑 Clear All Data</div>
-  </div>
+    <div id="add" class="page">
+        <h2 id="form-title" style="font-size: 1.2rem; margin-bottom: 20px;">Add New Slot</h2>
+        <div class="card">
+            <div style="display: flex; gap: 10px;">
+                <div style="flex: 1;"><label>Start</label><input type="time" id="startTime" value="06:00"></div>
+                <div style="flex: 1;"><label>End</label><input type="time" id="endTime" value="07:00"></div>
+            </div>
+            
+            <label>Repeat Weekly (Default: All)</label>
+            <div class="day-grid">
+                <div class="day-box"><input type="checkbox" id="d0" value="0" checked><label for="d0">S</label></div>
+                <div class="day-box"><input type="checkbox" id="d1" value="1" checked><label for="d1">M</label></div>
+                <div class="day-box"><input type="checkbox" id="d2" value="2" checked><label for="d2">T</label></div>
+                <div class="day-box"><input type="checkbox" id="d3" value="3" checked><label for="d3">W</label></div>
+                <div class="day-box"><input type="checkbox" id="d4" value="4" checked><label for="d4">T</label></div>
+                <div class="day-box"><input type="checkbox" id="d5" value="5" checked><label for="d5">F</label></div>
+                <div class="day-box"><input type="checkbox" id="d6" value="6" checked><label for="d6">S</label></div>
+            </div>
+
+            <label>Activities</label>
+            <div class="chip-grid" id="preset-chips"></div>
+            
+            <label>Reminder</label>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+                <input type="checkbox" id="reminder-toggle" style="width:20px; height:20px;">
+                <span>Notify me when this starts</span>
+            </div>
+
+            <button class="btn-primary" onclick="saveSlot()">Save to Timetable</button>
+            <button id="cancel-edit" style="display:none; width:100%; background:none; color:var(--muted); border:none; margin-top:10px;" onclick="resetForm()">Cancel</button>
+        </div>
+    </div>
 </div>
 
-<nav class="tab-bar">
-  <button class="tab-btn active" data-page="pg-view" onclick="switchTab(this,'pg-view')"><span>📅</span>View</button>
-  <button class="tab-btn" data-page="pg-add" onclick="switchTab(this,'pg-add')"><span>➕</span>Add</button>
-  <button class="tab-btn" data-page="pg-save" onclick="switchTab(this,'pg-save')"><span>⚙️</span>Settings</button>
+<nav>
+    <button class="nav-btn active" onclick="showPage('view', this)"><span>📅</span><small>SCHEDULE</small></button>
+    <button class="nav-btn" onclick="showPage('add', this)"><span>➕</span><small>ADD NEW</small></button>
 </nav>
 
-<div class="toast" id="toast"></div>
-
 <script>
-const PRESETS=["MAKING DINNER","BABY BATHING","DINNER TIME","QUALITY TIME","EXERCISE","BATH TIME","BED TIME"];
-let slots = JSON.parse(localStorage.getItem('rp_slots') || '[]');
-let selectedActs = [];
+    const PRESETS = ["Cooking", "Cleaning", "Exercise", "Work", "Reading", "Kid's Time", "Prayer", "Bedtime"];
+    let slots = JSON.parse(localStorage.getItem('routine_slots')) || [];
+    let selectedActivities = [];
+    let editingId = null;
 
-function switchTab(btn, pid) {
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(pid).classList.add('active');
-  if(pid === 'pg-view') renderView();
-}
+    // INITIALIZE
+    function init() {
+        const chipContainer = document.getElementById('preset-chips');
+        PRESETS.forEach(p => {
+            const div = document.createElement('div');
+            div.className = 'chip';
+            div.innerText = p;
+            div.onclick = () => toggleChip(p, div);
+            chipContainer.appendChild(div);
+        });
+        renderSchedule();
+        updateClock();
+        setInterval(updateClock, 1000);
+    }
 
-function buildChips() {
-  const g = document.getElementById('cg1'); g.innerHTML = '';
-  PRESETS.forEach(act => {
-    const sel = selectedActs.includes(act);
-    const d = document.createElement('div');
-    d.className = 'chip' + (sel ? ' sel' : '');
-    d.textContent = act;
-    d.onclick = () => {
-      if(sel) selectedActs = selectedActs.filter(a=>a!==act);
-      else selectedActs.push(act);
-      buildChips();
-    };
-    g.appendChild(d);
-  });
-}
+    function toggleChip(activity, element) {
+        if (selectedActivities.includes(activity)) {
+            selectedActivities = selectedActivities.filter(a => a !== activity);
+            element.classList.remove('selected');
+        } else {
+            selectedActivities.push(activity);
+            element.classList.add('selected');
+        }
+    }
 
-function addSlot() {
-  const s = document.getElementById('startTime').value;
-  const e = document.getElementById('endTime').value;
-  const days = Array.from(document.querySelectorAll('.day-check input:checked')).map(i=>parseInt(i.value));
+    function showPage(pageId, btn) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        btn.classList.add('active');
+        if(pageId === 'view') renderSchedule();
+    }
 
-  if(!selectedActs.length) return toast("Select an activity");
-  
-  slots.push({ start: s, end: e, activities: [...selectedActs], days: days });
-  slots.sort((a,b) => a.start.localeCompare(b.start));
-  
-  localStorage.setItem('rp_slots', JSON.stringify(slots));
-  selectedActs = [];
-  buildChips();
-  toast("✅ Slot Added!");
-  switchTab(document.querySelector('[data-page=pg-view]'), 'pg-view');
-}
+    function saveSlot() {
+        const start = document.getElementById('startTime').value;
+        const end = document.getElementById('endTime').value;
+        const reminder = document.getElementById('reminder-toggle').checked;
+        const days = Array.from(document.querySelectorAll('.day-box input:checked')).map(i => parseInt(i.value));
 
-function renderView() {
-  const el = document.getElementById('slotsList');
-  const today = new Date().getDay();
-  const now = new Date();
-  const ns = now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+        if (!selectedActivities.length) return alert("Select at least one activity");
 
-  // Filter slots to only show those that apply to "today"
-  const todaysSlots = slots.filter(s => s.days.includes(today));
+        const newSlot = {
+            id: editingId || Date.now(),
+            start, end, days, reminder,
+            activities: [...selectedActivities]
+        };
 
-  if(!todaysSlots.length) {
-    el.innerHTML = '<div style="text-align:center; padding:40px; color:var(--muted)">No tasks for today.</div>';
-    return;
-  }
+        if (editingId) {
+            slots = slots.map(s => s.id === editingId ? newSlot : s);
+        } else {
+            slots.push(newSlot);
+        }
 
-  el.innerHTML = todaysSlots.map((sl, i) => {
-    const cur = sl.start <= ns && ns < sl.end;
-    return `
-      <div class="slot-item ${cur ? 'current' : ''}">
-        <div class="slot-header">
-          <div class="slot-time">${sl.start} - ${sl.end}</div>
-          <button onclick="deleteSlot(${i})" style="background:none; border:none; color:var(--red)">🗑</button>
-        </div>
-        <div class="tag-row">
-          ${sl.activities.map(a => `<div class="tag c${a.length%3}">${a}</div>`).join('')}
-        </div>
-      </div>`;
-  }).join('');
-}
+        slots.sort((a, b) => a.start.localeCompare(b.start));
+        localStorage.setItem('routine_slots', JSON.stringify(slots));
+        resetForm();
+        showPage('view', document.querySelector('.nav-btn'));
+    }
 
-function deleteSlot(i) {
-  slots.splice(i, 1);
-  localStorage.setItem('rp_slots', JSON.stringify(slots));
-  renderView();
-}
+    function resetForm() {
+        editingId = null;
+        selectedActivities = [];
+        document.getElementById('form-title').innerText = "Add New Slot";
+        document.getElementById('cancel-edit').style.display = 'none';
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+        document.querySelectorAll('.day-box input').forEach(i => i.checked = true);
+    }
 
-function clearAll() {
-  if(confirm("Clear all data?")) { localStorage.clear(); location.reload(); }
-}
+    function renderSchedule() {
+        const container = document.getElementById('slot-container');
+        const today = new Date().getDay();
+        const nowStr = new Date().toTimeString().slice(0,5);
+        
+        container.innerHTML = '';
+        const todaysSlots = slots.filter(s => s.days.includes(today));
 
-function toast(m) {
-  const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2000);
-}
+        if (!todaysSlots.length) {
+            container.innerHTML = '<div style="text-align:center; padding:50px; color:var(--muted);">No activities today.</div>';
+            return;
+        }
 
-function startClock() {
-  setInterval(() => {
-    const now = new Date();
-    document.getElementById('clock').textContent = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-    if(now.getSeconds() === 0) renderView();
-  }, 1000);
-}
+        todaysSlots.forEach(s => {
+            const isActive = nowStr >= s.start && nowStr < s.end;
+            const div = document.createElement('div');
+            div.className = `slot ${isActive ? 'active-now' : ''}`;
+            div.innerHTML = `
+                ${isActive ? '<span style="color:var(--accent); font-size:0.7rem; font-weight:800;">● ACTIVE NOW</span>' : ''}
+                <div class="slot-header">
+                    <div class="slot-time">${formatTime(s.start)} - ${formatTime(s.end)}</div>
+                    <div class="slot-actions">
+                        <button onclick="editSlot(${s.id})">✏️</button>
+                        <button onclick="deleteSlot(${s.id})">🗑️</button>
+                    </div>
+                </div>
+                <div class="tag-row">${s.activities.map(a => `<div class="tag">${a}</div>`).join('')}</div>
+                ${s.reminder ? '<div style="font-size:0.6rem; color:var(--muted); margin-top:8px;">🔔 Reminder set</div>' : ''}
+            `;
+            container.appendChild(div);
+        });
+    }
 
-buildChips();
-renderView();
-startClock();
+    function formatTime(t) {
+        const [h, m] = t.split(':');
+        const hh = parseInt(h);
+        return `${hh % 12 || 12}:${m} ${hh >= 12 ? 'PM' : 'AM'}`;
+    }
+
+    function deleteSlot(id) {
+        if(confirm("Delete this slot?")) {
+            slots = slots.filter(s => s.id !== id);
+            localStorage.setItem('routine_slots', JSON.stringify(slots));
+            renderSchedule();
+        }
+    }
+
+    function editSlot(id) {
+        const s = slots.find(item => item.id === id);
+        editingId = id;
+        document.getElementById('startTime').value = s.start;
+        document.getElementById('endTime').value = s.end;
+        document.getElementById('reminder-toggle').checked = s.reminder;
+        document.getElementById('form-title').innerText = "Edit Time Slot";
+        document.getElementById('cancel-edit').style.display = 'block';
+        
+        // Reset and set chips
+        selectedActivities = [...s.activities];
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.classList.toggle('selected', selectedActivities.includes(chip.innerText));
+        });
+
+        // Set days
+        document.querySelectorAll('.day-box input').forEach(input => {
+            input.checked = s.days.includes(parseInt(input.value));
+        });
+
+        showPage('add', document.querySelectorAll('.nav-btn')[1]);
+    }
+
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toTimeString().slice(0, 5);
+        
+        // Basic Logic for Visual "Reminders"
+        const nowStr = now.toTimeString().slice(0,5);
+        slots.forEach(s => {
+            if (s.start === nowStr && s.reminder && now.getSeconds() === 0) {
+                // Check if browser supports notifications
+                if (Notification.permission === "granted") {
+                    new Notification("Activity Starting!", { body: s.activities.join(", ") });
+                } else {
+                    alert("⏰ STARTING: " + s.activities.join(", "));
+                }
+            }
+        });
+    }
+
+    // Ask for notification permission
+    if ("Notification" in window) Notification.requestPermission();
+
+    init();
 </script>
 </body>
 </html>
