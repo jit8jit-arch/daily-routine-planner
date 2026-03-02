@@ -1,0 +1,15 @@
+{
+  "short_name": "Routine",
+  "name": "Daily Routine Planner",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2997/2997300.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "background_color": "#0f1117",
+  "display": "standalone",
+  "theme_color": "#0f1117"
+}
