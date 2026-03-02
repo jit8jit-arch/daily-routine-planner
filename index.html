@@ -21,818 +21,208 @@
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;display:flex;flex-direction:column}
 
-/* ── HEADER ── */
-header{
-  height:var(--hdr);flex-shrink:0;
-  background:var(--surf);border-bottom:1px solid var(--bdr);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 16px;position:relative;z-index:50;
-}
-.hdr-left{display:flex;align-items:center;gap:10px}
-.hdr-left h1{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--acc);white-space:nowrap}
+header{height:var(--hdr);flex-shrink:0;background:var(--surf);border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:relative;z-index:50;}
+.hdr-left h1{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--acc)}
 .clock{font-size:0.78rem;font-weight:600;color:var(--acc);background:rgba(240,165,0,.12);padding:4px 10px;border-radius:20px;border:1px solid rgba(240,165,0,.25)}
-.hdr-right{display:flex;gap:8px}
-.hbtn{
-  padding:7px 13px;border-radius:8px;border:none;cursor:pointer;
-  font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;
-  transition:all .18s;white-space:nowrap;
-}
-.hbtn-acc{background:var(--acc);color:#111}
-.hbtn-acc:hover{filter:brightness(1.12)}
+.hbtn{padding:7px 13px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;}
 .hbtn-out{background:transparent;border:1px solid var(--bdr);color:var(--text)}
-.hbtn-out:hover{border-color:var(--acc);color:var(--acc)}
 
-/* ── TABS (mobile nav) ── */
-.tab-bar{
-  height:var(--nav);flex-shrink:0;
-  background:var(--surf);border-top:1px solid var(--bdr);
-  display:flex;order:99;
-}
-.tab-btn{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:3px;background:none;border:none;cursor:pointer;color:var(--muted);
-  font-family:'DM Sans',sans-serif;font-size:0.65rem;font-weight:500;transition:all .18s;
-  padding:6px 0;
-}
-.tab-btn .ticon{font-size:1.3rem;line-height:1}
+.tab-bar{height:var(--nav);flex-shrink:0;background:var(--surf);border-top:1px solid var(--bdr);display:flex;order:99;}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.65rem;font-weight:500;}
 .tab-btn.active{color:var(--acc)}
-.tab-btn.active .ticon{filter:drop-shadow(0 0 4px rgba(240,165,0,.6))}
 
-/* ── CONTENT AREA ── */
 .content{flex:1;overflow:hidden;display:flex;flex-direction:column}
-.page{display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px}
+.page{display:none;flex:1;overflow-y:auto;padding:16px}
 .page.active{display:flex;flex-direction:column}
 
-/* ── SECTION TITLE ── */
 .sec-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--acc);margin-bottom:14px}
-
-/* ── ADD FORM ── */
 .card{background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;margin-bottom:16px}
 .time-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .time-group{display:flex;flex-direction:column;gap:5px}
-.time-group label{font-size:0.7rem;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.4px}
-.time-group input[type=time]{
-  background:var(--bg);border:1px solid var(--bdr);border-radius:8px;
-  color:var(--text);padding:10px 12px;font-family:'DM Sans',sans-serif;
-  font-size:0.95rem;width:100%;appearance:none;-webkit-appearance:none;
-}
-.time-group input[type=time]:focus{outline:none;border-color:var(--acc)}
+.time-group label{font-size:0.7rem;color:var(--muted);text-transform:uppercase}
+.time-group input{background:var(--bg);border:1px solid var(--bdr);border-radius:8px;color:var(--text);padding:10px;width:100%}
 
-.field-label{font-size:0.7rem;color:var(--muted);margin:10px 0 7px;font-weight:500;text-transform:uppercase;letter-spacing:.4px}
+/* NEW DAY SELECTOR */
+.day-selector {display:flex; justify-content:space-between; margin-bottom:15px; gap:4px}
+.day-check {flex:1; text-align:center;}
+.day-check input {display:none;}
+.day-check label {display:block; padding:8px 0; background:var(--bg); border:1px solid var(--bdr); border-radius:6px; font-size:0.7rem; color:var(--muted); cursor:pointer;}
+.day-check input:checked + label {background:var(--acc); color:#111; border-color:var(--acc); font-weight:700;}
 
-.manual-row{display:flex;gap:8px;margin-bottom:12px}
-.manual-row input{
-  flex:1;background:var(--bg);border:1px solid var(--bdr);border-radius:8px;
-  color:var(--text);padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:0.88rem;
-}
-.manual-row input::placeholder{color:var(--muted)}
-.manual-row input:focus{outline:none;border-color:var(--acc)}
-.manual-row button{
-  padding:10px 14px;background:transparent;border:1px solid var(--acc);
-  border-radius:8px;color:var(--acc);cursor:pointer;font-size:1rem;font-weight:700;
-  transition:all .15s;flex-shrink:0;
-}
-.manual-row button:active{background:var(--acc);color:#111}
+.chip-grid{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{padding:6px 12px;border-radius:20px;border:1px solid var(--bdr);background:var(--bg);color:var(--muted);font-size:0.72rem;}
+.chip.sel{background:var(--acc);color:#111;font-weight:600}
 
-.chip-grid{display:flex;flex-wrap:wrap;gap:6px;padding:2px}
-.chip{
-  padding:6px 12px;border-radius:20px;border:1px solid var(--bdr);background:var(--bg);
-  color:var(--muted);font-size:0.72rem;cursor:pointer;transition:all .15s;
-  user-select:none;display:flex;align-items:center;gap:5px;
-  -webkit-user-select:none;
-}
-.chip.sel{background:var(--acc);color:#111;border-color:var(--acc);font-weight:600}
-.chip .cdel{font-size:0.65rem;color:var(--red);font-weight:700;opacity:0;transition:.15s;margin-left:1px}
-.chip.custom:active .cdel{opacity:1}
-@media(hover:hover){.chip.custom:hover .cdel{opacity:1}}
+.add-btn{width:100%;margin-top:14px;padding:13px;background:var(--acc);color:#111;border:none;border-radius:10px;font-weight:700;}
 
-.add-btn{
-  width:100%;margin-top:14px;padding:13px;background:var(--acc);color:#111;
-  border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:700;
-  font-size:0.9rem;cursor:pointer;transition:all .18s;letter-spacing:.3px;
-}
-.add-btn:active{filter:brightness(.9);transform:scale(.98)}
-
-/* ── SLOTS LIST ── */
-.slot-item{
-  background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);
-  padding:14px;margin-bottom:10px;transition:all .18s;
-}
-.slot-item:active{border-color:var(--acc)}
-.slot-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px}
-.slot-time{font-size:0.82rem;font-weight:600;color:var(--acc);background:rgba(240,165,0,.1);padding:4px 10px;border-radius:20px}
-.slot-btns{display:flex;gap:6px;flex-shrink:0}
-.sbtn{
-  padding:5px 10px;border-radius:6px;border:1px solid;cursor:pointer;
-  font-size:0.7rem;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .15s;
-}
-.sbtn-edit{border-color:var(--bdr);color:var(--muted);background:transparent}
-.sbtn-edit:active{border-color:var(--acc);color:var(--acc)}
-.sbtn-del{border-color:rgba(224,92,92,.3);color:var(--red);background:rgba(224,92,92,.08)}
-.sbtn-del:active{background:var(--red);color:#fff}
-
+.slot-item{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;margin-bottom:10px;}
+.slot-item.current{border:2px solid var(--acc); background:rgba(240,165,0,.05)}
+.slot-header{display:flex;justify-content:space-between;margin-bottom:10px}
+.slot-time{font-size:0.82rem;font-weight:600;color:var(--acc)}
 .tag-row{display:flex;flex-wrap:wrap;gap:6px}
-.tag{
-  padding:5px 10px 5px 11px;border-radius:20px;font-size:0.7rem;font-weight:500;
-  border:1px solid;display:flex;align-items:center;gap:6px;
-}
-.tag .tdel{
-  cursor:pointer;font-size:0.6rem;opacity:.4;font-weight:700;
-  background:rgba(255,255,255,.1);border-radius:50%;
-  width:14px;height:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  transition:.15s;
-}
-.tag .tdel:active{opacity:1;background:rgba(224,92,92,.5)}
-@media(hover:hover){.tag .tdel:hover{opacity:1;background:rgba(224,92,92,.4)}}
+.tag{padding:4px 10px;border-radius:20px;font-size:0.7rem;border:1px solid;display:flex;align-items:center;gap:5px}
+.tag .tdel {cursor:pointer; opacity:0.5}
 
-/* ── CURRENT SLOT — SPECIAL HIGHLIGHT ── */
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-@keyframes borderGlow{0%,100%{box-shadow:0 0 0 0 rgba(240,165,0,0),0 0 20px rgba(240,165,0,.15)}50%{box-shadow:0 0 0 3px rgba(240,165,0,.25),0 0 40px rgba(240,165,0,.3)}}
-@keyframes scanline{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-@keyframes breathe{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.02)}}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--surf);border:1px solid var(--acc);padding:10px 20px;border-radius:10px;opacity:0;transition:0.3s;z-index:300;}
+.toast.show{opacity:1}
 
-.slot-item.current{
-  border:2px solid var(--acc);
-  background:linear-gradient(135deg,rgba(240,165,0,.1) 0%,rgba(240,165,0,.04) 60%,rgba(240,100,0,.08) 100%);
-  animation:borderGlow 2.5s ease-in-out infinite;
-  position:relative;overflow:hidden;
-}
-/* shimmer sweep */
-.slot-item.current::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(105deg,transparent 40%,rgba(240,165,0,.08) 50%,transparent 60%);
-  animation:scanline 3s ease-in-out infinite;pointer-events:none;
-}
-/* left accent stripe */
-.slot-item.current::after{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
-  background:linear-gradient(180deg,#ffd700,#f0a500,#e07b00);
-  border-radius:4px 0 0 4px;
-}
-
-/* ACTIVE NOW banner */
-.cur-banner{
-  display:flex;align-items:center;justify-content:space-between;
-  background:linear-gradient(90deg,rgba(240,165,0,.22),rgba(240,140,0,.1));
-  border:1px solid rgba(240,165,0,.35);
-  border-radius:8px;padding:7px 12px;margin-bottom:11px;
-  animation:breathe 2.5s ease-in-out infinite;
-}
-.cur-banner-left{display:flex;align-items:center;gap:8px}
-.cur-dot{width:9px;height:9px;border-radius:50%;background:#f0a500;animation:pulse 1s infinite;flex-shrink:0;box-shadow:0 0 6px rgba(240,165,0,.8)}
-.cur-label{font-size:0.75rem;font-weight:700;color:#f0a500;text-transform:uppercase;letter-spacing:.8px}
-.cur-time-left{font-size:0.7rem;color:rgba(240,165,0,.7);font-weight:500}
-
-/* progress bar */
-.cur-progress{height:4px;background:rgba(240,165,0,.15);border-radius:4px;margin-bottom:11px;overflow:hidden}
-.cur-progress-fill{height:100%;background:linear-gradient(90deg,#ffd700,#f0a500);border-radius:4px;transition:width .5s ease}
-
-/* badge (small, inside header row) */
-.cur-badge{
-  font-size:0.62rem;background:var(--acc);color:#111;
-  padding:2px 8px;border-radius:20px;font-weight:800;
-  animation:pulse 1.2s infinite;letter-spacing:.4px;
-}
-
-/* make time badge brighter when current */
-.slot-item.current .slot-time{
-  background:rgba(240,165,0,.25);color:#ffd700;
-  border:1px solid rgba(240,165,0,.45);
-}
-/* ── ACTIVE TASK TAGS — vivid highlight ── */
-@keyframes tagGlow{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 14px 3px rgba(240,165,0,.3)}}
-@keyframes tagPop{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
-
-.slot-item.current .tag-row{gap:8px}
-.slot-item.current .tag{
-  font-size:0.8rem;font-weight:700;
-  padding:8px 14px 8px 12px;
-  border-width:1.5px;letter-spacing:.25px;
-  animation:tagGlow 2.5s ease-in-out infinite,tagPop 3s ease-in-out infinite;
-  box-shadow:0 3px 12px rgba(0,0,0,.35);
-  position:relative;overflow:hidden;
-}
-.slot-item.current .tag::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.13) 50%,transparent 65%);
-  animation:scanline 2.6s ease-in-out infinite;pointer-events:none;
-}
-.slot-item.current .tag:nth-child(2){animation-delay:.45s}
-.slot-item.current .tag:nth-child(3){animation-delay:.9s}
-.slot-item.current .tag:nth-child(4){animation-delay:1.35s}
-.slot-item.current .tag:nth-child(5){animation-delay:1.8s}
-.slot-item.current .tag:nth-child(6){animation-delay:2.25s}
-
-.slot-item.current .c0{background:rgba(240,165,0,.3);color:#ffd145;border-color:rgba(240,165,0,.75)}
-.slot-item.current .c1{background:rgba(224,92,92,.3);color:#ff8080;border-color:rgba(224,92,92,.75)}
-.slot-item.current .c2{background:rgba(76,175,125,.3);color:#6dffc0;border-color:rgba(76,175,125,.75)}
-.slot-item.current .c3{background:rgba(100,149,237,.3);color:#85b8ff;border-color:rgba(100,149,237,.75)}
-.slot-item.current .c4{background:rgba(186,85,211,.3);color:#d97dff;border-color:rgba(186,85,211,.75)}
-.slot-item.current .c5{background:rgba(255,160,122,.3);color:#ffb899;border-color:rgba(255,160,122,.75)}
-.slot-item.current .c6{background:rgba(95,158,160,.3);color:#7de0e3;border-color:rgba(95,158,160,.75)}
-.slot-item.current .c7{background:rgba(255,215,0,.3);color:#ffe44d;border-color:rgba(255,215,0,.75)}
-.slot-item.current .c8{background:rgba(144,238,144,.3);color:#a0ffb0;border-color:rgba(144,238,144,.75)}
-.slot-item.current .c9{background:rgba(173,216,230,.3);color:#c5eeff;border-color:rgba(173,216,230,.75)}
-.slot-item.current .c10{background:rgba(255,182,193,.3);color:#ffc4d0;border-color:rgba(255,182,193,.75)}
-.slot-item.current .c11{background:rgba(221,160,221,.3);color:#e8b0ff;border-color:rgba(221,160,221,.75)}
-
-.empty{text-align:center;padding:50px 20px;color:var(--muted)}
-.empty .ei{font-size:3rem;margin-bottom:12px}
-.empty h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--text);margin-bottom:6px}
-.empty p{font-size:0.82rem}
-
-/* ── SAVE PAGE ── */
-.save-card{
-  background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);
-  padding:18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;cursor:pointer;
-  transition:all .18s;
-}
-.save-card:active{border-color:var(--acc);transform:scale(.98)}
-.save-icon{font-size:2rem;width:46px;text-align:center;flex-shrink:0}
-.save-info h4{font-size:0.9rem;font-weight:600;color:var(--text);margin-bottom:3px}
-.save-info p{font-size:0.75rem;color:var(--muted)}
-.save-card .arrow{margin-left:auto;color:var(--muted);font-size:1rem;flex-shrink:0}
-
-.status-box{background:rgba(76,175,125,.1);border:1px solid rgba(76,175,125,.3);border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:0.8rem;color:#4caf7d;display:none}
-.status-box.show{display:block}
-
-.divider{height:1px;background:var(--bdr);margin:14px 0}
-.sec-sub{font-size:0.72rem;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
-
-/* ── POPUP ── */
-.popup-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
-  backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px;
-}
-.popup-overlay.show{display:flex}
-.popup{
-  background:var(--surf);border:1px solid var(--acc);border-radius:20px;
-  padding:28px 24px;width:100%;max-width:360px;text-align:center;
-  box-shadow:0 20px 60px rgba(240,165,0,.2);animation:popIn .3s cubic-bezier(.175,.885,.32,1.275);
-}
-@keyframes popIn{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:scale(1)}}
-.popup .pi{font-size:2.5rem;margin-bottom:10px}
-.popup h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:5px}
-.popup .pt{font-size:0.82rem;color:var(--muted);margin-bottom:14px}
-.popup .pa{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px}
-.popup-close{padding:11px 32px;background:var(--acc);color:#111;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.88rem;cursor:pointer;width:100%}
-
-/* ── EDIT MODAL ── */
-.modal-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:150;
-  align-items:flex-end;justify-content:center;
-}
-.modal-overlay.show{display:flex}
-.modal{
-  background:var(--surf);border:1px solid var(--bdr);border-radius:20px 20px 0 0;
-  padding:24px 20px;width:100%;max-width:480px;
-  animation:slideUp .3s ease;max-height:88vh;overflow-y:auto;
-}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal h3{font-family:'Playfair Display',serif;color:var(--acc);margin-bottom:16px}
-.modal-footer{display:flex;gap:10px;margin-top:16px}
-.modal-footer button{flex:1;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.88rem;transition:all .15s}
-.mf-cancel{background:var(--surf2);color:var(--text)}
-.mf-save{background:var(--acc);color:#111}
-
-/* ── TOAST ── */
-.toast{
-  position:fixed;bottom:calc(var(--nav) + 12px);left:50%;transform:translateX(-50%) translateY(20px);
-  background:var(--surf);border:1px solid var(--acc);border-radius:10px;
-  padding:10px 18px;white-space:nowrap;font-size:0.8rem;font-weight:500;
-  box-shadow:0 6px 24px rgba(0,0,0,.4);opacity:0;transition:all .3s;z-index:300;
-}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ── COLORS ── */
-.c0{background:rgba(240,165,0,.12);color:#f0a500;border-color:rgba(240,165,0,.3)}
-.c1{background:rgba(224,92,92,.12);color:#e05c5c;border-color:rgba(224,92,92,.3)}
-.c2{background:rgba(76,175,125,.12);color:#4caf7d;border-color:rgba(76,175,125,.3)}
-.c3{background:rgba(100,149,237,.12);color:#6495ed;border-color:rgba(100,149,237,.3)}
-.c4{background:rgba(186,85,211,.12);color:#ba55d3;border-color:rgba(186,85,211,.3)}
-.c5{background:rgba(255,160,122,.12);color:#ffa07a;border-color:rgba(255,160,122,.3)}
-.c6{background:rgba(95,158,160,.12);color:#5f9ea0;border-color:rgba(95,158,160,.3)}
-.c7{background:rgba(255,215,0,.12);color:#ffd700;border-color:rgba(255,215,0,.3)}
-.c8{background:rgba(144,238,144,.12);color:#90ee90;border-color:rgba(90,238,90,.3)}
-.c9{background:rgba(173,216,230,.12);color:#add8e6;border-color:rgba(173,216,230,.3)}
-.c10{background:rgba(255,182,193,.12);color:#ffb6c1;border-color:rgba(255,182,193,.3)}
-.c11{background:rgba(221,160,221,.12);color:#dda0dd;border-color:rgba(221,160,221,.3)}
-
-/* ── DESKTOP LAYOUT override ── */
-@media(min-width:768px){
-  body{flex-direction:column}
-  .tab-bar{display:none}
-  .content{flex-direction:row}
-  .page{border:none}
-  #pg-add{display:flex;flex:0 0 360px;border-right:1px solid var(--bdr);overflow-y:auto}
-  #pg-view{display:flex;flex:1;overflow-y:auto}
-  #pg-save{display:none}
-  #pg-save.active{display:flex;position:fixed;top:var(--hdr);right:0;width:320px;height:calc(100vh - var(--hdr));border-left:1px solid var(--bdr);z-index:40;background:var(--surf)}
-  .hdr-right{display:flex}
-  .modal{border-radius:18px;margin-bottom:0}
-  .modal-overlay{align-items:center}
-}
-
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:10px}
+/* COLORS */
+.c0{background:rgba(240,165,0,.1);color:#f0a500;border-color:#f0a500}
+.c1{background:rgba(224,92,92,.1);color:#e05c5c;border-color:#e05c5c}
+.c2{background:rgba(76,175,125,.1);color:#4caf7d;border-color:#4caf7d}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="hdr-left">
-    <h1>🌙 Routine Planner</h1>
-  </div>
+  <div class="hdr-left"><h1>🌙 Routine</h1></div>
   <div class="clock" id="clock">--:--</div>
-  <div class="hdr-right">
-    <button class="hbtn hbtn-out" onclick="openSavePage()">💾 Save</button>
-  </div>
+  <button class="hbtn hbtn-out" onclick="switchTab(document.querySelector('[data-page=pg-save]'),'pg-save')">💾 Save</button>
 </header>
 
 <div class="content">
-
-  <!-- PAGE: ADD SLOT -->
-  <div class="page active" id="pg-add">
-    <div class="sec-title">➕ Add Time Slot</div>
-    <div class="card">
-      <div class="time-row">
-        <div class="time-group">
-          <label>From</label>
-          <input type="time" id="startTime" value="06:00">
-        </div>
-        <div class="time-group">
-          <label>To</label>
-          <input type="time" id="endTime" value="06:30">
-        </div>
-      </div>
-
-      <div class="field-label">✏️ Custom Activity (type + press ＋)</div>
-      <div class="manual-row">
-        <input type="text" id="manualInput" placeholder="e.g. READING TIME…" maxlength="40"
-          onkeydown="if(event.key==='Enter')addCustom('cg1',selectedActs,'manualInput')">
-        <button onclick="addCustom('cg1',selectedActs,'manualInput')">＋</button>
-      </div>
-
-      <div class="field-label">☑️ Select Activities (tap to toggle, multiple ok)</div>
-      <div class="chip-grid" id="cg1"></div>
-
-      <button class="add-btn" onclick="addSlot()">+ Add to Timetable</button>
-    </div>
-  </div>
-
-  <!-- PAGE: VIEW TIMETABLE -->
-  <div class="page" id="pg-view">
+  <div class="page active" id="pg-view">
     <div class="sec-title">📅 Today's Timetable</div>
     <div id="slotsList"></div>
   </div>
 
-  <!-- PAGE: SAVE / EXPORT -->
-  <div class="page" id="pg-save">
-    <div class="sec-title">💾 Save & Export</div>
-
-    <div class="status-box" id="statusBox"></div>
-
-    <div class="sec-sub">Auto-Save</div>
-    <div class="card" style="padding:14px 16px;margin-bottom:14px">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div style="font-size:0.85rem;font-weight:600;color:var(--text)">Browser Storage</div>
-          <div style="font-size:0.72rem;color:var(--muted);margin-top:2px">Auto-saved on every change</div>
-        </div>
-        <div style="font-size:1.4rem">✅</div>
+  <div class="page" id="pg-add">
+    <div class="sec-title">➕ Add Time Slot</div>
+    <div class="card">
+      <div class="time-row">
+        <div class="time-group"><label>From</label><input type="time" id="startTime" value="06:00"></div>
+        <div class="time-group"><label>To</label><input type="time" id="endTime" value="06:30"></div>
       </div>
-    </div>
 
-    <div class="divider"></div>
-    <div class="sec-sub">Export Options</div>
-
-    <div class="save-card" onclick="exportJSON()">
-      <div class="save-icon">📄</div>
-      <div class="save-info">
-        <h4>Download as JSON</h4>
-        <p>Best for reloading later · Share & backup</p>
+      <div style="font-size:0.7rem; color:var(--muted); margin-bottom:8px; text-transform:uppercase;">Repeat on Days:</div>
+      <div class="day-selector" id="daySelector">
+        <div class="day-check"><input type="checkbox" id="d0" value="0" checked><label for="d0">Sun</label></div>
+        <div class="day-check"><input type="checkbox" id="d1" value="1" checked><label for="d1">Mon</label></div>
+        <div class="day-check"><input type="checkbox" id="d2" value="2" checked><label for="d2">Tue</label></div>
+        <div class="day-check"><input type="checkbox" id="d3" value="3" checked><label for="d3">Wed</label></div>
+        <div class="day-check"><input type="checkbox" id="d4" value="4" checked><label for="d4">Thu</label></div>
+        <div class="day-check"><input type="checkbox" id="d5" value="5" checked><label for="d5">Fri</label></div>
+        <div class="day-check"><input type="checkbox" id="d6" value="6" checked><label for="d6">Sat</label></div>
       </div>
-      <div class="arrow">›</div>
-    </div>
 
-    <div class="save-card" onclick="exportCSV()">
-      <div class="save-icon">📊</div>
-      <div class="save-info">
-        <h4>Download as CSV</h4>
-        <p>Open in Excel, Google Sheets</p>
-      </div>
-      <div class="arrow">›</div>
-    </div>
-
-    <div class="save-card" onclick="printTimetable()">
-      <div class="save-icon">🖨️</div>
-      <div class="save-info">
-        <h4>Print / Save as PDF</h4>
-        <p>Print or save as PDF via browser</p>
-      </div>
-      <div class="arrow">›</div>
-    </div>
-
-    <div class="save-card" onclick="shareTimetable()">
-      <div class="save-icon">🔗</div>
-      <div class="save-info">
-        <h4>Share via Link</h4>
-        <p>Copy shareable URL with timetable data</p>
-      </div>
-      <div class="arrow">›</div>
-    </div>
-
-    <div class="divider"></div>
-    <div class="sec-sub">Import</div>
-
-    <div class="save-card" onclick="importJSON()">
-      <div class="save-icon">📂</div>
-      <div class="save-info">
-        <h4>Load from File</h4>
-        <p>Restore a previously saved JSON file</p>
-      </div>
-      <div class="arrow">›</div>
-    </div>
-
-    <div class="divider"></div>
-    <div class="sec-sub">Danger Zone</div>
-    <div class="save-card" onclick="clearAll()" style="border-color:rgba(224,92,92,.2)">
-      <div class="save-icon">🗑️</div>
-      <div class="save-info">
-        <h4 style="color:var(--red)">Clear All Slots</h4>
-        <p>Permanently remove all scheduled slots</p>
-      </div>
-      <div class="arrow" style="color:var(--red)">›</div>
+      <div class="chip-grid" id="cg1"></div>
+      <button class="add-btn" onclick="addSlot()">+ Add to Timetable</button>
     </div>
   </div>
 
+  <div class="page" id="pg-save">
+    <div class="sec-title">💾 Settings</div>
+    <div class="card" onclick="clearAll()" style="border-color:var(--red); color:var(--red); text-align:center;">🗑 Clear All Data</div>
+  </div>
 </div>
 
-<!-- BOTTOM TAB BAR -->
 <nav class="tab-bar">
-  <button class="tab-btn active" data-page="pg-add" onclick="switchTab(this,'pg-add')">
-    <span class="ticon">➕</span>Add Slot
-  </button>
-  <button class="tab-btn" data-page="pg-view" onclick="switchTab(this,'pg-view')">
-    <span class="ticon">📅</span>Timetable
-  </button>
-  <button class="tab-btn" data-page="pg-save" onclick="switchTab(this,'pg-save')">
-    <span class="ticon">💾</span>Save
-  </button>
+  <button class="tab-btn active" data-page="pg-view" onclick="switchTab(this,'pg-view')"><span>📅</span>View</button>
+  <button class="tab-btn" data-page="pg-add" onclick="switchTab(this,'pg-add')"><span>➕</span>Add</button>
+  <button class="tab-btn" data-page="pg-save" onclick="switchTab(this,'pg-save')"><span>⚙️</span>Settings</button>
 </nav>
 
-<!-- REMINDER POPUP -->
-<div class="popup-overlay" id="popupOverlay">
-  <div class="popup">
-    <div class="pi">⏰</div>
-    <h3>Time to Start!</h3>
-    <div class="pt" id="popupTime"></div>
-    <div class="pa" id="popupActs"></div>
-    <button class="popup-close" onclick="closePopup()">Got it! ✓</button>
-  </div>
-</div>
-
-<!-- EDIT MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <h3>✏️ Edit Slot</h3>
-    <div class="time-row">
-      <div class="time-group"><label>From</label><input type="time" id="editStart"></div>
-      <div class="time-group"><label>To</label><input type="time" id="editEnd"></div>
-    </div>
-    <div class="field-label" style="margin-top:10px">✏️ Add custom activity:</div>
-    <div class="manual-row">
-      <input type="text" id="editManualInput" placeholder="Custom activity…" maxlength="40"
-        onkeydown="if(event.key==='Enter')addCustom('cg2',editSelected,'editManualInput')">
-      <button onclick="addCustom('cg2',editSelected,'editManualInput')">＋</button>
-    </div>
-    <div class="field-label">Select activities:</div>
-    <div class="chip-grid" id="cg2"></div>
-    <div class="modal-footer">
-      <button class="mf-cancel" onclick="closeModal()">Cancel</button>
-      <button class="mf-save" onclick="saveEdit()">Save Changes</button>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- PRINT STYLES -->
-<style id="printStyle">
-@media print{
-  header,nav,.tab-bar,.card,.sec-title+.card,#pg-add,#pg-save,.popup-overlay,.modal-overlay,.toast{display:none!important}
-  body,html{overflow:visible!important;height:auto!important;background:#fff!important;color:#000!important}
-  .content{display:block!important}
-  #pg-view{display:block!important;padding:20px!important}
-  .slot-item{border:1px solid #ccc!important;background:#fff!important;margin-bottom:12px!important;page-break-inside:avoid}
-  .slot-time{color:#b8860b!important;background:#fff8e1!important}
-  .tag{border:1px solid #999!important;background:#f5f5f5!important;color:#333!important}
-  .tag .tdel,.slot-btns{display:none!important}
-  .cur-badge{display:none!important}
-  h2,.sec-title{color:#000!important;font-size:1.1rem!important}
-}
-</style>
-
 <script>
-const PRESETS=["MAKING DINNER","BABY BATHING","DINNER TIME","QUALITY TIME","KITCHEN CLEANING","OTHER CLEANING","KID'S PLAY TIME","PRAYER TIME","KID BED TIME","EXERCISE TIME","BATH TIME","BED TIME"];
-const ICONS={"MAKING DINNER":"🍳","BABY BATHING":"🛁","DINNER TIME":"🍽️","QUALITY TIME":"💖","KITCHEN CLEANING":"🧹","OTHER CLEANING":"🧽","KID'S PLAY TIME":"🧸","PRAYER TIME":"🤲","KID BED TIME":"🌙","EXERCISE TIME":"💪","BATH TIME":"🚿","BED TIME":"😴"};
+const PRESETS=["MAKING DINNER","BABY BATHING","DINNER TIME","QUALITY TIME","EXERCISE","BATH TIME","BED TIME"];
+let slots = JSON.parse(localStorage.getItem('rp_slots') || '[]');
+let selectedActs = [];
 
-let ACTS=JSON.parse(localStorage.getItem('rp_acts')||'null')||[...PRESETS];
-let slots=JSON.parse(localStorage.getItem('rp_slots')||'[]');
-let selectedActs=[],editSelected=[],editIdx=-1;
-let reminded=new Set(),lastMin='';
-
-// Load from URL if shared
-(()=>{
-  const p=new URLSearchParams(location.search).get('d');
-  if(p){try{const d=JSON.parse(atob(p));if(d.slots){slots=d.slots;if(d.acts)ACTS=d.acts;saveSlots();saveActs();}}catch(e){}}
-})();
-
-function ci(a){let h=0;for(const c of a)h=c.charCodeAt(0)+((h<<5)-h);return Math.abs(h)%12;}
-function icon(a){return ICONS[a]||'⭐';}
-function fmt(t){if(!t)return '';const[h,m]=t.split(':'),hh=parseInt(h);return`${hh>12?hh-12:hh===0?12:hh}:${m} ${hh>=12?'PM':'AM'}`;}
-
-/* ── CHIPS ── */
-function buildChips(gid,arr){
-  const g=document.getElementById(gid);g.innerHTML='';
-  ACTS.forEach(act=>{
-    const isP=PRESETS.includes(act),sel=arr.includes(act);
-    const d=document.createElement('div');
-    d.className='chip'+(sel?' sel':'')+(isP?'':' custom');
-    d.innerHTML=`<span>${act}</span>${!isP?`<span class="cdel" data-act="${act}" data-gid="${gid}">✕</span>`:''}`;
-    d.addEventListener('click',e=>{
-      if(e.target.classList.contains('cdel')){removeAct(e.target.dataset.act,e.target.dataset.gid);return;}
-      const i=arr.indexOf(act);if(i>-1)arr.splice(i,1);else arr.push(act);
-      buildChips(gid,arr);
-    });
-    g.appendChild(d);
-  });
-}
-
-function removeAct(act,gid){
-  const i=ACTS.indexOf(act);if(i>-1)ACTS.splice(i,1);
-  const arr=gid==='cg1'?selectedActs:editSelected;
-  const ai=arr.indexOf(act);if(ai>-1)arr.splice(ai,1);
-  saveActs();buildChips(gid,arr);toast('🗑️ Removed: '+act);
-}
-
-function addCustom(gid,arr,inp){
-  const el=document.getElementById(inp);
-  const val=el.value.trim().toUpperCase();if(!val)return;
-  if(!ACTS.includes(val)){ACTS.push(val);saveActs();}
-  if(!arr.includes(val))arr.push(val);
-  el.value='';buildChips(gid,arr);toast('✅ Added: '+val);
-}
-
-/* ── SLOTS ── */
-function addSlot(){
-  const s=document.getElementById('startTime').value,e=document.getElementById('endTime').value;
-  if(!s||!e){toast('⚠️ Set start & end time');return;}
-  if(!selectedActs.length){toast('⚠️ Select at least one activity');return;}
-  slots.push({start:s,end:e,activities:[...selectedActs]});
-  slots.sort((a,b)=>a.start.localeCompare(b.start));
-  selectedActs.length=0;buildChips('cg1',selectedActs);
-  saveSlots();renderView();toast('✅ Slot added: '+fmt(s));
-  // Switch to timetable view on mobile
-  if(window.innerWidth<768){
-    const tb=document.querySelector('[data-page="pg-view"]');
-    if(tb)tb.click();
-  }
-}
-
-function deleteSlot(i){if(!confirm('Delete this slot?'))return;slots.splice(i,1);saveSlots();renderView();toast('🗑️ Slot deleted');}
-
-function removeTag(si,act){
-  slots[si].activities=slots[si].activities.filter(a=>a!==act);
-  if(!slots[si].activities.length){slots.splice(si,1);toast('🗑️ Slot removed (no activities)');}
-  else toast('✅ Activity removed');
-  saveSlots();renderView();
-}
-
-function openEdit(i){
-  editIdx=i;const sl=slots[i];
-  document.getElementById('editStart').value=sl.start;
-  document.getElementById('editEnd').value=sl.end;
-  editSelected.length=0;sl.activities.forEach(a=>editSelected.push(a));
-  buildChips('cg2',editSelected);
-  document.getElementById('modalOverlay').classList.add('show');
-}
-function saveEdit(){
-  const s=document.getElementById('editStart').value,e=document.getElementById('editEnd').value;
-  if(!s||!e||!editSelected.length){toast('⚠️ Fill all fields');return;}
-  slots[editIdx]={start:s,end:e,activities:[...editSelected]};
-  slots.sort((a,b)=>a.start.localeCompare(b.start));
-  closeModal();saveSlots();renderView();toast('✅ Slot updated');
-}
-function closeModal(){document.getElementById('modalOverlay').classList.remove('show');}
-
-/* ── RENDER ── */
-function toMins(t){const[h,m]=t.split(':');return parseInt(h)*60+parseInt(m);}
-
-function renderView(){
-  const el=document.getElementById('slotsList');
-  if(!slots.length){
-    el.innerHTML=`<div class="empty"><div class="ei">📅</div><h3>No slots yet</h3><p>Go to "Add Slot" tab to get started.</p></div>`;return;
-  }
-  const now=new Date();
-  const ns=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
-  const nowMins=now.getHours()*60+now.getMinutes();
-
-  el.innerHTML=slots.map((sl,i)=>{
-    const cur=sl.start<=ns&&ns<sl.end;
-    let bannerHtml='', progressHtml='';
-
-    if(cur){
-      const startM=toMins(sl.start), endM=toMins(sl.end);
-      const pct=Math.min(100,Math.round(((nowMins-startM)/(endM-startM))*100));
-      const minsLeft=endM-nowMins;
-      const timeLeft=minsLeft<=0?'Ending soon':`${minsLeft} min${minsLeft!==1?'s':''} left`;
-
-      bannerHtml=`<div class="cur-banner">
-        <div class="cur-banner-left">
-          <div class="cur-dot"></div>
-          <span class="cur-label">⚡ Active Now</span>
-        </div>
-        <span class="cur-time-left">${timeLeft}</span>
-      </div>`;
-
-      progressHtml=`<div class="cur-progress">
-        <div class="cur-progress-fill" style="width:${pct}%"></div>
-      </div>`;
-    }
-
-    return`<div class="slot-item${cur?' current':''}" id="slot-${i}">
-      ${bannerHtml}
-      <div class="slot-header">
-        <div class="slot-time">${fmt(sl.start)} → ${fmt(sl.end)}</div>
-        <div class="slot-btns">
-          ${cur?'<span class="cur-badge">NOW</span>':''}
-          <button class="sbtn sbtn-edit" onclick="openEdit(${i})">✏️</button>
-          <button class="sbtn sbtn-del" onclick="deleteSlot(${i})">🗑</button>
-        </div>
-      </div>
-      ${progressHtml}
-      <div class="tag-row">
-        ${sl.activities.map(a=>`<div class="tag c${ci(a)}"><span style="${cur?'font-size:1rem':''}"> ${icon(a)}</span> ${a}<span class="tdel" onclick="removeTag(${i},'${a.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</span></div>`).join('')}
-      </div>
-    </div>`;
-  }).join('');
-
-  // Auto-scroll to current slot smoothly
-  const cur=document.querySelector('.slot-item.current');
-  if(cur) setTimeout(()=>cur.scrollIntoView({behavior:'smooth',block:'center'}),100);
-}
-
-/* ── TABS ── */
-function switchTab(btn,pid){
+function switchTab(btn, pid) {
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById(pid).classList.add('active');
-}
-function openSavePage(){
-  // On mobile, switch to save tab; on desktop, toggle sidebar
-  if(window.innerWidth<768){
-    const btn=document.querySelector('[data-page="pg-save"]');
-    if(btn)btn.click();
-  } else {
-    const pg=document.getElementById('pg-save');
-    pg.classList.toggle('active');
-  }
+  if(pid === 'pg-view') renderView();
 }
 
-/* ── CLOCK & REMINDERS ── */
-function startClock(){
-  setInterval(()=>{
-    const now=new Date();
-    document.getElementById('clock').textContent=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    const min=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
-    if(min!==lastMin){lastMin=min;renderView();checkReminders(min);}
-    // Update progress bar fill every tick without full re-render
-    else{
-      const fill=document.querySelector('.cur-progress-fill');
-      if(fill){
-        const curSlot=slots.find(sl=>{const ns=min;return sl.start<=ns&&ns<sl.end;});
-        if(curSlot){
-          const sm=toMins(curSlot.start),em=toMins(curSlot.end),nm=now.getHours()*60+now.getMinutes();
-          fill.style.width=Math.min(100,Math.round(((nm-sm)/(em-sm))*100))+'%';
-        }
-      }
-      // update time-left label
-      const tl=document.querySelector('.cur-time-left');
-      if(tl){
-        const curSlot=slots.find(sl=>{const ns=min;return sl.start<=ns&&ns<sl.end;});
-        if(curSlot){
-          const em=toMins(curSlot.end),nm=now.getHours()*60+now.getMinutes();
-          const ml=em-nm;tl.textContent=ml<=0?'Ending soon':`${ml} min${ml!==1?'s':''} left`;
-        }
-      }
-    }
-  },1000);
-}
-function checkReminders(ns){
-  slots.forEach((sl,i)=>{
-    const k=sl.start+'-'+i;
-    if(sl.start===ns&&!reminded.has(k)){reminded.add(k);triggerReminder(sl);}
+function buildChips() {
+  const g = document.getElementById('cg1'); g.innerHTML = '';
+  PRESETS.forEach(act => {
+    const sel = selectedActs.includes(act);
+    const d = document.createElement('div');
+    d.className = 'chip' + (sel ? ' sel' : '');
+    d.textContent = act;
+    d.onclick = () => {
+      if(sel) selectedActs = selectedActs.filter(a=>a!==act);
+      else selectedActs.push(act);
+      buildChips();
+    };
+    g.appendChild(d);
   });
 }
-function triggerReminder(sl){
-  document.getElementById('popupTime').textContent=`${fmt(sl.start)} → ${fmt(sl.end)}`;
-  document.getElementById('popupActs').innerHTML=sl.activities.map(a=>`<div class="tag c${ci(a)}">${icon(a)} ${a}</div>`).join('');
-  document.getElementById('popupOverlay').classList.add('show');
-  if('Notification'in window&&Notification.permission==='granted')
-    new Notification('⏰ '+sl.activities[0],{body:sl.activities.join(', ')+' — '+fmt(sl.start)});
-}
-function closePopup(){document.getElementById('popupOverlay').classList.remove('show');}
 
-/* ── TOAST ── */
-function toast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
-function showStatus(msg){
-  const s=document.getElementById('statusBox');s.textContent=msg;s.classList.add('show');
-  setTimeout(()=>s.classList.remove('show'),4000);
-}
+function addSlot() {
+  const s = document.getElementById('startTime').value;
+  const e = document.getElementById('endTime').value;
+  const days = Array.from(document.querySelectorAll('.day-check input:checked')).map(i=>parseInt(i.value));
 
-/* ── SAVE / EXPORT ── */
-function saveSlots(){localStorage.setItem('rp_slots',JSON.stringify(slots));}
-function saveActs(){localStorage.setItem('rp_acts',JSON.stringify(ACTS));}
-
-function exportJSON(){
-  const blob=new Blob([JSON.stringify({slots,acts:ACTS},null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='daily-routine-'+today()+'.json';a.click();
-  showStatus('✅ JSON file downloaded! You can re-import this anytime.');
-  toast('💾 JSON saved');
+  if(!selectedActs.length) return toast("Select an activity");
+  
+  slots.push({ start: s, end: e, activities: [...selectedActs], days: days });
+  slots.sort((a,b) => a.start.localeCompare(b.start));
+  
+  localStorage.setItem('rp_slots', JSON.stringify(slots));
+  selectedActs = [];
+  buildChips();
+  toast("✅ Slot Added!");
+  switchTab(document.querySelector('[data-page=pg-view]'), 'pg-view');
 }
 
-function exportCSV(){
-  let csv='Time From,Time To,Activities\n';
-  slots.forEach(sl=>{
-    csv+=`"${fmt(sl.start)}","${fmt(sl.end)}","${sl.activities.join(' | ')}"\n`;
-  });
-  const blob=new Blob([csv],{type:'text/csv'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='daily-routine-'+today()+'.csv';a.click();
-  showStatus('✅ CSV downloaded! Open in Excel or Google Sheets.');
-  toast('📊 CSV saved');
-}
+function renderView() {
+  const el = document.getElementById('slotsList');
+  const today = new Date().getDay();
+  const now = new Date();
+  const ns = now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
 
-function printTimetable(){
-  // Switch to view page first for printing
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('pg-view').classList.add('active');
-  setTimeout(()=>{window.print();},200);
-  toast('🖨️ Opening print dialog…');
-}
+  // Filter slots to only show those that apply to "today"
+  const todaysSlots = slots.filter(s => s.days.includes(today));
 
-function shareTimetable(){
-  const data=btoa(JSON.stringify({slots,acts:ACTS}));
-  const url=location.origin+location.pathname+'?d='+data;
-  if(navigator.share){
-    navigator.share({title:'My Daily Routine',url}).catch(()=>{});
-  } else if(navigator.clipboard){
-    navigator.clipboard.writeText(url);
-    showStatus('✅ Share link copied to clipboard! Paste it to share your timetable.');
-    toast('🔗 Link copied!');
-  } else {
-    prompt('Copy this link:',url);
+  if(!todaysSlots.length) {
+    el.innerHTML = '<div style="text-align:center; padding:40px; color:var(--muted)">No tasks for today.</div>';
+    return;
   }
+
+  el.innerHTML = todaysSlots.map((sl, i) => {
+    const cur = sl.start <= ns && ns < sl.end;
+    return `
+      <div class="slot-item ${cur ? 'current' : ''}">
+        <div class="slot-header">
+          <div class="slot-time">${sl.start} - ${sl.end}</div>
+          <button onclick="deleteSlot(${i})" style="background:none; border:none; color:var(--red)">🗑</button>
+        </div>
+        <div class="tag-row">
+          ${sl.activities.map(a => `<div class="tag c${a.length%3}">${a}</div>`).join('')}
+        </div>
+      </div>`;
+  }).join('');
 }
 
-function importJSON(){
-  const inp=document.createElement('input');inp.type='file';inp.accept='.json';
-  inp.onchange=ev=>{
-    const f=ev.target.files[0];if(!f)return;
-    const r=new FileReader();
-    r.onload=re=>{
-      try{
-        const d=JSON.parse(re.result);
-        slots=d.slots||d;
-        if(d.acts){ACTS=d.acts;saveActs();}
-        saveSlots();buildChips('cg1',selectedActs);renderView();
-        showStatus('✅ Timetable loaded from file!');
-        toast('📂 Loaded!');
-      }catch{toast('❌ Invalid file');}
-    };r.readAsText(f);
-  };inp.click();
+function deleteSlot(i) {
+  slots.splice(i, 1);
+  localStorage.setItem('rp_slots', JSON.stringify(slots));
+  renderView();
 }
 
-function clearAll(){
-  if(confirm('Clear ALL scheduled slots? This cannot be undone.'))
-    {slots=[];reminded.clear();saveSlots();renderView();toast('🗑️ All slots cleared');}
+function clearAll() {
+  if(confirm("Clear all data?")) { localStorage.clear(); location.reload(); }
 }
 
-function today(){
-  const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0')+'-'+d.getDate().toString().padStart(2,'0');
+function toast(m) {
+  const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2000);
 }
 
-/* ── INIT ── */
-if('Notification'in window&&Notification.permission==='default')Notification.requestPermission();
-buildChips('cg1',selectedActs);
-buildChips('cg2',editSelected);
+function startClock() {
+  setInterval(() => {
+    const now = new Date();
+    document.getElementById('clock').textContent = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    if(now.getSeconds() === 0) renderView();
+  }, 1000);
+}
+
+buildChips();
 renderView();
 startClock();
 </script>
