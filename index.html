@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -22,39 +23,39 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;dis
 
 /* ── HEADER ── */
 header{
-  height:var(--hdr);flex-shrink:0;
-  background:var(--surf);border-bottom:1px solid var(--bdr);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 16px;position:relative;z-index:50;
+height:var(–hdr);flex-shrink:0;
+background:var(–surf);border-bottom:1px solid var(–bdr);
+display:flex;align-items:center;justify-content:space-between;
+padding:0 16px;position:relative;z-index:50;
 }
 .hdr-left{display:flex;align-items:center;gap:10px}
-.hdr-left h1{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--acc);white-space:nowrap}
-.clock{font-size:0.78rem;font-weight:600;color:var(--acc);background:rgba(240,165,0,.12);padding:4px 10px;border-radius:20px;border:1px solid rgba(240,165,0,.25)}
+.hdr-left h1{font-family:‘Playfair Display’,serif;font-size:1.15rem;color:var(–acc);white-space:nowrap}
+.clock{font-size:0.78rem;font-weight:600;color:var(–acc);background:rgba(240,165,0,.12);padding:4px 10px;border-radius:20px;border:1px solid rgba(240,165,0,.25)}
 .hdr-right{display:flex;gap:8px}
 .hbtn{
-  padding:7px 13px;border-radius:8px;border:none;cursor:pointer;
-  font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;
-  transition:all .18s;white-space:nowrap;
+padding:7px 13px;border-radius:8px;border:none;cursor:pointer;
+font-family:‘DM Sans’,sans-serif;font-size:0.78rem;font-weight:600;
+transition:all .18s;white-space:nowrap;
 }
-.hbtn-acc{background:var(--acc);color:#111}
+.hbtn-acc{background:var(–acc);color:#111}
 .hbtn-acc:hover{filter:brightness(1.12)}
-.hbtn-out{background:transparent;border:1px solid var(--bdr);color:var(--text)}
-.hbtn-out:hover{border-color:var(--acc);color:var(--acc)}
+.hbtn-out{background:transparent;border:1px solid var(–bdr);color:var(–text)}
+.hbtn-out:hover{border-color:var(–acc);color:var(–acc)}
 
 /* ── TABS (mobile nav) ── */
 .tab-bar{
-  height:var(--nav);flex-shrink:0;
-  background:var(--surf);border-top:1px solid var(--bdr);
-  display:flex;order:99;
+height:var(–nav);flex-shrink:0;
+background:var(–surf);border-top:1px solid var(–bdr);
+display:flex;order:99;
 }
 .tab-btn{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:3px;background:none;border:none;cursor:pointer;color:var(--muted);
-  font-family:'DM Sans',sans-serif;font-size:0.65rem;font-weight:500;transition:all .18s;
-  padding:6px 0;
+flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+gap:3px;background:none;border:none;cursor:pointer;color:var(–muted);
+font-family:‘DM Sans’,sans-serif;font-size:0.65rem;font-weight:500;transition:all .18s;
+padding:6px 0;
 }
 .tab-btn .ticon{font-size:1.3rem;line-height:1}
-.tab-btn.active{color:var(--acc)}
+.tab-btn.active{color:var(–acc)}
 .tab-btn.active .ticon{filter:drop-shadow(0 0 4px rgba(240,165,0,.6))}
 
 /* ── CONTENT AREA ── */
@@ -63,157 +64,243 @@ header{
 .page.active{display:flex;flex-direction:column}
 
 /* ── SECTION TITLE ── */
-.sec-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--acc);margin-bottom:14px}
+.sec-title{font-family:‘Playfair Display’,serif;font-size:1rem;color:var(–acc);margin-bottom:14px}
 
 /* ── ADD FORM ── */
-.card{background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;margin-bottom:16px}
+.card{background:var(–surf2);border:1px solid var(–bdr);border-radius:var(–r);padding:16px;margin-bottom:16px}
 .time-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .time-group{display:flex;flex-direction:column;gap:5px}
-.time-group label{font-size:0.7rem;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.4px}
+.time-group label{font-size:0.7rem;color:var(–muted);font-weight:500;text-transform:uppercase;letter-spacing:.4px}
 .time-group input[type=time]{
-  background:var(--bg);border:1px solid var(--bdr);border-radius:8px;
-  color:var(--text);padding:10px 12px;font-family:'DM Sans',sans-serif;
-  font-size:0.95rem;width:100%;appearance:none;-webkit-appearance:none;
+background:var(–bg);border:1px solid var(–bdr);border-radius:8px;
+color:var(–text);padding:10px 12px;font-family:‘DM Sans’,sans-serif;
+font-size:0.95rem;width:100%;appearance:none;-webkit-appearance:none;
 }
-.time-group input[type=time]:focus{outline:none;border-color:var(--acc)}
+.time-group input[type=time]:focus{outline:none;border-color:var(–acc)}
 
-.field-label{font-size:0.7rem;color:var(--muted);margin:10px 0 7px;font-weight:500;text-transform:uppercase;letter-spacing:.4px}
+.field-label{font-size:0.7rem;color:var(–muted);margin:10px 0 7px;font-weight:500;text-transform:uppercase;letter-spacing:.4px}
 
 .manual-row{display:flex;gap:8px;margin-bottom:12px}
 .manual-row input{
-  flex:1;background:var(--bg);border:1px solid var(--bdr);border-radius:8px;
-  color:var(--text);padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:0.88rem;
+flex:1;background:var(–bg);border:1px solid var(–bdr);border-radius:8px;
+color:var(–text);padding:10px 12px;font-family:‘DM Sans’,sans-serif;font-size:0.88rem;
 }
-.manual-row input::placeholder{color:var(--muted)}
-.manual-row input:focus{outline:none;border-color:var(--acc)}
+.manual-row input::placeholder{color:var(–muted)}
+.manual-row input:focus{outline:none;border-color:var(–acc)}
 .manual-row button{
-  padding:10px 14px;background:transparent;border:1px solid var(--acc);
-  border-radius:8px;color:var(--acc);cursor:pointer;font-size:1rem;font-weight:700;
-  transition:all .15s;flex-shrink:0;
+padding:10px 14px;background:transparent;border:1px solid var(–acc);
+border-radius:8px;color:var(–acc);cursor:pointer;font-size:1rem;font-weight:700;
+transition:all .15s;flex-shrink:0;
 }
-.manual-row button:active{background:var(--acc);color:#111}
+.manual-row button:active{background:var(–acc);color:#111}
 
 .chip-grid{display:flex;flex-wrap:wrap;gap:6px;padding:2px}
 .chip{
-  padding:6px 12px;border-radius:20px;border:1px solid var(--bdr);background:var(--bg);
-  color:var(--muted);font-size:0.72rem;cursor:pointer;transition:all .15s;
-  user-select:none;display:flex;align-items:center;gap:5px;
-  -webkit-user-select:none;
+padding:6px 12px;border-radius:20px;border:1px solid var(–bdr);background:var(–bg);
+color:var(–muted);font-size:0.72rem;cursor:pointer;transition:all .15s;
+user-select:none;display:flex;align-items:center;gap:5px;
+-webkit-user-select:none;
 }
-.chip.sel{background:var(--acc);color:#111;border-color:var(--acc);font-weight:600}
-.chip .cdel{font-size:0.65rem;color:var(--red);font-weight:700;opacity:0;transition:.15s;margin-left:1px}
+.chip.sel{background:var(–acc);color:#111;border-color:var(–acc);font-weight:600}
+.chip .cdel{font-size:0.65rem;color:var(–red);font-weight:700;opacity:0;transition:.15s;margin-left:1px}
 .chip.custom:active .cdel{opacity:1}
 @media(hover:hover){.chip.custom:hover .cdel{opacity:1}}
 
 .add-btn{
-  width:100%;margin-top:14px;padding:13px;background:var(--acc);color:#111;
-  border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:700;
-  font-size:0.9rem;cursor:pointer;transition:all .18s;letter-spacing:.3px;
+width:100%;margin-top:14px;padding:13px;background:var(–acc);color:#111;
+border:none;border-radius:10px;font-family:‘DM Sans’,sans-serif;font-weight:700;
+font-size:0.9rem;cursor:pointer;transition:all .18s;letter-spacing:.3px;
 }
 .add-btn:active{filter:brightness(.9);transform:scale(.98)}
 
 /* ── SLOTS LIST ── */
 .slot-item{
-  background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);
-  padding:14px;margin-bottom:10px;transition:all .18s;
+background:var(–surf);border:1px solid var(–bdr);border-radius:var(–r);
+padding:14px;margin-bottom:10px;transition:all .18s;
 }
-.slot-item:active{border-color:var(--acc)}
+.slot-item:active{border-color:var(–acc)}
 .slot-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px}
-.slot-time{font-size:0.82rem;font-weight:600;color:var(--acc);background:rgba(240,165,0,.1);padding:4px 10px;border-radius:20px}
+.slot-time{font-size:0.82rem;font-weight:600;color:var(–acc);background:rgba(240,165,0,.1);padding:4px 10px;border-radius:20px}
 .slot-btns{display:flex;gap:6px;flex-shrink:0}
 .sbtn{
-  padding:5px 10px;border-radius:6px;border:1px solid;cursor:pointer;
-  font-size:0.7rem;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .15s;
+padding:5px 10px;border-radius:6px;border:1px solid;cursor:pointer;
+font-size:0.7rem;font-weight:600;font-family:‘DM Sans’,sans-serif;transition:all .15s;
 }
-.sbtn-edit{border-color:var(--bdr);color:var(--muted);background:transparent}
-.sbtn-edit:active{border-color:var(--acc);color:var(--acc)}
-.sbtn-del{border-color:rgba(224,92,92,.3);color:var(--red);background:rgba(224,92,92,.08)}
-.sbtn-del:active{background:var(--red);color:#fff}
+.sbtn-edit{border-color:var(–bdr);color:var(–muted);background:transparent}
+.sbtn-edit:active{border-color:var(–acc);color:var(–acc)}
+.sbtn-del{border-color:rgba(224,92,92,.3);color:var(–red);background:rgba(224,92,92,.08)}
+.sbtn-del:active{background:var(–red);color:#fff}
 
 .tag-row{display:flex;flex-wrap:wrap;gap:6px}
 .tag{
-  padding:5px 10px 5px 11px;border-radius:20px;font-size:0.7rem;font-weight:500;
-  border:1px solid;display:flex;align-items:center;gap:6px;
+padding:5px 10px 5px 11px;border-radius:20px;font-size:0.7rem;font-weight:500;
+border:1px solid;display:flex;align-items:center;gap:6px;
 }
 .tag .tdel{
-  cursor:pointer;font-size:0.6rem;opacity:.4;font-weight:700;
-  background:rgba(255,255,255,.1);border-radius:50%;
-  width:14px;height:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  transition:.15s;
+cursor:pointer;font-size:0.6rem;opacity:.4;font-weight:700;
+background:rgba(255,255,255,.1);border-radius:50%;
+width:14px;height:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+transition:.15s;
 }
 .tag .tdel:active{opacity:1;background:rgba(224,92,92,.5)}
 @media(hover:hover){.tag .tdel:hover{opacity:1;background:rgba(224,92,92,.4)}}
 
-/* CURRENT indicator */
-.cur-badge{font-size:0.65rem;background:var(--acc);color:#111;padding:2px 8px;border-radius:20px;font-weight:700;animation:pulse 1.4s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-.slot-item.current{border-color:var(--acc);background:rgba(240,165,0,.05)}
+/* ── CURRENT SLOT — SPECIAL HIGHLIGHT ── */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes borderGlow{0%,100%{box-shadow:0 0 0 0 rgba(240,165,0,0),0 0 20px rgba(240,165,0,.15)}50%{box-shadow:0 0 0 3px rgba(240,165,0,.25),0 0 40px rgba(240,165,0,.3)}}
+@keyframes scanline{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+@keyframes breathe{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.02)}}
 
-.empty{text-align:center;padding:50px 20px;color:var(--muted)}
+.slot-item.current{
+border:2px solid var(–acc);
+background:linear-gradient(135deg,rgba(240,165,0,.1) 0%,rgba(240,165,0,.04) 60%,rgba(240,100,0,.08) 100%);
+animation:borderGlow 2.5s ease-in-out infinite;
+position:relative;overflow:hidden;
+}
+/* shimmer sweep */
+.slot-item.current::before{
+content:’’;position:absolute;inset:0;
+background:linear-gradient(105deg,transparent 40%,rgba(240,165,0,.08) 50%,transparent 60%);
+animation:scanline 3s ease-in-out infinite;pointer-events:none;
+}
+/* left accent stripe */
+.slot-item.current::after{
+content:’’;position:absolute;left:0;top:0;bottom:0;width:4px;
+background:linear-gradient(180deg,#ffd700,#f0a500,#e07b00);
+border-radius:4px 0 0 4px;
+}
+
+/* ACTIVE NOW banner */
+.cur-banner{
+display:flex;align-items:center;justify-content:space-between;
+background:linear-gradient(90deg,rgba(240,165,0,.22),rgba(240,140,0,.1));
+border:1px solid rgba(240,165,0,.35);
+border-radius:8px;padding:7px 12px;margin-bottom:11px;
+animation:breathe 2.5s ease-in-out infinite;
+}
+.cur-banner-left{display:flex;align-items:center;gap:8px}
+.cur-dot{width:9px;height:9px;border-radius:50%;background:#f0a500;animation:pulse 1s infinite;flex-shrink:0;box-shadow:0 0 6px rgba(240,165,0,.8)}
+.cur-label{font-size:0.75rem;font-weight:700;color:#f0a500;text-transform:uppercase;letter-spacing:.8px}
+.cur-time-left{font-size:0.7rem;color:rgba(240,165,0,.7);font-weight:500}
+
+/* progress bar */
+.cur-progress{height:4px;background:rgba(240,165,0,.15);border-radius:4px;margin-bottom:11px;overflow:hidden}
+.cur-progress-fill{height:100%;background:linear-gradient(90deg,#ffd700,#f0a500);border-radius:4px;transition:width .5s ease}
+
+/* badge (small, inside header row) */
+.cur-badge{
+font-size:0.62rem;background:var(–acc);color:#111;
+padding:2px 8px;border-radius:20px;font-weight:800;
+animation:pulse 1.2s infinite;letter-spacing:.4px;
+}
+
+/* make time badge brighter when current */
+.slot-item.current .slot-time{
+background:rgba(240,165,0,.25);color:#ffd700;
+border:1px solid rgba(240,165,0,.45);
+}
+/* ── ACTIVE TASK TAGS — vivid highlight ── */
+@keyframes tagGlow{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 14px 3px rgba(240,165,0,.3)}}
+@keyframes tagPop{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+
+.slot-item.current .tag-row{gap:8px}
+.slot-item.current .tag{
+font-size:0.8rem;font-weight:700;
+padding:8px 14px 8px 12px;
+border-width:1.5px;letter-spacing:.25px;
+animation:tagGlow 2.5s ease-in-out infinite,tagPop 3s ease-in-out infinite;
+box-shadow:0 3px 12px rgba(0,0,0,.35);
+position:relative;overflow:hidden;
+}
+.slot-item.current .tag::before{
+content:’’;position:absolute;inset:0;
+background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.13) 50%,transparent 65%);
+animation:scanline 2.6s ease-in-out infinite;pointer-events:none;
+}
+.slot-item.current .tag:nth-child(2){animation-delay:.45s}
+.slot-item.current .tag:nth-child(3){animation-delay:.9s}
+.slot-item.current .tag:nth-child(4){animation-delay:1.35s}
+.slot-item.current .tag:nth-child(5){animation-delay:1.8s}
+.slot-item.current .tag:nth-child(6){animation-delay:2.25s}
+
+.slot-item.current .c0{background:rgba(240,165,0,.3);color:#ffd145;border-color:rgba(240,165,0,.75)}
+.slot-item.current .c1{background:rgba(224,92,92,.3);color:#ff8080;border-color:rgba(224,92,92,.75)}
+.slot-item.current .c2{background:rgba(76,175,125,.3);color:#6dffc0;border-color:rgba(76,175,125,.75)}
+.slot-item.current .c3{background:rgba(100,149,237,.3);color:#85b8ff;border-color:rgba(100,149,237,.75)}
+.slot-item.current .c4{background:rgba(186,85,211,.3);color:#d97dff;border-color:rgba(186,85,211,.75)}
+.slot-item.current .c5{background:rgba(255,160,122,.3);color:#ffb899;border-color:rgba(255,160,122,.75)}
+.slot-item.current .c6{background:rgba(95,158,160,.3);color:#7de0e3;border-color:rgba(95,158,160,.75)}
+.slot-item.current .c7{background:rgba(255,215,0,.3);color:#ffe44d;border-color:rgba(255,215,0,.75)}
+.slot-item.current .c8{background:rgba(144,238,144,.3);color:#a0ffb0;border-color:rgba(144,238,144,.75)}
+.slot-item.current .c9{background:rgba(173,216,230,.3);color:#c5eeff;border-color:rgba(173,216,230,.75)}
+.slot-item.current .c10{background:rgba(255,182,193,.3);color:#ffc4d0;border-color:rgba(255,182,193,.75)}
+.slot-item.current .c11{background:rgba(221,160,221,.3);color:#e8b0ff;border-color:rgba(221,160,221,.75)}
+
+.empty{text-align:center;padding:50px 20px;color:var(–muted)}
 .empty .ei{font-size:3rem;margin-bottom:12px}
-.empty h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--text);margin-bottom:6px}
+.empty h3{font-family:‘Playfair Display’,serif;font-size:1rem;color:var(–text);margin-bottom:6px}
 .empty p{font-size:0.82rem}
 
 /* ── SAVE PAGE ── */
 .save-card{
-  background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);
-  padding:18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;cursor:pointer;
-  transition:all .18s;
+background:var(–surf2);border:1px solid var(–bdr);border-radius:var(–r);
+padding:18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;cursor:pointer;
+transition:all .18s;
 }
-.save-card:active{border-color:var(--acc);transform:scale(.98)}
+.save-card:active{border-color:var(–acc);transform:scale(.98)}
 .save-icon{font-size:2rem;width:46px;text-align:center;flex-shrink:0}
-.save-info h4{font-size:0.9rem;font-weight:600;color:var(--text);margin-bottom:3px}
-.save-info p{font-size:0.75rem;color:var(--muted)}
-.save-card .arrow{margin-left:auto;color:var(--muted);font-size:1rem;flex-shrink:0}
+.save-info h4{font-size:0.9rem;font-weight:600;color:var(–text);margin-bottom:3px}
+.save-info p{font-size:0.75rem;color:var(–muted)}
+.save-card .arrow{margin-left:auto;color:var(–muted);font-size:1rem;flex-shrink:0}
 
 .status-box{background:rgba(76,175,125,.1);border:1px solid rgba(76,175,125,.3);border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:0.8rem;color:#4caf7d;display:none}
 .status-box.show{display:block}
 
-.divider{height:1px;background:var(--bdr);margin:14px 0}
-.sec-sub{font-size:0.72rem;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.divider{height:1px;background:var(–bdr);margin:14px 0}
+.sec-sub{font-size:0.72rem;color:var(–muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
 
 /* ── POPUP ── */
 .popup-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
-  backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px;
+display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
+backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px;
 }
 .popup-overlay.show{display:flex}
 .popup{
-  background:var(--surf);border:1px solid var(--acc);border-radius:20px;
-  padding:28px 24px;width:100%;max-width:360px;text-align:center;
-  box-shadow:0 20px 60px rgba(240,165,0,.2);animation:popIn .3s cubic-bezier(.175,.885,.32,1.275);
+background:var(–surf);border:1px solid var(–acc);border-radius:20px;
+padding:28px 24px;width:100%;max-width:360px;text-align:center;
+box-shadow:0 20px 60px rgba(240,165,0,.2);animation:popIn .3s cubic-bezier(.175,.885,.32,1.275);
 }
 @keyframes popIn{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:scale(1)}}
 .popup .pi{font-size:2.5rem;margin-bottom:10px}
-.popup h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:5px}
-.popup .pt{font-size:0.82rem;color:var(--muted);margin-bottom:14px}
+.popup h3{font-family:‘Playfair Display’,serif;font-size:1.2rem;color:var(–acc);margin-bottom:5px}
+.popup .pt{font-size:0.82rem;color:var(–muted);margin-bottom:14px}
 .popup .pa{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px}
-.popup-close{padding:11px 32px;background:var(--acc);color:#111;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.88rem;cursor:pointer;width:100%}
+.popup-close{padding:11px 32px;background:var(–acc);color:#111;border:none;border-radius:10px;font-family:‘DM Sans’,sans-serif;font-weight:700;font-size:0.88rem;cursor:pointer;width:100%}
 
 /* ── EDIT MODAL ── */
 .modal-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:150;
-  align-items:flex-end;justify-content:center;
+display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:150;
+align-items:flex-end;justify-content:center;
 }
 .modal-overlay.show{display:flex}
 .modal{
-  background:var(--surf);border:1px solid var(--bdr);border-radius:20px 20px 0 0;
-  padding:24px 20px;width:100%;max-width:480px;
-  animation:slideUp .3s ease;max-height:88vh;overflow-y:auto;
+background:var(–surf);border:1px solid var(–bdr);border-radius:20px 20px 0 0;
+padding:24px 20px;width:100%;max-width:480px;
+animation:slideUp .3s ease;max-height:88vh;overflow-y:auto;
 }
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal h3{font-family:'Playfair Display',serif;color:var(--acc);margin-bottom:16px}
+.modal h3{font-family:‘Playfair Display’,serif;color:var(–acc);margin-bottom:16px}
 .modal-footer{display:flex;gap:10px;margin-top:16px}
-.modal-footer button{flex:1;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.88rem;transition:all .15s}
-.mf-cancel{background:var(--surf2);color:var(--text)}
-.mf-save{background:var(--acc);color:#111}
+.modal-footer button{flex:1;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:‘DM Sans’,sans-serif;font-weight:600;font-size:0.88rem;transition:all .15s}
+.mf-cancel{background:var(–surf2);color:var(–text)}
+.mf-save{background:var(–acc);color:#111}
 
 /* ── TOAST ── */
 .toast{
-  position:fixed;bottom:calc(var(--nav) + 12px);left:50%;transform:translateX(-50%) translateY(20px);
-  background:var(--surf);border:1px solid var(--acc);border-radius:10px;
-  padding:10px 18px;white-space:nowrap;font-size:0.8rem;font-weight:500;
-  box-shadow:0 6px 24px rgba(0,0,0,.4);opacity:0;transition:all .3s;z-index:300;
+position:fixed;bottom:calc(var(–nav) + 12px);left:50%;transform:translateX(-50%) translateY(20px);
+background:var(–surf);border:1px solid var(–acc);border-radius:10px;
+padding:10px 18px;white-space:nowrap;font-size:0.8rem;font-weight:500;
+box-shadow:0 6px 24px rgba(0,0,0,.4);opacity:0;transition:all .3s;z-index:300;
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -233,22 +320,23 @@ header{
 
 /* ── DESKTOP LAYOUT override ── */
 @media(min-width:768px){
-  body{flex-direction:column}
-  .tab-bar{display:none}
-  .content{flex-direction:row}
-  .page{border:none}
-  #pg-add{display:flex;flex:0 0 360px;border-right:1px solid var(--bdr);overflow-y:auto}
-  #pg-view{display:flex;flex:1;overflow-y:auto}
-  #pg-save{display:none}
-  #pg-save.active{display:flex;position:fixed;top:var(--hdr);right:0;width:320px;height:calc(100vh - var(--hdr));border-left:1px solid var(--bdr);z-index:40;background:var(--surf)}
-  .hdr-right{display:flex}
-  .modal{border-radius:18px;margin-bottom:0}
-  .modal-overlay{align-items:center}
+body{flex-direction:column}
+.tab-bar{display:none}
+.content{flex-direction:row}
+.page{border:none}
+#pg-add{display:flex;flex:0 0 360px;border-right:1px solid var(–bdr);overflow-y:auto}
+#pg-view{display:flex;flex:1;overflow-y:auto}
+#pg-save{display:none}
+#pg-save.active{display:flex;position:fixed;top:var(–hdr);right:0;width:320px;height:calc(100vh - var(–hdr));border-left:1px solid var(–bdr);z-index:40;background:var(–surf)}
+.hdr-right{display:flex}
+.modal{border-radius:18px;margin-bottom:0}
+.modal-overlay{align-items:center}
 }
 
 ::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:10px}
+::-webkit-scrollbar-thumb{background:var(–bdr);border-radius:10px}
 </style>
+
 </head>
 <body>
 
@@ -265,6 +353,7 @@ header{
 <div class="content">
 
   <!-- PAGE: ADD SLOT -->
+
   <div class="page active" id="pg-add">
     <div class="sec-title">➕ Add Time Slot</div>
     <div class="card">
@@ -279,109 +368,118 @@ header{
         </div>
       </div>
 
-      <div class="field-label">✏️ Custom Activity (type + press ＋)</div>
-      <div class="manual-row">
-        <input type="text" id="manualInput" placeholder="e.g. READING TIME…" maxlength="40"
-          onkeydown="if(event.key==='Enter')addCustom('cg1',selectedActs,'manualInput')">
-        <button onclick="addCustom('cg1',selectedActs,'manualInput')">＋</button>
-      </div>
+```
+  <div class="field-label">✏️ Custom Activity (type + press ＋)</div>
+  <div class="manual-row">
+    <input type="text" id="manualInput" placeholder="e.g. READING TIME…" maxlength="40"
+      onkeydown="if(event.key==='Enter')addCustom('cg1',selectedActs,'manualInput')">
+    <button onclick="addCustom('cg1',selectedActs,'manualInput')">＋</button>
+  </div>
 
-      <div class="field-label">☑️ Select Activities (tap to toggle, multiple ok)</div>
-      <div class="chip-grid" id="cg1"></div>
+  <div class="field-label">☑️ Select Activities (tap to toggle, multiple ok)</div>
+  <div class="chip-grid" id="cg1"></div>
 
-      <button class="add-btn" onclick="addSlot()">+ Add to Timetable</button>
-    </div>
+  <button class="add-btn" onclick="addSlot()">+ Add to Timetable</button>
+</div>
+```
+
   </div>
 
   <!-- PAGE: VIEW TIMETABLE -->
+
   <div class="page" id="pg-view">
     <div class="sec-title">📅 Today's Timetable</div>
     <div id="slotsList"></div>
   </div>
 
   <!-- PAGE: SAVE / EXPORT -->
+
   <div class="page" id="pg-save">
     <div class="sec-title">💾 Save & Export</div>
 
-    <div class="status-box" id="statusBox"></div>
+```
+<div class="status-box" id="statusBox"></div>
 
-    <div class="sec-sub">Auto-Save</div>
-    <div class="card" style="padding:14px 16px;margin-bottom:14px">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div style="font-size:0.85rem;font-weight:600;color:var(--text)">Browser Storage</div>
-          <div style="font-size:0.72rem;color:var(--muted);margin-top:2px">Auto-saved on every change</div>
-        </div>
-        <div style="font-size:1.4rem">✅</div>
-      </div>
+<div class="sec-sub">Auto-Save</div>
+<div class="card" style="padding:14px 16px;margin-bottom:14px">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div style="font-size:0.85rem;font-weight:600;color:var(--text)">Browser Storage</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-top:2px">Auto-saved on every change</div>
     </div>
+    <div style="font-size:1.4rem">✅</div>
+  </div>
+</div>
 
-    <div class="divider"></div>
-    <div class="sec-sub">Export Options</div>
+<div class="divider"></div>
+<div class="sec-sub">Export Options</div>
 
-    <div class="save-card" onclick="exportJSON()">
-      <div class="save-icon">📄</div>
-      <div class="save-info">
-        <h4>Download as JSON</h4>
-        <p>Best for reloading later · Share & backup</p>
-      </div>
-      <div class="arrow">›</div>
-    </div>
+<div class="save-card" onclick="exportJSON()">
+  <div class="save-icon">📄</div>
+  <div class="save-info">
+    <h4>Download as JSON</h4>
+    <p>Best for reloading later · Share & backup</p>
+  </div>
+  <div class="arrow">›</div>
+</div>
 
-    <div class="save-card" onclick="exportCSV()">
-      <div class="save-icon">📊</div>
-      <div class="save-info">
-        <h4>Download as CSV</h4>
-        <p>Open in Excel, Google Sheets</p>
-      </div>
-      <div class="arrow">›</div>
-    </div>
+<div class="save-card" onclick="exportCSV()">
+  <div class="save-icon">📊</div>
+  <div class="save-info">
+    <h4>Download as CSV</h4>
+    <p>Open in Excel, Google Sheets</p>
+  </div>
+  <div class="arrow">›</div>
+</div>
 
-    <div class="save-card" onclick="printTimetable()">
-      <div class="save-icon">🖨️</div>
-      <div class="save-info">
-        <h4>Print / Save as PDF</h4>
-        <p>Print or save as PDF via browser</p>
-      </div>
-      <div class="arrow">›</div>
-    </div>
+<div class="save-card" onclick="printTimetable()">
+  <div class="save-icon">🖨️</div>
+  <div class="save-info">
+    <h4>Print / Save as PDF</h4>
+    <p>Print or save as PDF via browser</p>
+  </div>
+  <div class="arrow">›</div>
+</div>
 
-    <div class="save-card" onclick="shareTimetable()">
-      <div class="save-icon">🔗</div>
-      <div class="save-info">
-        <h4>Share via Link</h4>
-        <p>Copy shareable URL with timetable data</p>
-      </div>
-      <div class="arrow">›</div>
-    </div>
+<div class="save-card" onclick="shareTimetable()">
+  <div class="save-icon">🔗</div>
+  <div class="save-info">
+    <h4>Share via Link</h4>
+    <p>Copy shareable URL with timetable data</p>
+  </div>
+  <div class="arrow">›</div>
+</div>
 
-    <div class="divider"></div>
-    <div class="sec-sub">Import</div>
+<div class="divider"></div>
+<div class="sec-sub">Import</div>
 
-    <div class="save-card" onclick="importJSON()">
-      <div class="save-icon">📂</div>
-      <div class="save-info">
-        <h4>Load from File</h4>
-        <p>Restore a previously saved JSON file</p>
-      </div>
-      <div class="arrow">›</div>
-    </div>
+<div class="save-card" onclick="importJSON()">
+  <div class="save-icon">📂</div>
+  <div class="save-info">
+    <h4>Load from File</h4>
+    <p>Restore a previously saved JSON file</p>
+  </div>
+  <div class="arrow">›</div>
+</div>
 
-    <div class="divider"></div>
-    <div class="sec-sub">Danger Zone</div>
-    <div class="save-card" onclick="clearAll()" style="border-color:rgba(224,92,92,.2)">
-      <div class="save-icon">🗑️</div>
-      <div class="save-info">
-        <h4 style="color:var(--red)">Clear All Slots</h4>
-        <p>Permanently remove all scheduled slots</p>
-      </div>
-      <div class="arrow" style="color:var(--red)">›</div>
-    </div>
+<div class="divider"></div>
+<div class="sec-sub">Danger Zone</div>
+<div class="save-card" onclick="clearAll()" style="border-color:rgba(224,92,92,.2)">
+  <div class="save-icon">🗑️</div>
+  <div class="save-info">
+    <h4 style="color:var(--red)">Clear All Slots</h4>
+    <p>Permanently remove all scheduled slots</p>
+  </div>
+  <div class="arrow" style="color:var(--red)">›</div>
+</div>
+```
+
   </div>
 
 </div>
 
 <!-- BOTTOM TAB BAR -->
+
 <nav class="tab-bar">
   <button class="tab-btn active" data-page="pg-add" onclick="switchTab(this,'pg-add')">
     <span class="ticon">➕</span>Add Slot
@@ -395,6 +493,7 @@ header{
 </nav>
 
 <!-- REMINDER POPUP -->
+
 <div class="popup-overlay" id="popupOverlay">
   <div class="popup">
     <div class="pi">⏰</div>
@@ -406,6 +505,7 @@ header{
 </div>
 
 <!-- EDIT MODAL -->
+
 <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <h3>✏️ Edit Slot</h3>
@@ -429,9 +529,11 @@ header{
 </div>
 
 <!-- TOAST -->
+
 <div class="toast" id="toast"></div>
 
 <!-- PRINT STYLES -->
+
 <style id="printStyle">
 @media print{
   header,nav,.tab-bar,.card,.sec-title+.card,#pg-add,#pg-save,.popup-overlay,.modal-overlay,.toast{display:none!important}
@@ -541,6 +643,8 @@ function saveEdit(){
 function closeModal(){document.getElementById('modalOverlay').classList.remove('show');}
 
 /* ── RENDER ── */
+function toMins(t){const[h,m]=t.split(':');return parseInt(h)*60+parseInt(m);}
+
 function renderView(){
   const el=document.getElementById('slotsList');
   if(!slots.length){
@@ -548,9 +652,33 @@ function renderView(){
   }
   const now=new Date();
   const ns=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  const nowMins=now.getHours()*60+now.getMinutes();
+
   el.innerHTML=slots.map((sl,i)=>{
     const cur=sl.start<=ns&&ns<sl.end;
-    return`<div class="slot-item${cur?' current':''}">
+    let bannerHtml='', progressHtml='';
+
+    if(cur){
+      const startM=toMins(sl.start), endM=toMins(sl.end);
+      const pct=Math.min(100,Math.round(((nowMins-startM)/(endM-startM))*100));
+      const minsLeft=endM-nowMins;
+      const timeLeft=minsLeft<=0?'Ending soon':`${minsLeft} min${minsLeft!==1?'s':''} left`;
+
+      bannerHtml=`<div class="cur-banner">
+        <div class="cur-banner-left">
+          <div class="cur-dot"></div>
+          <span class="cur-label">⚡ Active Now</span>
+        </div>
+        <span class="cur-time-left">${timeLeft}</span>
+      </div>`;
+
+      progressHtml=`<div class="cur-progress">
+        <div class="cur-progress-fill" style="width:${pct}%"></div>
+      </div>`;
+    }
+
+    return`<div class="slot-item${cur?' current':''}" id="slot-${i}">
+      ${bannerHtml}
       <div class="slot-header">
         <div class="slot-time">${fmt(sl.start)} → ${fmt(sl.end)}</div>
         <div class="slot-btns">
@@ -559,11 +687,16 @@ function renderView(){
           <button class="sbtn sbtn-del" onclick="deleteSlot(${i})">🗑</button>
         </div>
       </div>
+      ${progressHtml}
       <div class="tag-row">
-        ${sl.activities.map(a=>`<div class="tag c${ci(a)}">${icon(a)} ${a}<span class="tdel" onclick="removeTag(${i},'${a.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</span></div>`).join('')}
+        ${sl.activities.map(a=>`<div class="tag c${ci(a)}"><span style="${cur?'font-size:1rem':''}"> ${icon(a)}</span> ${a}<span class="tdel" onclick="removeTag(${i},'${a.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</span></div>`).join('')}
       </div>
     </div>`;
   }).join('');
+
+  // Auto-scroll to current slot smoothly
+  const cur=document.querySelector('.slot-item.current');
+  if(cur) setTimeout(()=>cur.scrollIntoView({behavior:'smooth',block:'center'}),100);
 }
 
 /* ── TABS ── */
@@ -591,6 +724,26 @@ function startClock(){
     document.getElementById('clock').textContent=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
     const min=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
     if(min!==lastMin){lastMin=min;renderView();checkReminders(min);}
+    // Update progress bar fill every tick without full re-render
+    else{
+      const fill=document.querySelector('.cur-progress-fill');
+      if(fill){
+        const curSlot=slots.find(sl=>{const ns=min;return sl.start<=ns&&ns<sl.end;});
+        if(curSlot){
+          const sm=toMins(curSlot.start),em=toMins(curSlot.end),nm=now.getHours()*60+now.getMinutes();
+          fill.style.width=Math.min(100,Math.round(((nm-sm)/(em-sm))*100))+'%';
+        }
+      }
+      // update time-left label
+      const tl=document.querySelector('.cur-time-left');
+      if(tl){
+        const curSlot=slots.find(sl=>{const ns=min;return sl.start<=ns&&ns<sl.end;});
+        if(curSlot){
+          const em=toMins(curSlot.end),nm=now.getHours()*60+now.getMinutes();
+          const ml=em-nm;tl.textContent=ml<=0?'Ending soon':`${ml} min${ml!==1?'s':''} left`;
+        }
+      }
+    }
   },1000);
 }
 function checkReminders(ns){
@@ -698,5 +851,6 @@ buildChips('cg2',editSelected);
 renderView();
 startClock();
 </script>
+
 </body>
 </html>
