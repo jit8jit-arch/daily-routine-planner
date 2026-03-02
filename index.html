@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-狠translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0f1117">
     <title>Routine Pro</title>
     <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0f1117; --card: #1a1d27; --accent: #f0a500;
             --text: #ffffff; --muted: #8e8e93; --red: #ff453a;
-            --green: #34c759; --safe-top: env(safe-area-inset-top);
+            --green: #34c759; --glass: rgba(255, 255, 255, 0.05);
+            --safe-top: env(safe-area-inset-top);
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
@@ -21,102 +22,115 @@
             color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* HEADER */
+        /* ANIMATIONS */
+        @keyframes pulse-glow { 0% { box-shadow: 0 0 5px var(--accent); } 50% { box-shadow: 0 0 20px var(--accent); } 100% { box-shadow: 0 0 5px var(--accent); } }
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0px); } }
+
         header {
             padding: calc(var(--safe-top) + 15px) 20px 15px;
             background: var(--card); border-bottom: 1px solid #2c2c2e;
             display: flex; justify-content: space-between; align-items: center;
         }
-        header h1 { margin: 0; font-size: 1.2rem; color: var(--accent); }
-        .clock { font-weight: 700; font-size: 1rem; color: var(--accent); }
+        header h1 { margin: 0; font-size: 1.2rem; color: var(--accent); font-weight: 800; }
+        .clock { font-weight: 700; font-size: 1rem; color: var(--accent); background: rgba(240,165,0,0.1); padding: 4px 12px; border-radius: 20px; }
 
-        /* TAB SYSTEM */
         .content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
         .page { display: none; }
-        .page.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .page.active { display: block; }
 
-        /* CARDS & INPUTS */
-        .card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 16px; border: 1px solid #2c2c2e; }
-        label { display: block; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
+        .card { background: var(--card); border-radius: 18px; padding: 18px; margin-bottom: 16px; border: 1px solid #2c2c2e; }
+        label { display: block; font-size: 0.7rem; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; font-weight: 700; letter-spacing: 0.5px; }
+        
         input[type="time"], input[type="text"] {
             width: 100%; background: #000; border: 1px solid #3a3a3c; color: #fff;
-            padding: 12px; border-radius: 10px; font-size: 1rem; margin-bottom: 15px;
+            padding: 14px; border-radius: 12px; font-size: 1rem; margin-bottom: 15px; outline: none;
         }
+        input:focus { border-color: var(--accent); }
 
-        /* DAY SELECTOR (WEEKLY FEATURE) */
-        .day-grid { display: flex; justify-content: space-between; gap: 5px; margin-bottom: 15px; }
-        .day-box { flex: 1; position: relative; }
-        .day-box input { position: absolute; opacity: 0; width: 0; height: 0; }
+        /* MANUAL ENTRY ROW */
+        .manual-entry { display: flex; gap: 8px; margin-bottom: 20px; }
+        .manual-entry input { margin-bottom: 0; }
+        .add-btn-small { background: var(--accent); border: none; padding: 0 20px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+
+        .day-grid { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 20px; }
+        .day-box { flex: 1; }
+        .day-box input { display: none; }
         .day-box label { 
-            display: block; background: #2c2c2e; text-align: center; padding: 10px 0;
-            border-radius: 8px; font-size: 0.7rem; color: #fff; transition: 0.2s;
+            display: block; background: #2c2c2e; text-align: center; padding: 12px 0;
+            border-radius: 10px; font-size: 0.75rem; color: #fff; transition: 0.3s; margin: 0;
         }
-        .day-box input:checked + label { background: var(--accent); color: #000; font-weight: 700; }
+        .day-box input:checked + label { background: var(--accent); color: #000; font-weight: 800; transform: scale(1.05); }
 
-        /* ACTIVITY CHIPS */
-        .chip-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .chip-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
         .chip { 
-            padding: 8px 16px; background: #2c2c2e; border-radius: 20px; font-size: 0.85rem; 
-            border: 1px solid transparent; transition: 0.2s;
+            padding: 10px 18px; background: #2c2c2e; border-radius: 25px; font-size: 0.85rem; 
+            border: 1px solid transparent; transition: 0.2s; cursor: pointer;
         }
-        .chip.selected { border-color: var(--accent); color: var(--accent); background: rgba(240,165,0,0.1); }
+        .chip.selected { border-color: var(--accent); color: var(--accent); background: rgba(240,165,0,0.15); font-weight: 600; }
 
-        /* SLOT ITEMS */
+        /* ACTIVE SLOT HIGHLIGHT */
         .slot { 
-            background: var(--card); border-radius: 15px; padding: 16px; margin-bottom: 12px;
-            border-left: 4px solid transparent; position: relative;
+            background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px;
+            border: 1px solid #2c2c2e; transition: 0.4s; position: relative; overflow: hidden;
         }
         .slot.active-now { 
-            border-left-color: var(--accent); background: linear-gradient(90deg, rgba(240,165,0,0.1) 0%, var(--card) 100%);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 2px solid var(--accent); 
+            animation: pulse-glow 3s infinite ease-in-out;
+            background: linear-gradient(135deg, #1a1d27 0%, #252a3a 100%);
         }
-        .slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .slot-time { font-weight: 700; font-size: 0.9rem; color: var(--accent); }
-        .slot-actions button { background: none; border: none; font-size: 1.1rem; margin-left: 10px; cursor: pointer; }
-        .tag-row { display: flex; flex-wrap: wrap; gap: 5px; }
-        .tag { background: #3a3a3c; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; }
+        .slot.active-now::after {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(240,165,0,0.1), transparent);
+            animation: shimmer 2s infinite;
+        }
+        .status-badge {
+            display: inline-block; background: var(--accent); color: #000;
+            font-size: 0.6rem; font-weight: 900; padding: 3px 8px; border-radius: 6px;
+            margin-bottom: 10px; animation: float 2s infinite ease-in-out;
+        }
 
-        /* NAV BAR */
+        .slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .slot-time { font-weight: 800; font-size: 1rem; color: var(--accent); }
+        .tag-row { display: flex; flex-wrap: wrap; gap: 8px; position: relative; z-index: 2; }
+        .tag { background: rgba(255,255,255,0.08); padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; }
+
         nav {
-            position: fixed; bottom: 0; width: 100%; height: 70px;
-            background: var(--card); border-top: 1px solid #2c2c2e;
-            display: flex; justify-content: space-around; align-items: center;
-            padding-bottom: env(safe-area-inset-bottom);
+            position: fixed; bottom: 0; width: 100%; height: 75px;
+            background: rgba(26, 29, 39, 0.95); backdrop-filter: blur(15px);
+            border-top: 1px solid #2c2c2e; display: flex; justify-content: space-around; padding-bottom: 15px;
         }
-        .nav-btn { background: none; border: none; color: var(--muted); text-align: center; flex: 1; }
-        .nav-btn.active { color: var(--accent); }
-        .nav-btn span { display: block; font-size: 1.2rem; }
-        .nav-btn small { font-size: 0.65rem; font-weight: 600; }
-
+        .nav-btn { background: none; border: none; color: var(--muted); padding-top: 10px; transition: 0.3s; }
+        .nav-btn.active { color: var(--accent); transform: translateY(-5px); }
         .btn-primary { 
             width: 100%; background: var(--accent); color: #000; border: none; 
-            padding: 15px; border-radius: 12px; font-weight: 700; font-size: 1rem;
+            padding: 16px; border-radius: 14px; font-weight: 800; font-size: 1rem;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Routine Planner</h1>
+    <h1>Routine Pro</h1>
     <div class="clock" id="clock">00:00</div>
 </header>
 
 <div class="content">
     <div id="view" class="page active">
-        <label id="today-label">Today's Schedule</label>
+        <label id="today-label">Today's Timeline</label>
         <div id="slot-container"></div>
     </div>
 
     <div id="add" class="page">
-        <h2 id="form-title" style="font-size: 1.2rem; margin-bottom: 20px;">Add New Slot</h2>
+        <h2 id="form-title" style="font-size: 1.3rem; font-weight: 800; margin-bottom: 20px;">Plan Activity</h2>
+        
         <div class="card">
-            <div style="display: flex; gap: 10px;">
+            <div style="display: flex; gap: 12px;">
                 <div style="flex: 1;"><label>Start</label><input type="time" id="startTime" value="06:00"></div>
                 <div style="flex: 1;"><label>End</label><input type="time" id="endTime" value="07:00"></div>
             </div>
-            
-            <label>Repeat Weekly (Default: All)</label>
+
+            <label>Days of the Week</label>
             <div class="day-grid">
                 <div class="day-box"><input type="checkbox" id="d0" value="0" checked><label for="d0">S</label></div>
                 <div class="day-box"><input type="checkbox" id="d1" value="1" checked><label for="d1">M</label></div>
@@ -127,54 +141,62 @@
                 <div class="day-box"><input type="checkbox" id="d6" value="6" checked><label for="d6">S</label></div>
             </div>
 
-            <label>Activities</label>
-            <div class="chip-grid" id="preset-chips"></div>
-            
-            <label>Reminder</label>
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
-                <input type="checkbox" id="reminder-toggle" style="width:20px; height:20px;">
-                <span>Notify me when this starts</span>
+            <label>Manual Activity Entry</label>
+            <div class="manual-entry">
+                <input type="text" id="manualInput" placeholder="Type custom activity...">
+                <button class="add-btn-small" onclick="addManualActivity()">+</button>
             </div>
 
-            <button class="btn-primary" onclick="saveSlot()">Save to Timetable</button>
-            <button id="cancel-edit" style="display:none; width:100%; background:none; color:var(--muted); border:none; margin-top:10px;" onclick="resetForm()">Cancel</button>
+            <label>Quick Select</label>
+            <div class="chip-grid" id="preset-chips"></div>
+
+            <button class="btn-primary" onclick="saveSlot()">Save Routine</button>
+            <button id="cancel-edit" style="display:none; width:100%; background:none; color:var(--muted); border:none; margin-top:15px; font-weight:600;" onclick="resetForm()">Cancel Editing</button>
         </div>
     </div>
 </div>
 
 <nav>
-    <button class="nav-btn active" onclick="showPage('view', this)"><span>📅</span><small>SCHEDULE</small></button>
-    <button class="nav-btn" onclick="showPage('add', this)"><span>➕</span><small>ADD NEW</small></button>
+    <button class="nav-btn active" onclick="showPage('view', this)"><span>📅</span><br><small>VIEW</small></button>
+    <button class="nav-btn" onclick="showPage('add', this)"><span>➕</span><br><small>ADD</small></button>
 </nav>
 
 <script>
-    const PRESETS = ["Cooking", "Cleaning", "Exercise", "Work", "Reading", "Kid's Time", "Prayer", "Bedtime"];
+    let PRESETS = ["Cooking", "Cleaning", "Exercise", "Work", "Reading", "Kid's Time"];
     let slots = JSON.parse(localStorage.getItem('routine_slots')) || [];
     let selectedActivities = [];
     let editingId = null;
 
-    // INITIALIZE
     function init() {
-        const chipContainer = document.getElementById('preset-chips');
-        PRESETS.forEach(p => {
-            const div = document.createElement('div');
-            div.className = 'chip';
-            div.innerText = p;
-            div.onclick = () => toggleChip(p, div);
-            chipContainer.appendChild(div);
-        });
+        renderChips();
         renderSchedule();
         updateClock();
         setInterval(updateClock, 1000);
     }
 
-    function toggleChip(activity, element) {
-        if (selectedActivities.includes(activity)) {
-            selectedActivities = selectedActivities.filter(a => a !== activity);
-            element.classList.remove('selected');
-        } else {
-            selectedActivities.push(activity);
-            element.classList.add('selected');
+    function renderChips() {
+        const container = document.getElementById('preset-chips');
+        container.innerHTML = '';
+        PRESETS.forEach(p => {
+            const div = document.createElement('div');
+            div.className = `chip ${selectedActivities.includes(p) ? 'selected' : ''}`;
+            div.innerText = p;
+            div.onclick = () => {
+                if(selectedActivities.includes(p)) selectedActivities = selectedActivities.filter(a => a !== p);
+                else selectedActivities.push(p);
+                renderChips();
+            };
+            container.appendChild(div);
+        });
+    }
+
+    function addManualActivity() {
+        const val = document.getElementById('manualInput').value.trim();
+        if(val && !PRESETS.includes(val)) {
+            PRESETS.push(val);
+            selectedActivities.push(val);
+            document.getElementById('manualInput').value = '';
+            renderChips();
         }
     }
 
@@ -189,22 +211,18 @@
     function saveSlot() {
         const start = document.getElementById('startTime').value;
         const end = document.getElementById('endTime').value;
-        const reminder = document.getElementById('reminder-toggle').checked;
         const days = Array.from(document.querySelectorAll('.day-box input:checked')).map(i => parseInt(i.value));
 
-        if (!selectedActivities.length) return alert("Select at least one activity");
+        if (!selectedActivities.length) return alert("Please select or type an activity");
 
         const newSlot = {
             id: editingId || Date.now(),
-            start, end, days, reminder,
+            start, end, days,
             activities: [...selectedActivities]
         };
 
-        if (editingId) {
-            slots = slots.map(s => s.id === editingId ? newSlot : s);
-        } else {
-            slots.push(newSlot);
-        }
+        if (editingId) slots = slots.map(s => s.id === editingId ? newSlot : s);
+        else slots.push(newSlot);
 
         slots.sort((a, b) => a.start.localeCompare(b.start));
         localStorage.setItem('routine_slots', JSON.stringify(slots));
@@ -212,105 +230,69 @@
         showPage('view', document.querySelector('.nav-btn'));
     }
 
-    function resetForm() {
-        editingId = null;
-        selectedActivities = [];
-        document.getElementById('form-title').innerText = "Add New Slot";
-        document.getElementById('cancel-edit').style.display = 'none';
-        document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
-        document.querySelectorAll('.day-box input').forEach(i => i.checked = true);
-    }
-
     function renderSchedule() {
         const container = document.getElementById('slot-container');
         const today = new Date().getDay();
         const nowStr = new Date().toTimeString().slice(0,5);
-        
         container.innerHTML = '';
+        
         const todaysSlots = slots.filter(s => s.days.includes(today));
-
-        if (!todaysSlots.length) {
-            container.innerHTML = '<div style="text-align:center; padding:50px; color:var(--muted);">No activities today.</div>';
-            return;
-        }
 
         todaysSlots.forEach(s => {
             const isActive = nowStr >= s.start && nowStr < s.end;
             const div = document.createElement('div');
             div.className = `slot ${isActive ? 'active-now' : ''}`;
             div.innerHTML = `
-                ${isActive ? '<span style="color:var(--accent); font-size:0.7rem; font-weight:800;">● ACTIVE NOW</span>' : ''}
+                ${isActive ? '<div class="status-badge">CURRENTLY ACTIVE</div>' : ''}
                 <div class="slot-header">
-                    <div class="slot-time">${formatTime(s.start)} - ${formatTime(s.end)}</div>
+                    <div class="slot-time">${s.start} - ${s.end}</div>
                     <div class="slot-actions">
                         <button onclick="editSlot(${s.id})">✏️</button>
                         <button onclick="deleteSlot(${s.id})">🗑️</button>
                     </div>
                 </div>
                 <div class="tag-row">${s.activities.map(a => `<div class="tag">${a}</div>`).join('')}</div>
-                ${s.reminder ? '<div style="font-size:0.6rem; color:var(--muted); margin-top:8px;">🔔 Reminder set</div>' : ''}
             `;
             container.appendChild(div);
         });
     }
 
-    function formatTime(t) {
-        const [h, m] = t.split(':');
-        const hh = parseInt(h);
-        return `${hh % 12 || 12}:${m} ${hh >= 12 ? 'PM' : 'AM'}`;
+    function editSlot(id) {
+        const s = slots.find(i => i.id === id);
+        editingId = id;
+        document.getElementById('startTime').value = s.start;
+        document.getElementById('endTime').value = s.end;
+        selectedActivities = [...s.activities];
+        document.querySelectorAll('.day-box input').forEach(input => {
+            input.checked = s.days.includes(parseInt(input.value));
+        });
+        renderChips();
+        document.getElementById('form-title').innerText = "Edit Schedule";
+        document.getElementById('cancel-edit').style.display = 'block';
+        showPage('add', document.querySelectorAll('.nav-btn')[1]);
     }
 
     function deleteSlot(id) {
-        if(confirm("Delete this slot?")) {
+        if(confirm("Delete this?")) {
             slots = slots.filter(s => s.id !== id);
             localStorage.setItem('routine_slots', JSON.stringify(slots));
             renderSchedule();
         }
     }
 
-    function editSlot(id) {
-        const s = slots.find(item => item.id === id);
-        editingId = id;
-        document.getElementById('startTime').value = s.start;
-        document.getElementById('endTime').value = s.end;
-        document.getElementById('reminder-toggle').checked = s.reminder;
-        document.getElementById('form-title').innerText = "Edit Time Slot";
-        document.getElementById('cancel-edit').style.display = 'block';
-        
-        // Reset and set chips
-        selectedActivities = [...s.activities];
-        document.querySelectorAll('.chip').forEach(chip => {
-            chip.classList.toggle('selected', selectedActivities.includes(chip.innerText));
-        });
-
-        // Set days
-        document.querySelectorAll('.day-box input').forEach(input => {
-            input.checked = s.days.includes(parseInt(input.value));
-        });
-
-        showPage('add', document.querySelectorAll('.nav-btn')[1]);
+    function resetForm() {
+        editingId = null;
+        selectedActivities = [];
+        document.getElementById('form-title').innerText = "Plan Activity";
+        document.getElementById('cancel-edit').style.display = 'none';
+        document.querySelectorAll('.day-box input').forEach(i => i.checked = true);
+        renderChips();
     }
 
     function updateClock() {
-        const now = new Date();
-        document.getElementById('clock').innerText = now.toTimeString().slice(0, 5);
-        
-        // Basic Logic for Visual "Reminders"
-        const nowStr = now.toTimeString().slice(0,5);
-        slots.forEach(s => {
-            if (s.start === nowStr && s.reminder && now.getSeconds() === 0) {
-                // Check if browser supports notifications
-                if (Notification.permission === "granted") {
-                    new Notification("Activity Starting!", { body: s.activities.join(", ") });
-                } else {
-                    alert("⏰ STARTING: " + s.activities.join(", "));
-                }
-            }
-        });
+        document.getElementById('clock').innerText = new Date().toTimeString().slice(0, 5);
+        if(new Date().getSeconds() === 0) renderSchedule();
     }
-
-    // Ask for notification permission
-    if ("Notification" in window) Notification.requestPermission();
 
     init();
 </script>
