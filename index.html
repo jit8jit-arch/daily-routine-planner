@@ -6,14 +6,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0f1117">
-    <title>Routine Pro</title>
+    <title>Routine Pro Max</title>
     <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0f1117; --card: #1a1d27; --accent: #f0a500;
-            --text: #ffffff; --muted: #8e8e93; --red: #ff453a;
-            --green: #34c759; --glass: rgba(255, 255, 255, 0.05);
+            --text: #ffffff; --muted: #a0a0ab; --red: #ff453a;
             --safe-top: env(safe-area-inset-top);
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -23,114 +22,119 @@
         }
 
         /* ANIMATIONS */
-        @keyframes pulse-glow { 0% { box-shadow: 0 0 5px var(--accent); } 50% { box-shadow: 0 0 20px var(--accent); } 100% { box-shadow: 0 0 5px var(--accent); } }
+        @keyframes pulse-glow { 0% { box-shadow: 0 0 5px var(--accent); } 50% { box-shadow: 0 0 25px rgba(240,165,0,0.4); } 100% { box-shadow: 0 0 5px var(--accent); } }
         @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0px); } }
+        @keyframes icon-bounce { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.2); } }
+        @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         header {
             padding: calc(var(--safe-top) + 15px) 20px 15px;
             background: var(--card); border-bottom: 1px solid #2c2c2e;
             display: flex; justify-content: space-between; align-items: center;
         }
-        header h1 { margin: 0; font-size: 1.2rem; color: var(--accent); font-weight: 800; }
-        .clock { font-weight: 700; font-size: 1rem; color: var(--accent); background: rgba(240,165,0,0.1); padding: 4px 12px; border-radius: 20px; }
+        header h1 { margin: 0; font-size: 1.3rem; color: var(--accent); font-weight: 900; letter-spacing: -0.5px; }
+        .clock { font-weight: 800; font-size: 1.1rem; color: var(--accent); background: rgba(240,165,0,0.15); padding: 5px 15px; border-radius: 30px; border: 1px solid rgba(240,165,0,0.3); }
 
-        .content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
+        .content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 110px; }
         .page { display: none; }
-        .page.active { display: block; }
+        .page.active { display: block; animation: slide-up 0.4s ease-out; }
 
-        .card { background: var(--card); border-radius: 18px; padding: 18px; margin-bottom: 16px; border: 1px solid #2c2c2e; }
-        label { display: block; font-size: 0.7rem; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; font-weight: 700; letter-spacing: 0.5px; }
+        .card { background: var(--card); border-radius: 22px; padding: 22px; margin-bottom: 18px; border: 1px solid #2c2c2e; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        label { display: block; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
         
         input[type="time"], input[type="text"] {
-            width: 100%; background: #000; border: 1px solid #3a3a3c; color: #fff;
-            padding: 14px; border-radius: 12px; font-size: 1rem; margin-bottom: 15px; outline: none;
+            width: 100%; background: #000; border: 2px solid #3a3a3c; color: #fff;
+            padding: 16px; border-radius: 14px; font-size: 1.1rem; margin-bottom: 20px; outline: none; transition: 0.3s;
         }
-        input:focus { border-color: var(--accent); }
+        input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(240,165,0,0.2); }
 
-        /* MANUAL ENTRY ROW */
-        .manual-entry { display: flex; gap: 8px; margin-bottom: 20px; }
-        .manual-entry input { margin-bottom: 0; }
-        .add-btn-small { background: var(--accent); border: none; padding: 0 20px; border-radius: 12px; font-weight: 700; cursor: pointer; }
-
-        .day-grid { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 20px; }
+        .day-grid { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 25px; }
         .day-box { flex: 1; }
         .day-box input { display: none; }
         .day-box label { 
-            display: block; background: #2c2c2e; text-align: center; padding: 12px 0;
-            border-radius: 10px; font-size: 0.75rem; color: #fff; transition: 0.3s; margin: 0;
+            display: block; background: #2c2c2e; text-align: center; padding: 14px 0;
+            border-radius: 12px; font-size: 0.8rem; color: #fff; transition: 0.3s; cursor: pointer;
         }
-        .day-box input:checked + label { background: var(--accent); color: #000; font-weight: 800; transform: scale(1.05); }
+        .day-box input:checked + label { background: var(--accent); color: #000; font-weight: 900; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(240,165,0,0.3); }
 
-        .chip-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-        .chip { 
-            padding: 10px 18px; background: #2c2c2e; border-radius: 25px; font-size: 0.85rem; 
-            border: 1px solid transparent; transition: 0.2s; cursor: pointer;
-        }
-        .chip.selected { border-color: var(--accent); color: var(--accent); background: rgba(240,165,0,0.15); font-weight: 600; }
-
-        /* ACTIVE SLOT HIGHLIGHT */
+        /* ACTIVITY CARDS */
         .slot { 
-            background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px;
+            background: var(--card); border-radius: 24px; padding: 24px; margin-bottom: 18px;
             border: 1px solid #2c2c2e; transition: 0.4s; position: relative; overflow: hidden;
         }
         .slot.active-now { 
-            border: 2px solid var(--accent); 
+            border: 3px solid var(--accent); 
             animation: pulse-glow 3s infinite ease-in-out;
-            background: linear-gradient(135deg, #1a1d27 0%, #252a3a 100%);
+            background: linear-gradient(145deg, #1e2230 0%, #12141d 100%);
         }
         .slot.active-now::after {
             content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(240,165,0,0.1), transparent);
-            animation: shimmer 2s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            animation: shimmer 2.5s infinite;
         }
+
         .status-badge {
             display: inline-block; background: var(--accent); color: #000;
-            font-size: 0.6rem; font-weight: 900; padding: 3px 8px; border-radius: 6px;
-            margin-bottom: 10px; animation: float 2s infinite ease-in-out;
+            font-size: 0.65rem; font-weight: 900; padding: 4px 12px; border-radius: 50px;
+            margin-bottom: 15px; letter-spacing: 1px;
         }
 
-        .slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .slot-time { font-weight: 800; font-size: 1rem; color: var(--accent); }
-        .tag-row { display: flex; flex-wrap: wrap; gap: 8px; position: relative; z-index: 2; }
-        .tag { background: rgba(255,255,255,0.08); padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; }
+        .slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .slot-time { font-weight: 900; font-size: 1.2rem; color: var(--accent); }
+        
+        /* NEW LARGE FONT TAGS */
+        .tag-list { display: flex; flex-direction: column; gap: 12px; }
+        .big-tag { 
+            display: flex; align-items: center; gap: 15px;
+            background: rgba(255,255,255,0.05); padding: 15px 20px; 
+            border-radius: 18px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .active-now .big-tag { background: rgba(240,165,0,0.1); border-color: rgba(240,165,0,0.3); }
+        .tag-icon { font-size: 2rem; animation: icon-bounce 2s infinite ease-in-out; }
+        .tag-text { font-size: 1.3rem; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px; }
+
+        .slot-actions button { background: rgba(255,255,255,0.05); border: none; font-size: 1.2rem; padding: 8px; border-radius: 10px; margin-left: 8px; color: #fff; }
 
         nav {
-            position: fixed; bottom: 0; width: 100%; height: 75px;
-            background: rgba(26, 29, 39, 0.95); backdrop-filter: blur(15px);
-            border-top: 1px solid #2c2c2e; display: flex; justify-content: space-around; padding-bottom: 15px;
+            position: fixed; bottom: 0; width: 100%; height: 85px;
+            background: rgba(26, 29, 39, 0.98); backdrop-filter: blur(20px);
+            border-top: 1px solid #2c2c2e; display: flex; justify-content: space-around; padding-bottom: 20px; z-index: 100;
         }
-        .nav-btn { background: none; border: none; color: var(--muted); padding-top: 10px; transition: 0.3s; }
-        .nav-btn.active { color: var(--accent); transform: translateY(-5px); }
+        .nav-btn { background: none; border: none; color: var(--muted); padding-top: 15px; transition: 0.3s; flex: 1; }
+        .nav-btn.active { color: var(--accent); }
+        .nav-btn span { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+        .nav-btn small { font-weight: 800; font-size: 0.7rem; }
+
         .btn-primary { 
             width: 100%; background: var(--accent); color: #000; border: none; 
-            padding: 16px; border-radius: 14px; font-weight: 800; font-size: 1rem;
+            padding: 18px; border-radius: 16px; font-weight: 900; font-size: 1.1rem;
+            box-shadow: 0 10px 20px rgba(240,165,0,0.2); cursor: pointer;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Routine Pro</h1>
+    <h1>ROUTINE PRO</h1>
     <div class="clock" id="clock">00:00</div>
 </header>
 
 <div class="content">
     <div id="view" class="page active">
-        <label id="today-label">Today's Timeline</label>
+        <label id="today-label">Current Timeline</label>
         <div id="slot-container"></div>
     </div>
 
     <div id="add" class="page">
-        <h2 id="form-title" style="font-size: 1.3rem; font-weight: 800; margin-bottom: 20px;">Plan Activity</h2>
+        <h2 id="form-title" style="font-size: 1.5rem; font-weight: 900; margin-bottom: 25px;">New Activity</h2>
         
         <div class="card">
-            <div style="display: flex; gap: 12px;">
-                <div style="flex: 1;"><label>Start</label><input type="time" id="startTime" value="06:00"></div>
-                <div style="flex: 1;"><label>End</label><input type="time" id="endTime" value="07:00"></div>
+            <div style="display: flex; gap: 15px;">
+                <div style="flex: 1;"><label>Start Time</label><input type="time" id="startTime" value="06:00"></div>
+                <div style="flex: 1;"><label>End Time</label><input type="time" id="endTime" value="07:00"></div>
             </div>
 
-            <label>Days of the Week</label>
+            <label>Repeat Weekly</label>
             <div class="day-grid">
                 <div class="day-box"><input type="checkbox" id="d0" value="0" checked><label for="d0">S</label></div>
                 <div class="day-box"><input type="checkbox" id="d1" value="1" checked><label for="d1">M</label></div>
@@ -141,28 +145,39 @@
                 <div class="day-box"><input type="checkbox" id="d6" value="6" checked><label for="d6">S</label></div>
             </div>
 
-            <label>Manual Activity Entry</label>
-            <div class="manual-entry">
-                <input type="text" id="manualInput" placeholder="Type custom activity...">
-                <button class="add-btn-small" onclick="addManualActivity()">+</button>
-            </div>
+            <label>Enter Activity Name</label>
+            <input type="text" id="manualInput" placeholder="e.g., Gym, Morning Coffee..." onkeypress="if(event.key==='Enter') addManualActivity()">
 
-            <label>Quick Select</label>
-            <div class="chip-grid" id="preset-chips"></div>
+            <label>Quick History</label>
+            <div class="chip-grid" id="preset-chips" style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:25px;"></div>
 
-            <button class="btn-primary" onclick="saveSlot()">Save Routine</button>
-            <button id="cancel-edit" style="display:none; width:100%; background:none; color:var(--muted); border:none; margin-top:15px; font-weight:600;" onclick="resetForm()">Cancel Editing</button>
+            <button class="btn-primary" onclick="saveSlot()">SAVE TO SCHEDULE</button>
+            <button id="cancel-edit" style="display:none; width:100%; background:none; color:var(--muted); border:none; margin-top:20px; font-weight:700;" onclick="resetForm()">DISCARD CHANGES</button>
         </div>
     </div>
 </div>
 
 <nav>
-    <button class="nav-btn active" onclick="showPage('view', this)"><span>📅</span><br><small>VIEW</small></button>
-    <button class="nav-btn" onclick="showPage('add', this)"><span>➕</span><br><small>ADD</small></button>
+    <button class="nav-btn active" onclick="showPage('view', this)"><span>📅</span><small>SCHEDULE</small></button>
+    <button class="nav-btn" onclick="showPage('add', this)"><span>➕</span><small>ADD</small></button>
 </nav>
 
 <script>
-    let PRESETS = ["Cooking", "Cleaning", "Exercise", "Work", "Reading", "Kid's Time"];
+    // Activity to Emoji Mapping
+    const EMOJIS = {
+        "cook": "🍳", "clean": "🧹", "gym": "💪", "work": "💻", "read": "📚", "kid": "🧸", "prayer": "🤲", "sleep": "😴",
+        "bath": "🚿", "coffee": "☕", "walk": "🐕", "dinner": "🍽️", "study": "🧠", "meditation": "🧘", "default": "⭐"
+    };
+
+    function getEmoji(text) {
+        text = text.toLowerCase();
+        for (const [key, val] of Object.entries(EMOJIS)) {
+            if (text.includes(key)) return val;
+        }
+        return EMOJIS.default;
+    }
+
+    let PRESETS = ["Cooking", "Cleaning", "Gym", "Work", "Reading", "Kid's Time"];
     let slots = JSON.parse(localStorage.getItem('routine_slots')) || [];
     let selectedActivities = [];
     let editingId = null;
@@ -179,7 +194,12 @@
         container.innerHTML = '';
         PRESETS.forEach(p => {
             const div = document.createElement('div');
-            div.className = `chip ${selectedActivities.includes(p) ? 'selected' : ''}`;
+            div.style.padding = "10px 18px";
+            div.style.background = selectedActivities.includes(p) ? "rgba(240,165,0,0.2)" : "#2c2c2e";
+            div.style.border = "1px solid " + (selectedActivities.includes(p) ? "var(--accent)" : "transparent");
+            div.style.borderRadius = "12px";
+            div.style.fontSize = "0.9rem";
+            div.style.color = selectedActivities.includes(p) ? "var(--accent)" : "#fff";
             div.innerText = p;
             div.onclick = () => {
                 if(selectedActivities.includes(p)) selectedActivities = selectedActivities.filter(a => a !== p);
@@ -192,9 +212,9 @@
 
     function addManualActivity() {
         const val = document.getElementById('manualInput').value.trim();
-        if(val && !PRESETS.includes(val)) {
-            PRESETS.push(val);
-            selectedActivities.push(val);
+        if(val) {
+            if(!PRESETS.includes(val)) PRESETS.push(val);
+            if(!selectedActivities.includes(val)) selectedActivities.push(val);
             document.getElementById('manualInput').value = '';
             renderChips();
         }
@@ -209,11 +229,12 @@
     }
 
     function saveSlot() {
+        addManualActivity(); // Catch any text in the input
         const start = document.getElementById('startTime').value;
         const end = document.getElementById('endTime').value;
         const days = Array.from(document.querySelectorAll('.day-box input:checked')).map(i => parseInt(i.value));
 
-        if (!selectedActivities.length) return alert("Please select or type an activity");
+        if (!selectedActivities.length) return alert("Add an activity first!");
 
         const newSlot = {
             id: editingId || Date.now(),
@@ -251,7 +272,14 @@
                         <button onclick="deleteSlot(${s.id})">🗑️</button>
                     </div>
                 </div>
-                <div class="tag-row">${s.activities.map(a => `<div class="tag">${a}</div>`).join('')}</div>
+                <div class="tag-list">
+                    ${s.activities.map(a => `
+                        <div class="big-tag">
+                            <span class="tag-icon">${getEmoji(a)}</span>
+                            <span class="tag-text">${a}</span>
+                        </div>
+                    `).join('')}
+                </div>
             `;
             container.appendChild(div);
         });
@@ -283,7 +311,7 @@
     function resetForm() {
         editingId = null;
         selectedActivities = [];
-        document.getElementById('form-title').innerText = "Plan Activity";
+        document.getElementById('form-title').innerText = "New Activity";
         document.getElementById('cancel-edit').style.display = 'none';
         document.querySelectorAll('.day-box input').forEach(i => i.checked = true);
         renderChips();
