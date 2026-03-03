@@ -6,9 +6,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0f1117">
-    <title>Routine Pro Master</title>
+    <title>Routine Pro Max</title>
     <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
@@ -28,90 +28,82 @@
             background: var(--card); border-bottom: 1px solid #2c2c2e;
             display: flex; justify-content: space-between; align-items: center;
         }
-        header h1 { margin: 0; font-size: 1.1rem; color: var(--accent); font-weight: 900; }
+        header h1 { margin: 0; font-size: 1.2rem; color: var(--accent); font-weight: 900; }
         .clock { font-weight: 800; font-size: 1rem; color: var(--accent); background: rgba(240,165,0,0.1); padding: 5px 12px; border-radius: 30px; }
 
         .content { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
         .page { display: none; }
-        .page.active { display: block; }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* ALIGNED TIME INPUTS */
-        .time-input-container {
-            display: flex; gap: 12px; margin-bottom: 20px;
+        /* DAILY SLOTS - BIG HIGHLIGHTS */
+        .slot { 
+            background: var(--card); border-radius: 24px; padding: 25px; margin-bottom: 18px; 
+            border: 1px solid #2c2c2e; position: relative; overflow: hidden;
         }
-        .time-box { flex: 1; display: flex; flex-direction: column; }
-        input[type="time"] {
-            width: 100%; background: #000; border: 2px solid #3a3a3c; color: #fff;
-            padding: 12px; border-radius: 12px; font-size: 1rem; outline: none;
-            appearance: none; -webkit-appearance: none;
-        }
-
-        /* WEEKLY TABLE VIEW */
-        .table-wrap { width: 100%; overflow-x: auto; background: var(--card); border-radius: 12px; padding: 10px; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-        th, td { border: 1px solid #3a3a3c; padding: 8px; text-align: left; vertical-align: top; }
-        th { color: var(--accent); background: #000; }
-
-        /* CARDS & TAGS */
-        .slot { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px; border: 1px solid #2c2c2e; position: relative; }
-        .active-now { border: 2px solid var(--accent); box-shadow: 0 0 20px rgba(240,165,0,0.2); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+        .active-now { border: 3px solid var(--accent); animation: pulse 2s infinite; background: linear-gradient(145deg, #1e2230 0%, #12141d 100%); }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.01); } }
         
-        .tag-row { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-        .big-tag { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; }
-        .tag-text { font-size: 1.1rem; font-weight: 900; }
+        .slot-time-header { font-size: 1rem; font-weight: 800; color: var(--accent); margin-bottom: 15px; display: block; }
+        .big-activity-name { 
+            font-size: 2.2rem; font-weight: 900; text-transform: uppercase; 
+            letter-spacing: -1px; line-height: 1; display: flex; align-items: center; gap: 15px;
+        }
+        .activity-icon { font-size: 2.5rem; }
+
+        /* TIME INPUTS */
+        .time-row { display: flex; gap: 10px; margin-bottom: 20px; }
+        .time-row div { flex: 1; }
+        input[type="time"], input[type="text"] {
+            width: 100%; background: #000; border: 2px solid #3a3a3c; color: #fff;
+            padding: 15px; border-radius: 12px; font-size: 1rem; outline: none;
+        }
+
+        /* MOBILE WEEKLY CARDS */
+        .weekly-day-card { background: #000; border-radius: 15px; padding: 15px; margin-bottom: 15px; border: 1px solid #2c2c2e; }
+        .day-title { color: var(--accent); font-weight: 900; font-size: 1.1rem; margin-bottom: 10px; border-bottom: 1px solid #2c2c2e; padding-bottom: 5px; }
+        .mini-slot { font-size: 0.85rem; padding: 5px 0; border-bottom: 1px dotted #2c2c2e; display: flex; justify-content: space-between; }
 
         /* DAY SELECTOR */
-        .day-grid { display: flex; justify-content: space-between; gap: 5px; margin-bottom: 20px; }
+        .day-grid { display: flex; justify-content: space-between; gap: 4px; margin-bottom: 20px; }
         .day-box { flex: 1; }
         .day-box input { display: none; }
-        .day-box label { display: block; background: #2c2c2e; text-align: center; padding: 10px 0; border-radius: 8px; font-size: 0.7rem; color: #fff; }
-        .day-box input:checked + label { background: var(--accent); color: #000; font-weight: 800; }
+        .day-box label { display: block; background: #2c2c2e; text-align: center; padding: 12px 0; border-radius: 8px; font-size: 0.75rem; font-weight: 700; }
+        .day-box input:checked + label { background: var(--accent); color: #000; }
 
         /* NAV */
         nav {
-            position: fixed; bottom: 0; width: 100%; height: 75px; background: var(--card);
-            border-top: 1px solid #2c2c2e; display: flex; justify-content: space-around; padding-bottom: 15px;
+            position: fixed; bottom: 0; width: 100%; height: 80px; background: var(--card);
+            border-top: 1px solid #2c2c2e; display: flex; justify-content: space-around; padding-bottom: 15px; z-index: 1000;
         }
-        .nav-btn { background: none; border: none; color: var(--muted); flex: 1; }
+        .nav-btn { background: none; border: none; color: var(--muted); flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .nav-btn.active { color: var(--accent); }
-        
-        .btn-action { background: var(--accent); color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: 800; width: 100%; margin-top: 10px; }
-        .btn-pdf { background: #3a3a3c; color: #fff; margin-top: 10px; border: none; padding: 10px; border-radius: 8px; font-weight: 600; width: 100%; }
+        .nav-btn span { font-size: 1.4rem; }
+        .nav-btn small { font-size: 0.65rem; font-weight: 800; margin-top: 2px; }
+
+        .btn-main { background: var(--accent); color: #000; border: none; padding: 18px; border-radius: 15px; font-weight: 900; width: 100%; font-size: 1.1rem; margin-top: 10px; }
+        .btn-sec { background: #3a3a3c; color: #fff; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 10px; font-weight: 700; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>ROUTINE PRO</h1>
-    <div class="clock" id="clock">--:-- --</div>
+    <div class="clock" id="clock">00:00 AM</div>
 </header>
 
 <div class="content">
-    <div id="view" class="page active">
-        <div id="slot-container"></div>
-        <button class="btn-pdf" onclick="exportPDF('slot-container', 'Daily_Routine')">📄 Save Daily as PDF</button>
+    <div id="page-daily" class="page active">
+        <div id="daily-container"></div>
     </div>
 
-    <div id="weekly" class="page">
-        <h2 style="font-size: 1.2rem; color: var(--accent);">Weekly Timetable</h2>
-        <div id="weekly-table-area" class="table-wrap">
-            <table id="main-table">
-                <thead><tr><th>Time</th><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead>
-                <tbody id="table-body"></tbody>
-            </table>
+    <div id="page-add" class="page">
+        <h2 style="font-weight:900;">Plan Activity</h2>
+        <div class="time-row">
+            <div><label><small>START</small></label><input type="time" id="startTime" value="06:00"></div>
+            <div><label><small>END</small></label><input type="time" id="endTime" value="07:00"></div>
         </div>
-        <button class="btn-pdf" onclick="exportPDF('weekly-table-area', 'Weekly_Timetable')">📄 Save Weekly as PDF</button>
-    </div>
-
-    <div id="add" class="page">
-        <h2 id="form-title">Plan Task</h2>
-        <div class="time-input-container">
-            <div class="time-box"><label style="font-size:0.7rem; color:var(--muted); margin-bottom:5px;">START</label><input type="time" id="startTime" value="06:00"></div>
-            <div class="time-box"><label style="font-size:0.7rem; color:var(--muted); margin-bottom:5px;">END</label><input type="time" id="endTime" value="07:00"></div>
-        </div>
-
-        <label style="font-size:0.7rem; color:var(--muted);">REPEAT ON</label>
+        <label><small>REPEAT ON DAYS</small></label>
         <div class="day-grid">
             <div class="day-box"><input type="checkbox" id="d0" value="0" checked><label for="d0">S</label></div>
             <div class="day-box"><input type="checkbox" id="d1" value="1" checked><label for="d1">M</label></div>
@@ -121,30 +113,32 @@
             <div class="day-box"><input type="checkbox" id="d5" value="5" checked><label for="d5">F</label></div>
             <div class="day-box"><input type="checkbox" id="d6" value="6" checked><label for="d6">S</label></div>
         </div>
+        <input type="text" id="taskName" placeholder="Activity Name (e.g. Gym, Cooking)">
+        <button class="btn-main" onclick="saveTask()">SAVE ACTIVITY</button>
+    </div>
 
-        <label style="font-size:0.7rem; color:var(--muted);">TASK NAME</label>
-        <input type="text" id="manualInput" placeholder="Enter task..." style="width:100%; padding:14px; background:#000; border:2px solid #3a3a3c; color:#fff; border-radius:12px; margin-bottom:15px;">
+    <div id="page-more" class="page">
+        <h2 style="font-weight:900;">Weekly Summary</h2>
+        <div id="weekly-scroll-area"></div>
         
-        <label style="font-size:0.7rem; color:var(--muted);">QUICK SELECT</label>
-        <div id="presets" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;"></div>
-
-        <button class="btn-action" onclick="saveSlot()">SAVE TASK</button>
+        <hr style="border:0; border-top:1px solid #2c2c2e; margin:25px 0;">
+        
+        <h2 style="font-weight:900;">Export Options</h2>
+        <button class="btn-sec" onclick="exportPDF('daily-container', 'Daily_Schedule')">📄 Save Daily as PDF</button>
+        <button class="btn-sec" onclick="exportPDF('weekly-scroll-area', 'Weekly_Schedule')">🗓️ Save Weekly as PDF</button>
+        <button class="btn-sec" style="color:var(--red);" onclick="localStorage.clear(); location.reload();">🗑️ Clear All Data</button>
     </div>
 </div>
 
 <nav>
-    <button class="nav-btn active" onclick="showPage('view', this)"><span>📅</span><br><small>DAILY</small></button>
-    <button class="nav-btn" onclick="showPage('weekly', this)"><span>🗓️</span><br><small>WEEKLY</small></button>
-    <button class="nav-btn" onclick="showPage('add', this)"><span>➕</span><br><small>ADD</small></button>
+    <button class="nav-btn active" onclick="showPage('page-daily', this)"><span>📅</span><small>DAILY</small></button>
+    <button class="nav-btn" onclick="showPage('page-add', this)"><span>➕</span><small>ADD</small></button>
+    <button class="nav-btn" onclick="showPage('page-more', this)"><span>📊</span><small>WEEKLY/PDF</small></button>
 </nav>
 
 <script>
-    const EMOJIS = { "cook": "🍳", "clean": "🧹", "gym": "💪", "work": "💻", "read": "📚", "kid": "🧸", "pray": "🤲", "sleep": "😴", "bath": "🚿", "study": "🧠", "shop": "🛒", "walk": "🚶", "coffee": "☕" };
-    const PRESETS = ["Cooking", "Cleaning", "Gym", "Office Work", "Reading", "Kid's Play", "Prayer", "Shower", "Meditation", "Grocery", "Walking", "Breakfast", "Lunch", "Dinner"];
-    
-    let slots = JSON.parse(localStorage.getItem('routine_slots')) || [];
-    let selectedActivities = [];
-    let editingId = null;
+    const EMOJIS = { "cook": "🍳", "clean": "🧹", "gym": "💪", "work": "💻", "read": "📚", "kid": "🧸", "pray": "🤲", "sleep": "😴", "bath": "🚿", "walk": "🚶" };
+    let tasks = JSON.parse(localStorage.getItem('pro_tasks')) || [];
 
     function getEmoji(t) {
         t = t.toLowerCase();
@@ -152,7 +146,6 @@
         return "⭐";
     }
 
-    // Convert 24h to 12h format
     function t12(t) {
         let [h, m] = t.split(':');
         h = parseInt(h);
@@ -161,132 +154,109 @@
         return `${h}:${m} ${ampm}`;
     }
 
-    function init() {
-        const p = document.getElementById('presets');
-        PRESETS.forEach(pre => {
-            let div = document.createElement('div');
-            div.className = "day-box";
-            div.innerHTML = `<div style="background:#2c2c2e; padding:8px; border-radius:8px; font-size:0.8rem; cursor:pointer;">${pre}</div>`;
-            div.onclick = () => { document.getElementById('manualInput').value = pre; };
-            p.appendChild(div);
-        });
-        renderSchedule();
-        setInterval(updateClock, 1000);
-    }
-
-    function updateClock() {
-        let now = new Date();
-        let h = now.getHours();
-        let m = now.getMinutes().toString().padStart(2, '0');
-        let ampm = h >= 12 ? 'PM' : 'AM';
-        h = h % 12 || 12;
-        document.getElementById('clock').innerText = `${h}:${m} ${ampm}`;
-        if (now.getSeconds() === 0) renderSchedule();
-    }
-
     function showPage(id, btn) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         btn.classList.add('active');
-        if(id === 'weekly') renderWeeklyTable();
-        if(id === 'view') renderSchedule();
+        if(id === 'page-daily') renderDaily();
+        if(id === 'page-more') renderWeekly();
     }
 
-    function saveSlot() {
-        const task = document.getElementById('manualInput').value;
+    function saveTask() {
+        const name = document.getElementById('taskName').value;
         const start = document.getElementById('startTime').value;
         const end = document.getElementById('endTime').value;
         const days = Array.from(document.querySelectorAll('.day-box input:checked')).map(i => parseInt(i.value));
-        if(!task) return alert("Enter task name");
 
-        const newSlot = { id: editingId || Date.now(), start, end, days, task };
-        if (editingId) slots = slots.map(s => s.id === editingId ? newSlot : s);
-        else slots.push(newSlot);
+        if(!name) return alert("Please enter an activity name");
 
-        slots.sort((a,b) => a.start.localeCompare(b.start));
-        localStorage.setItem('routine_slots', JSON.stringify(slots));
-        location.reload();
+        tasks.push({ id: Date.now(), name, start, end, days });
+        tasks.sort((a,b) => a.start.localeCompare(b.start));
+        localStorage.setItem('pro_tasks', JSON.stringify(tasks));
+        
+        document.getElementById('taskName').value = '';
+        showPage('page-daily', document.querySelector('.nav-btn'));
     }
 
-    function renderSchedule() {
-        const container = document.getElementById('slot-container');
+    function renderDaily() {
+        const container = document.getElementById('daily-container');
         const today = new Date().getDay();
-        const nowH = new Date().getHours();
-        const nowM = new Date().getMinutes();
-        const nowStr = `${nowH.toString().padStart(2, '0')}:${nowM.toString().padStart(2, '0')}`;
+        const now = new Date().getHours() * 60 + new Date().getMinutes();
         
-        container.innerHTML = '';
-        const todaysSlots = slots.filter(s => s.days.includes(today));
+        container.innerHTML = '<h2 style="font-weight:900; margin-bottom:20px;">Today\'s Tasks</h2>';
+        const todaysTasks = tasks.filter(t => t.days.includes(today));
 
-        todaysSlots.forEach(s => {
-            const isActive = nowStr >= s.start && nowStr < s.end;
+        if(todaysTasks.length === 0) {
+            container.innerHTML += '<p style="color:var(--muted);">No activities planned for today.</p>';
+            return;
+        }
+
+        todaysTasks.forEach(t => {
+            const startM = parseInt(t.start.split(':')[0]) * 60 + parseInt(t.start.split(':')[1]);
+            const endM = parseInt(t.end.split(':')[0]) * 60 + parseInt(t.end.split(':')[1]);
+            const isActive = now >= startM && now < endM;
+
             container.innerHTML += `
                 <div class="slot ${isActive ? 'active-now' : ''}">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="slot-time">${t12(s.start)} - ${t12(s.end)}</span>
-                        <div>
-                            <button onclick="editSlot(${s.id})" style="background:none; border:none; color:#fff;">✏️</button>
-                            <button onclick="deleteSlot(${s.id})" style="background:none; border:none; color:var(--red);">🗑️</button>
-                        </div>
+                    <span class="slot-time-header">${t12(t.start)} - ${t12(t.end)}</span>
+                    <div class="big-activity-name">
+                        <span class="activity-icon">${getEmoji(t.name)}</span>
+                        <span>${t.name}</span>
                     </div>
-                    <div class="tag-row">
-                        <div class="big-tag">
-                            <span style="font-size:2rem;">${getEmoji(s.task)}</span>
-                            <span class="tag-text">${s.task}</span>
-                        </div>
-                    </div>
+                    <button onclick="deleteTask(${t.id})" style="position:absolute; top:20px; right:20px; background:none; border:none; color:var(--red); font-size:1.2rem;">🗑️</button>
                 </div>`;
         });
     }
 
-    function renderWeeklyTable() {
-        const body = document.getElementById('table-body');
-        body.innerHTML = '';
-        // Group by time
-        const timeGroups = [...new Set(slots.map(s => s.start))].sort();
-        
-        timeGroups.forEach(time => {
-            let row = `<tr><td>${t12(time)}</td>`;
-            for(let i=0; i<7; i++) {
-                const taskAtTime = slots.find(s => s.start === time && s.days.includes(i));
-                row += `<td>${taskAtTime ? taskAtTime.task : ''}</td>`;
-            }
-            row += `</tr>`;
-            body.innerHTML += row;
+    function renderWeekly() {
+        const container = document.getElementById('weekly-scroll-area');
+        const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        container.innerHTML = '';
+
+        dayNames.forEach((name, index) => {
+            const dayTasks = tasks.filter(t => t.days.includes(index));
+            let html = `<div class="weekly-day-card"><div class="day-title">${name}</div>`;
+            if(dayTasks.length === 0) html += `<div style="color:var(--muted); font-size:0.8rem;">Rest Day</div>`;
+            dayTasks.forEach(t => {
+                html += `<div class="mini-slot"><span>${t12(t.start)}</span> <b>${t.name}</b></div>`;
+            });
+            html += `</div>`;
+            container.innerHTML += html;
         });
     }
 
-    function editSlot(id) {
-        const s = slots.find(i => i.id === id);
-        editingId = id;
-        document.getElementById('startTime').value = s.start;
-        document.getElementById('endTime').value = s.end;
-        document.getElementById('manualInput').value = s.task;
-        showPage('add', document.querySelectorAll('.nav-btn')[2]);
+    function deleteTask(id) {
+        if(!confirm("Delete this activity?")) return;
+        tasks = tasks.filter(t => t.id !== id);
+        localStorage.setItem('pro_tasks', JSON.stringify(tasks));
+        renderDaily();
     }
 
-    function deleteSlot(id) {
-        if(confirm("Delete task?")) {
-            slots = slots.filter(s => s.id !== id);
-            localStorage.setItem('routine_slots', JSON.stringify(slots));
-            renderSchedule();
-        }
+    function updateClock() {
+        const now = new Date();
+        let h = now.getHours();
+        let m = now.getMinutes().toString().padStart(2, '0');
+        let ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        document.getElementById('clock').innerText = `${h}:${m} ${ampm}`;
+        if(now.getSeconds() === 0) renderDaily();
     }
 
-    function exportPDF(elementId, fileName) {
-        const element = document.getElementById(elementId);
+    function exportPDF(id, filename) {
+        const element = document.getElementById(id);
         const opt = {
-            margin: 0.5,
-            filename: fileName + '.pdf',
+            margin: 10,
+            filename: filename + '.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, backgroundColor: '#0f1117' },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
         html2pdf().set(opt).from(element).save();
     }
 
-    init();
+    renderDaily();
+    setInterval(updateClock, 1000);
 </script>
 </body>
 </html>
