@@ -6,9 +6,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0f1117">
-    <title>Routine Pro Max</title>
+    <title>Routine Pro Master</title>
     <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --bg: #0f1117; --card: #1a1d27; --accent: #f0a500;
@@ -21,267 +22,238 @@
             color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* ANIMATIONS */
-        @keyframes pulse-glow { 0% { box-shadow: 0 0 5px var(--accent); } 50% { box-shadow: 0 0 25px rgba(240,165,0,0.4); } 100% { box-shadow: 0 0 5px var(--accent); } }
-        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-        @keyframes icon-bounce { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.2); } }
-        @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
+        /* HEADER */
         header {
             padding: calc(var(--safe-top) + 15px) 20px 15px;
             background: var(--card); border-bottom: 1px solid #2c2c2e;
             display: flex; justify-content: space-between; align-items: center;
         }
-        header h1 { margin: 0; font-size: 1.3rem; color: var(--accent); font-weight: 900; letter-spacing: -0.5px; }
-        .clock { font-weight: 800; font-size: 1.1rem; color: var(--accent); background: rgba(240,165,0,0.15); padding: 5px 15px; border-radius: 30px; border: 1px solid rgba(240,165,0,0.3); }
+        header h1 { margin: 0; font-size: 1.1rem; color: var(--accent); font-weight: 900; }
+        .clock { font-weight: 800; font-size: 1rem; color: var(--accent); background: rgba(240,165,0,0.1); padding: 5px 12px; border-radius: 30px; }
 
-        .content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 110px; }
+        .content { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
         .page { display: none; }
-        .page.active { display: block; animation: slide-up 0.4s ease-out; }
+        .page.active { display: block; }
 
-        .card { background: var(--card); border-radius: 22px; padding: 22px; margin-bottom: 18px; border: 1px solid #2c2c2e; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        label { display: block; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
-        
-        input[type="time"], input[type="text"] {
-            width: 100%; background: #000; border: 2px solid #3a3a3c; color: #fff;
-            padding: 16px; border-radius: 14px; font-size: 1.1rem; margin-bottom: 20px; outline: none; transition: 0.3s;
+        /* ALIGNED TIME INPUTS */
+        .time-input-container {
+            display: flex; gap: 12px; margin-bottom: 20px;
         }
-        input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(240,165,0,0.2); }
+        .time-box { flex: 1; display: flex; flex-direction: column; }
+        input[type="time"] {
+            width: 100%; background: #000; border: 2px solid #3a3a3c; color: #fff;
+            padding: 12px; border-radius: 12px; font-size: 1rem; outline: none;
+            appearance: none; -webkit-appearance: none;
+        }
 
-        .day-grid { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 25px; }
+        /* WEEKLY TABLE VIEW */
+        .table-wrap { width: 100%; overflow-x: auto; background: var(--card); border-radius: 12px; padding: 10px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        th, td { border: 1px solid #3a3a3c; padding: 8px; text-align: left; vertical-align: top; }
+        th { color: var(--accent); background: #000; }
+
+        /* CARDS & TAGS */
+        .slot { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px; border: 1px solid #2c2c2e; position: relative; }
+        .active-now { border: 2px solid var(--accent); box-shadow: 0 0 20px rgba(240,165,0,0.2); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+        
+        .tag-row { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        .big-tag { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; }
+        .tag-text { font-size: 1.1rem; font-weight: 900; }
+
+        /* DAY SELECTOR */
+        .day-grid { display: flex; justify-content: space-between; gap: 5px; margin-bottom: 20px; }
         .day-box { flex: 1; }
         .day-box input { display: none; }
-        .day-box label { 
-            display: block; background: #2c2c2e; text-align: center; padding: 14px 0;
-            border-radius: 12px; font-size: 0.8rem; color: #fff; transition: 0.3s; cursor: pointer;
-        }
-        .day-box input:checked + label { background: var(--accent); color: #000; font-weight: 900; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(240,165,0,0.3); }
+        .day-box label { display: block; background: #2c2c2e; text-align: center; padding: 10px 0; border-radius: 8px; font-size: 0.7rem; color: #fff; }
+        .day-box input:checked + label { background: var(--accent); color: #000; font-weight: 800; }
 
-        /* ACTIVITY CARDS */
-        .slot { 
-            background: var(--card); border-radius: 24px; padding: 24px; margin-bottom: 18px;
-            border: 1px solid #2c2c2e; transition: 0.4s; position: relative; overflow: hidden;
-        }
-        .slot.active-now { 
-            border: 3px solid var(--accent); 
-            animation: pulse-glow 3s infinite ease-in-out;
-            background: linear-gradient(145deg, #1e2230 0%, #12141d 100%);
-        }
-        .slot.active-now::after {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
-            animation: shimmer 2.5s infinite;
-        }
-
-        .status-badge {
-            display: inline-block; background: var(--accent); color: #000;
-            font-size: 0.65rem; font-weight: 900; padding: 4px 12px; border-radius: 50px;
-            margin-bottom: 15px; letter-spacing: 1px;
-        }
-
-        .slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .slot-time { font-weight: 900; font-size: 1.2rem; color: var(--accent); }
-        
-        /* NEW LARGE FONT TAGS */
-        .tag-list { display: flex; flex-direction: column; gap: 12px; }
-        .big-tag { 
-            display: flex; align-items: center; gap: 15px;
-            background: rgba(255,255,255,0.05); padding: 15px 20px; 
-            border-radius: 18px; border: 1px solid rgba(255,255,255,0.1);
-        }
-        .active-now .big-tag { background: rgba(240,165,0,0.1); border-color: rgba(240,165,0,0.3); }
-        .tag-icon { font-size: 2rem; animation: icon-bounce 2s infinite ease-in-out; }
-        .tag-text { font-size: 1.3rem; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px; }
-
-        .slot-actions button { background: rgba(255,255,255,0.05); border: none; font-size: 1.2rem; padding: 8px; border-radius: 10px; margin-left: 8px; color: #fff; }
-
+        /* NAV */
         nav {
-            position: fixed; bottom: 0; width: 100%; height: 85px;
-            background: rgba(26, 29, 39, 0.98); backdrop-filter: blur(20px);
-            border-top: 1px solid #2c2c2e; display: flex; justify-content: space-around; padding-bottom: 20px; z-index: 100;
+            position: fixed; bottom: 0; width: 100%; height: 75px; background: var(--card);
+            border-top: 1px solid #2c2c2e; display: flex; justify-content: space-around; padding-bottom: 15px;
         }
-        .nav-btn { background: none; border: none; color: var(--muted); padding-top: 15px; transition: 0.3s; flex: 1; }
+        .nav-btn { background: none; border: none; color: var(--muted); flex: 1; }
         .nav-btn.active { color: var(--accent); }
-        .nav-btn span { font-size: 1.5rem; display: block; margin-bottom: 4px; }
-        .nav-btn small { font-weight: 800; font-size: 0.7rem; }
-
-        .btn-primary { 
-            width: 100%; background: var(--accent); color: #000; border: none; 
-            padding: 18px; border-radius: 16px; font-weight: 900; font-size: 1.1rem;
-            box-shadow: 0 10px 20px rgba(240,165,0,0.2); cursor: pointer;
-        }
+        
+        .btn-action { background: var(--accent); color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: 800; width: 100%; margin-top: 10px; }
+        .btn-pdf { background: #3a3a3c; color: #fff; margin-top: 10px; border: none; padding: 10px; border-radius: 8px; font-weight: 600; width: 100%; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>ROUTINE PRO</h1>
-    <div class="clock" id="clock">00:00</div>
+    <div class="clock" id="clock">--:-- --</div>
 </header>
 
 <div class="content">
     <div id="view" class="page active">
-        <label id="today-label">Current Timeline</label>
         <div id="slot-container"></div>
+        <button class="btn-pdf" onclick="exportPDF('slot-container', 'Daily_Routine')">📄 Save Daily as PDF</button>
+    </div>
+
+    <div id="weekly" class="page">
+        <h2 style="font-size: 1.2rem; color: var(--accent);">Weekly Timetable</h2>
+        <div id="weekly-table-area" class="table-wrap">
+            <table id="main-table">
+                <thead><tr><th>Time</th><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+        <button class="btn-pdf" onclick="exportPDF('weekly-table-area', 'Weekly_Timetable')">📄 Save Weekly as PDF</button>
     </div>
 
     <div id="add" class="page">
-        <h2 id="form-title" style="font-size: 1.5rem; font-weight: 900; margin-bottom: 25px;">New Activity</h2>
-        
-        <div class="card">
-            <div style="display: flex; gap: 15px;">
-                <div style="flex: 1;"><label>Start Time</label><input type="time" id="startTime" value="06:00"></div>
-                <div style="flex: 1;"><label>End Time</label><input type="time" id="endTime" value="07:00"></div>
-            </div>
-
-            <label>Repeat Weekly</label>
-            <div class="day-grid">
-                <div class="day-box"><input type="checkbox" id="d0" value="0" checked><label for="d0">S</label></div>
-                <div class="day-box"><input type="checkbox" id="d1" value="1" checked><label for="d1">M</label></div>
-                <div class="day-box"><input type="checkbox" id="d2" value="2" checked><label for="d2">T</label></div>
-                <div class="day-box"><input type="checkbox" id="d3" value="3" checked><label for="d3">W</label></div>
-                <div class="day-box"><input type="checkbox" id="d4" value="4" checked><label for="d4">T</label></div>
-                <div class="day-box"><input type="checkbox" id="d5" value="5" checked><label for="d5">F</label></div>
-                <div class="day-box"><input type="checkbox" id="d6" value="6" checked><label for="d6">S</label></div>
-            </div>
-
-            <label>Enter Activity Name</label>
-            <input type="text" id="manualInput" placeholder="e.g., Gym, Morning Coffee..." onkeypress="if(event.key==='Enter') addManualActivity()">
-
-            <label>Quick History</label>
-            <div class="chip-grid" id="preset-chips" style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:25px;"></div>
-
-            <button class="btn-primary" onclick="saveSlot()">SAVE TO SCHEDULE</button>
-            <button id="cancel-edit" style="display:none; width:100%; background:none; color:var(--muted); border:none; margin-top:20px; font-weight:700;" onclick="resetForm()">DISCARD CHANGES</button>
+        <h2 id="form-title">Plan Task</h2>
+        <div class="time-input-container">
+            <div class="time-box"><label style="font-size:0.7rem; color:var(--muted); margin-bottom:5px;">START</label><input type="time" id="startTime" value="06:00"></div>
+            <div class="time-box"><label style="font-size:0.7rem; color:var(--muted); margin-bottom:5px;">END</label><input type="time" id="endTime" value="07:00"></div>
         </div>
+
+        <label style="font-size:0.7rem; color:var(--muted);">REPEAT ON</label>
+        <div class="day-grid">
+            <div class="day-box"><input type="checkbox" id="d0" value="0" checked><label for="d0">S</label></div>
+            <div class="day-box"><input type="checkbox" id="d1" value="1" checked><label for="d1">M</label></div>
+            <div class="day-box"><input type="checkbox" id="d2" value="2" checked><label for="d2">T</label></div>
+            <div class="day-box"><input type="checkbox" id="d3" value="3" checked><label for="d3">W</label></div>
+            <div class="day-box"><input type="checkbox" id="d4" value="4" checked><label for="d4">T</label></div>
+            <div class="day-box"><input type="checkbox" id="d5" value="5" checked><label for="d5">F</label></div>
+            <div class="day-box"><input type="checkbox" id="d6" value="6" checked><label for="d6">S</label></div>
+        </div>
+
+        <label style="font-size:0.7rem; color:var(--muted);">TASK NAME</label>
+        <input type="text" id="manualInput" placeholder="Enter task..." style="width:100%; padding:14px; background:#000; border:2px solid #3a3a3c; color:#fff; border-radius:12px; margin-bottom:15px;">
+        
+        <label style="font-size:0.7rem; color:var(--muted);">QUICK SELECT</label>
+        <div id="presets" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;"></div>
+
+        <button class="btn-action" onclick="saveSlot()">SAVE TASK</button>
     </div>
 </div>
 
 <nav>
-    <button class="nav-btn active" onclick="showPage('view', this)"><span>📅</span><small>SCHEDULE</small></button>
-    <button class="nav-btn" onclick="showPage('add', this)"><span>➕</span><small>ADD</small></button>
+    <button class="nav-btn active" onclick="showPage('view', this)"><span>📅</span><br><small>DAILY</small></button>
+    <button class="nav-btn" onclick="showPage('weekly', this)"><span>🗓️</span><br><small>WEEKLY</small></button>
+    <button class="nav-btn" onclick="showPage('add', this)"><span>➕</span><br><small>ADD</small></button>
 </nav>
 
 <script>
-    // Activity to Emoji Mapping
-    const EMOJIS = {
-        "cook": "🍳", "clean": "🧹", "gym": "💪", "work": "💻", "read": "📚", "kid": "🧸", "prayer": "🤲", "sleep": "😴",
-        "bath": "🚿", "coffee": "☕", "walk": "🐕", "dinner": "🍽️", "study": "🧠", "meditation": "🧘", "default": "⭐"
-    };
-
-    function getEmoji(text) {
-        text = text.toLowerCase();
-        for (const [key, val] of Object.entries(EMOJIS)) {
-            if (text.includes(key)) return val;
-        }
-        return EMOJIS.default;
-    }
-
-    let PRESETS = ["Cooking", "Cleaning", "Gym", "Work", "Reading", "Kid's Time"];
+    const EMOJIS = { "cook": "🍳", "clean": "🧹", "gym": "💪", "work": "💻", "read": "📚", "kid": "🧸", "pray": "🤲", "sleep": "😴", "bath": "🚿", "study": "🧠", "shop": "🛒", "walk": "🚶", "coffee": "☕" };
+    const PRESETS = ["Cooking", "Cleaning", "Gym", "Office Work", "Reading", "Kid's Play", "Prayer", "Shower", "Meditation", "Grocery", "Walking", "Breakfast", "Lunch", "Dinner"];
+    
     let slots = JSON.parse(localStorage.getItem('routine_slots')) || [];
     let selectedActivities = [];
     let editingId = null;
 
+    function getEmoji(t) {
+        t = t.toLowerCase();
+        for (let key in EMOJIS) if (t.includes(key)) return EMOJIS[key];
+        return "⭐";
+    }
+
+    // Convert 24h to 12h format
+    function t12(t) {
+        let [h, m] = t.split(':');
+        h = parseInt(h);
+        let ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        return `${h}:${m} ${ampm}`;
+    }
+
     function init() {
-        renderChips();
+        const p = document.getElementById('presets');
+        PRESETS.forEach(pre => {
+            let div = document.createElement('div');
+            div.className = "day-box";
+            div.innerHTML = `<div style="background:#2c2c2e; padding:8px; border-radius:8px; font-size:0.8rem; cursor:pointer;">${pre}</div>`;
+            div.onclick = () => { document.getElementById('manualInput').value = pre; };
+            p.appendChild(div);
+        });
         renderSchedule();
-        updateClock();
         setInterval(updateClock, 1000);
     }
 
-    function renderChips() {
-        const container = document.getElementById('preset-chips');
-        container.innerHTML = '';
-        PRESETS.forEach(p => {
-            const div = document.createElement('div');
-            div.style.padding = "10px 18px";
-            div.style.background = selectedActivities.includes(p) ? "rgba(240,165,0,0.2)" : "#2c2c2e";
-            div.style.border = "1px solid " + (selectedActivities.includes(p) ? "var(--accent)" : "transparent");
-            div.style.borderRadius = "12px";
-            div.style.fontSize = "0.9rem";
-            div.style.color = selectedActivities.includes(p) ? "var(--accent)" : "#fff";
-            div.innerText = p;
-            div.onclick = () => {
-                if(selectedActivities.includes(p)) selectedActivities = selectedActivities.filter(a => a !== p);
-                else selectedActivities.push(p);
-                renderChips();
-            };
-            container.appendChild(div);
-        });
+    function updateClock() {
+        let now = new Date();
+        let h = now.getHours();
+        let m = now.getMinutes().toString().padStart(2, '0');
+        let ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        document.getElementById('clock').innerText = `${h}:${m} ${ampm}`;
+        if (now.getSeconds() === 0) renderSchedule();
     }
 
-    function addManualActivity() {
-        const val = document.getElementById('manualInput').value.trim();
-        if(val) {
-            if(!PRESETS.includes(val)) PRESETS.push(val);
-            if(!selectedActivities.includes(val)) selectedActivities.push(val);
-            document.getElementById('manualInput').value = '';
-            renderChips();
-        }
-    }
-
-    function showPage(pageId, btn) {
+    function showPage(id, btn) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
+        document.getElementById(id).classList.add('active');
         btn.classList.add('active');
-        if(pageId === 'view') renderSchedule();
+        if(id === 'weekly') renderWeeklyTable();
+        if(id === 'view') renderSchedule();
     }
 
     function saveSlot() {
-        addManualActivity(); // Catch any text in the input
+        const task = document.getElementById('manualInput').value;
         const start = document.getElementById('startTime').value;
         const end = document.getElementById('endTime').value;
         const days = Array.from(document.querySelectorAll('.day-box input:checked')).map(i => parseInt(i.value));
+        if(!task) return alert("Enter task name");
 
-        if (!selectedActivities.length) return alert("Add an activity first!");
-
-        const newSlot = {
-            id: editingId || Date.now(),
-            start, end, days,
-            activities: [...selectedActivities]
-        };
-
+        const newSlot = { id: editingId || Date.now(), start, end, days, task };
         if (editingId) slots = slots.map(s => s.id === editingId ? newSlot : s);
         else slots.push(newSlot);
 
-        slots.sort((a, b) => a.start.localeCompare(b.start));
+        slots.sort((a,b) => a.start.localeCompare(b.start));
         localStorage.setItem('routine_slots', JSON.stringify(slots));
-        resetForm();
-        showPage('view', document.querySelector('.nav-btn'));
+        location.reload();
     }
 
     function renderSchedule() {
         const container = document.getElementById('slot-container');
         const today = new Date().getDay();
-        const nowStr = new Date().toTimeString().slice(0,5);
-        container.innerHTML = '';
+        const nowH = new Date().getHours();
+        const nowM = new Date().getMinutes();
+        const nowStr = `${nowH.toString().padStart(2, '0')}:${nowM.toString().padStart(2, '0')}`;
         
+        container.innerHTML = '';
         const todaysSlots = slots.filter(s => s.days.includes(today));
 
         todaysSlots.forEach(s => {
             const isActive = nowStr >= s.start && nowStr < s.end;
-            const div = document.createElement('div');
-            div.className = `slot ${isActive ? 'active-now' : ''}`;
-            div.innerHTML = `
-                ${isActive ? '<div class="status-badge">CURRENTLY ACTIVE</div>' : ''}
-                <div class="slot-header">
-                    <div class="slot-time">${s.start} - ${s.end}</div>
-                    <div class="slot-actions">
-                        <button onclick="editSlot(${s.id})">✏️</button>
-                        <button onclick="deleteSlot(${s.id})">🗑️</button>
-                    </div>
-                </div>
-                <div class="tag-list">
-                    ${s.activities.map(a => `
-                        <div class="big-tag">
-                            <span class="tag-icon">${getEmoji(a)}</span>
-                            <span class="tag-text">${a}</span>
+            container.innerHTML += `
+                <div class="slot ${isActive ? 'active-now' : ''}">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span class="slot-time">${t12(s.start)} - ${t12(s.end)}</span>
+                        <div>
+                            <button onclick="editSlot(${s.id})" style="background:none; border:none; color:#fff;">✏️</button>
+                            <button onclick="deleteSlot(${s.id})" style="background:none; border:none; color:var(--red);">🗑️</button>
                         </div>
-                    `).join('')}
-                </div>
-            `;
-            container.appendChild(div);
+                    </div>
+                    <div class="tag-row">
+                        <div class="big-tag">
+                            <span style="font-size:2rem;">${getEmoji(s.task)}</span>
+                            <span class="tag-text">${s.task}</span>
+                        </div>
+                    </div>
+                </div>`;
+        });
+    }
+
+    function renderWeeklyTable() {
+        const body = document.getElementById('table-body');
+        body.innerHTML = '';
+        // Group by time
+        const timeGroups = [...new Set(slots.map(s => s.start))].sort();
+        
+        timeGroups.forEach(time => {
+            let row = `<tr><td>${t12(time)}</td>`;
+            for(let i=0; i<7; i++) {
+                const taskAtTime = slots.find(s => s.start === time && s.days.includes(i));
+                row += `<td>${taskAtTime ? taskAtTime.task : ''}</td>`;
+            }
+            row += `</tr>`;
+            body.innerHTML += row;
         });
     }
 
@@ -290,36 +262,28 @@
         editingId = id;
         document.getElementById('startTime').value = s.start;
         document.getElementById('endTime').value = s.end;
-        selectedActivities = [...s.activities];
-        document.querySelectorAll('.day-box input').forEach(input => {
-            input.checked = s.days.includes(parseInt(input.value));
-        });
-        renderChips();
-        document.getElementById('form-title').innerText = "Edit Schedule";
-        document.getElementById('cancel-edit').style.display = 'block';
-        showPage('add', document.querySelectorAll('.nav-btn')[1]);
+        document.getElementById('manualInput').value = s.task;
+        showPage('add', document.querySelectorAll('.nav-btn')[2]);
     }
 
     function deleteSlot(id) {
-        if(confirm("Delete this?")) {
+        if(confirm("Delete task?")) {
             slots = slots.filter(s => s.id !== id);
             localStorage.setItem('routine_slots', JSON.stringify(slots));
             renderSchedule();
         }
     }
 
-    function resetForm() {
-        editingId = null;
-        selectedActivities = [];
-        document.getElementById('form-title').innerText = "New Activity";
-        document.getElementById('cancel-edit').style.display = 'none';
-        document.querySelectorAll('.day-box input').forEach(i => i.checked = true);
-        renderChips();
-    }
-
-    function updateClock() {
-        document.getElementById('clock').innerText = new Date().toTimeString().slice(0, 5);
-        if(new Date().getSeconds() === 0) renderSchedule();
+    function exportPDF(elementId, fileName) {
+        const element = document.getElementById(elementId);
+        const opt = {
+            margin: 0.5,
+            filename: fileName + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, backgroundColor: '#0f1117' },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
     }
 
     init();
