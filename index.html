@@ -5,433 +5,357 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#05070a">
-    <title>Routine Pro Max | Elite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#0f1117">
+    <title>Routine & Med Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --bg: #05070a; --surface: #11131a; 
-            --accent: #6366f1; /* Default Indigo */
-            --accent-glow: rgba(99, 102, 241, 0.3);
-            --text: #f8fafc; --dim: #64748b; --border: rgba(255, 255, 255, 0.06);
-            --success: #10b981; --pending: #f43f5e;
-            --safe-top: env(safe-area-inset-top, 20px);
-            --safe-bottom: env(safe-area-inset-bottom, 20px);
+            --bg: #0f1117; --card: #1a1d27; --accent: #f0a500;
+            --text: #ffffff; --muted: #94a3b8; --red: #ff453a;
+            --blue: #007aff; --green: #34c759;
+            --glass: rgba(255, 255, 255, 0.04); --safe-top: env(safe-area-inset-top);
         }
-
-        /* SYSTEM & MOBILE RESETS */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        ::-webkit-scrollbar { display: none; } /* Hide scrollbars for app feel */
-        
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { 
-            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); 
-            height: 100vh; display: flex; flex-direction: column; overflow: hidden;
-            -webkit-user-select: none; user-select: none; /* Prevent UI highlighting */
+            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); 
+            color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden;
         }
-        input { -webkit-user-select: text; user-select: text; }
 
-        /* ONBOARDING */
-        #onboarding { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
-        .setup-input { appearance: none; background: var(--surface); border: 1px solid var(--border); padding: 18px; border-radius: 16px; color: white; width: 100%; text-align: center; font-size: 1.1rem; outline: none; margin-bottom: 20px; transition: 0.3s;}
-        .setup-input:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+        /* 2026 MOTION SYSTEM */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes glow { 0% { box-shadow: 0 0 5px var(--accent); } 50% { box-shadow: 0 0 25px rgba(240,165,0,0.3); } 100% { box-shadow: 0 0 5px var(--accent); } }
+        @keyframes slideIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* BANNER */
-        #banner { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--accent); box-shadow: 0 10px 30px var(--accent-glow); padding: 15px 25px; border-radius: 100px; z-index: 10000; font-weight: 800; font-size: 0.8rem; display: flex; align-items: center; gap: 10px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .banner-show { top: calc(var(--safe-top) + 10px) !important; }
+        header {
+            padding: calc(var(--safe-top) + 20px) 20px 20px;
+            background: linear-gradient(to bottom, var(--card), var(--bg));
+            display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass);
+        }
+       .user-info h2 { margin: 0; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; }
+       .user-info h1 { margin: 0; font-size: 1.4rem; font-weight: 900; }
+       .clock-pro { background: var(--glass); padding: 8px 15px; border-radius: 12px; font-weight: 900; color: var(--accent); border: 1px solid rgba(240,165,0,0.2); }
 
-        /* HEADER */
-        header { padding: calc(var(--safe-top) + 15px) 25px 15px; display: flex; justify-content: space-between; align-items: center; }
-        .clock { font-size: 1.8rem; font-weight: 300; letter-spacing: -1px; }
+       .content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 120px; }
+       .page { display: none; animation: slideIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+       .page.active { display: block; }
 
-        /* CONTENT AREA */
-        .content { flex: 1; overflow-y: auto; padding: 10px 20px calc(var(--safe-bottom) + 100px); scroll-behavior: smooth; }
-        .page { display: none; animation: fadeIn 0.3s ease; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* CARDS & STATUS */
-        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 20px; margin-bottom: 15px; position: relative; overflow: hidden; transition: 0.3s; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .card-time { font-size: 0.75rem; font-weight: 700; color: var(--dim); }
-        .card-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -0.5px; }
+        /* MULTI-PURPOSE PRO CARDS */
+       .card-pro { background: var(--card); border-radius: 28px; padding: 22px; margin-bottom: 20px; border: 1px solid var(--glass); position: relative; transition: 0.3s; }
+       .card-active { border: 2.5px solid var(--accent); animation: glow 3s infinite; }
+       .card-med { border-left: 5px solid var(--blue); }
         
-        .status-badge { font-size: 0.6rem; font-weight: 800; padding: 4px 10px; border-radius: 8px; letter-spacing: 1px; text-transform: uppercase; }
-        .status-completed { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid var(--success); }
-        .status-pending { background: rgba(244, 63, 94, 0.1); color: var(--pending); border: 1px solid var(--pending); animation: pulse-red 2s infinite; }
-        @keyframes pulse-red { 0%, 100% { box-shadow: 0 0 0 transparent; } 50% { box-shadow: 0 0 10px rgba(244, 63, 94, 0.4); } }
+       .time-tag { font-size: 0.85rem; font-weight: 800; color: var(--accent); margin-bottom: 10px; display: block; }
+       .activity-main { display: flex; align-items: center; gap: 18px; }
+       .activity-icon { font-size: 2.8rem; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4)); }
+       .activity-name { font-size: 2.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: -1.2px; line-height: 1; }
+       .card-active.activity-name { animation: float 3s infinite ease-in-out; color: var(--accent); }
 
-        /* AURA ENGINE */
-        @keyframes breathe { 0%, 100% { box-shadow: 0 0 10px var(--accent-glow); border-color: rgba(255,255,255,0.1); } 50% { box-shadow: 0 0 30px var(--accent-glow); border-color: var(--accent); } }
-        .active-task { animation: breathe 3s infinite ease-in-out; background: linear-gradient(180deg, var(--surface) 0%, #171926 100%); border-width: 1.5px; }
-        .active-task .card-time { color: var(--accent); }
-        
-        .aura-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--accent); box-shadow: 0 0 15px var(--accent); transition: width 1s linear; }
-        .particle { position: absolute; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); opacity: 0; pointer-events: none; }
-        @keyframes float-particle { 0% { transform: translateY(0) scale(1); opacity: 0.8; } 100% { transform: translateY(-40px) scale(0); opacity: 0; } }
+        /* MEDICINE UI ELEMENTS */
+       .med-qty { font-size: 0.9rem; font-weight: 700; color: var(--blue); margin-top: 5px; }
+       .med-actions { display: flex; gap: 10px; margin-top: 15px; }
+       .btn-med { flex: 1; padding: 12px; border-radius: 14px; border: none; font-weight: 800; font-size: 0.8rem; cursor: pointer; }
+       .btn-take { background: var(--green); color: #000; }
+       .btn-later { background: var(--glass); color: #fff; }
 
-        /* BUTTONS & FORMS */
-        button { touch-action: manipulation; }
-        .btn-action { background: var(--accent); color: white; border: none; padding: 18px; border-radius: 18px; font-weight: 800; width: 100%; cursor: pointer; box-shadow: 0 5px 15px var(--accent-glow); font-size: 1rem; }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 10px 15px; border-radius: 12px; font-weight: 700; font-size: 0.75rem; cursor: pointer; }
-        .btn-done { background: var(--success); color: #000; border: none; padding: 10px 15px; border-radius: 12px; font-weight: 800; font-size: 0.75rem; cursor: pointer; }
+        /* FORM INPUTS */
+       .input-wrap { margin-bottom: 22px; }
+        label { display: block; font-size: 0.7rem; font-weight: 900; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        input, select { 
+            width: 100%; background: rgba(0,0,0,0.3); border: 1.5px solid var(--glass); 
+            padding: 16px; border-radius: 16px; color: #fff; font-size: 1rem; font-weight: 700;
+        }
+        input:focus { border-color: var(--accent); }
+       .day-selector { display: flex; gap: 6px; overflow-x: auto; padding: 5px 0; }
+       .day-chip { flex: 1; text-align: center; background: var(--glass); padding: 12px 0; border-radius: 12px; font-size: 0.75rem; font-weight: 900; }
+       .day-chip.on { background: var(--accent); color: #000; box-shadow: 0 5px 15px rgba(240,165,0,0.2); }
 
-        .time-split { display: flex; gap: 10px; margin-bottom: 20px; }
-        .time-split input { flex: 1; appearance: none; background: var(--surface); border: 1px solid var(--border); padding: 15px; color: white; border-radius: 16px; outline: none; text-align: center; font-family: inherit; font-weight: 700;}
-        
-        /* DAY SELECTOR - AUTO ALL */
-        .day-grid { display: flex; gap: 6px; margin-bottom: 20px; }
-        .day-pill { flex: 1; padding: 12px 0; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; text-align: center; font-size: 0.75rem; font-weight: 800; color: var(--dim); cursor: pointer; transition: 0.2s; }
-        .day-pill.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 4px 10px var(--accent-glow); }
+        /* NAV ENGINE */
+        nav {
+            position: fixed; bottom: 0; width: 100%; height: 95px;
+            background: rgba(26, 29, 39, 0.95); backdrop-filter: blur(25px);
+            border-top: 1px solid var(--glass); display: flex; justify-content: space-around;
+            padding-bottom: env(safe-area-inset-bottom); z-index: 1000;
+        }
+       .nav-link { background: none; border: none; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; transition: 0.3s; }
+       .nav-link.active { color: var(--accent); }
+       .nav-link span { font-size: 1.6rem; margin-bottom: 5px; }
+       .nav-link small { font-size: 0.6rem; font-weight: 900; text-transform: uppercase; }
 
-        .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.02); border-radius: 16px; margin-bottom: 10px; border: 1px solid var(--border); }
-        input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent); }
-
-        /* THEME & NAV */
-        .theme-grid { display: flex; gap: 15px; margin-bottom: 30px; }
-        .theme-btn { width: 45px; height: 45px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
-        .theme-btn.active { border-color: white; transform: scale(1.1); box-shadow: 0 0 20px var(--accent-glow); }
-
-        nav { position: fixed; bottom: calc(var(--safe-bottom) + 10px); left: 20px; right: 20px; height: 75px; background: rgba(10, 12, 18, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 25px; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
-        .nav-btn { color: var(--dim); font-size: 0.65rem; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; transition: 0.2s; }
-        .nav-btn.active { color: var(--accent); transform: translateY(-2px); }
+        /* ACTIONS */
+       .btn-gold { background: var(--accent); color: #000; border: none; padding: 20px; border-radius: 20px; font-weight: 900; width: 100%; cursor: pointer; font-size: 1.1rem; }
+       .btn-ghost { background: var(--glass); color: var(--red); border: 1px solid rgba(255,69,58,0.2); padding: 15px; border-radius: 15px; width: 100%; margin-top: 15px; font-weight: 800; }
     </style>
 </head>
 <body>
 
-<audio id="notify-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
-
-<div id="banner"><span id="banner-icon">✨</span> <span id="banner-text">Time to focus!</span></div>
-
-<div id="onboarding">
-    <h1 style="font-weight: 800;">Establish Protocol</h1>
-    <p style="color:var(--dim); margin-bottom: 30px;">Enter your designation.</p>
-    <input type="text" id="name-input" class="setup-input" placeholder="Your Name">
-    <button onclick="setupApp()" class="btn-action" style="max-width: 200px;">Initialize</button>
-</div>
-
-<header id="main-header" style="display:none">
-    <div>
-        <span id="current-day-label" style="font-size:0.65rem; font-weight:800; color:var(--accent); letter-spacing:1px; text-transform:uppercase;"></span>
-        <h1 id="user-greeting" style="margin:0; font-size:1.5rem; font-weight:800;"></h1>
+<header>
+    <div class="user-info">
+        <h2 id="header-day">Loading...</h2>
+        <h1>HEALTH & ROUTINE</h1>
     </div>
-    <div class="clock" id="live-clock"></div>
+    <div class="clock-pro" id="clock">00:00</div>
 </header>
 
-<div class="content" id="main-content" style="display:none;">
-    <div id="page-list" class="page active"></div>
-
-    <div id="page-add" class="page">
-        <h2 id="form-title" style="margin-top:0;">New Ritual</h2>
-        <input type="hidden" id="edit-id">
-        <input type="text" id="task-name" class="setup-input" placeholder="Activity Title" style="text-align: left;">
-        
-        <div class="time-split">
-            <div><div style="font-size:0.6rem; color:var(--dim); margin-bottom:5px; font-weight:800;">START</div><input type="time" id="task-start"></div>
-            <div><div style="font-size:0.6rem; color:var(--dim); margin-bottom:5px; font-weight:800;">END</div><input type="time" id="task-end"></div>
-        </div>
-
-        <div style="font-size:0.6rem; color:var(--dim); margin-bottom:8px; font-weight:800; letter-spacing:1px;">ACTIVE DAYS</div>
-        <div class="day-grid" id="day-selector">
-            <div class="day-pill active" data-day="0">S</div>
-            <div class="day-pill active" data-day="1">M</div>
-            <div class="day-pill active" data-day="2">T</div>
-            <div class="day-pill active" data-day="3">W</div>
-            <div class="day-pill active" data-day="4">T</div>
-            <div class="day-pill active" data-day="5">F</div>
-            <div class="day-pill active" data-day="6">S</div>
-        </div>
-
-        <div class="toggle-row">
-            <span style="font-size:0.8rem; font-weight:700;">Remind Me (Banner)</span>
-            <input type="checkbox" id="task-remind" checked>
-        </div>
-        <div class="toggle-row" style="margin-bottom: 25px;">
-            <span style="font-size:0.8rem; font-weight:700;">Play Sound</span>
-            <input type="checkbox" id="task-sound" checked>
-        </div>
-        
-        <button class="btn-action" onclick="saveRitual()">Deploy Ritual</button>
-        <button id="del-btn" onclick="deleteRitual()" style="display:none; background:transparent; border:1px solid var(--border); color:var(--pending); margin-top:15px; width:100%; font-weight:800; padding:15px; border-radius:16px;">Delete Ritual</button>
+<div class="content">
+    <div id="page-daily" class="page active">
+        <div id="timeline-list"></div>
     </div>
 
-    <div id="page-settings" class="page">
-        <h2 style="margin-top:0;">Environment</h2>
-        <p style="font-size: 0.75rem; color:var(--dim); font-weight:700;">Aura Resonance</p>
-        <div class="theme-grid">
-            <div class="theme-btn active" style="background:#6366f1" onclick="applyTheme('#6366f1', this)"></div>
-            <div class="theme-btn" style="background:#f59e0b" onclick="applyTheme('#f59e0b', this)"></div>
-            <div class="theme-btn" style="background:#10b981" onclick="applyTheme('#10b981', this)"></div>
-            <div class="theme-btn" style="background:#ec4899" onclick="applyTheme('#ec4899', this)"></div>
+    <div id="page-add" class="page">
+        <div class="input-wrap">
+            <label>Entry Type</label>
+            <select id="entry-type" onchange="toggleFormFields()">
+                <option value="routine">Routine Task</option>
+                <option value="medicine">Medicine / Supplement</option>
+            </select>
         </div>
-        <button class="btn-outline" onclick="resetApp()" style="width:100%; color:var(--pending); border-color:rgba(244,63,94,0.2); padding:18px; border-radius:16px;">System Reset</button>
+
+        <div class="input-wrap">
+            <label id="name-label">Task Name</label>
+            <input type="text" id="entry-name" placeholder="e.g. Gym or Vitamin C">
+        </div>
+
+        <div id="med-fields" style="display:none;">
+            <div style="display:flex; gap:10px; margin-bottom:20px;">
+                <div style="flex:1;"><label>Type</label>
+                    <select id="med-unit">
+                        <option value="Capsule(s)">Capsules</option>
+                        <option value="ml">Drops (ml)</option>
+                    </select>
+                </div>
+                <div style="flex:1;"><label>Quantity</label>
+                    <input type="number" id="med-qty" value="1">
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-bottom:20px;">
+            <div style="flex:1;"><label>Time</label><input type="time" id="entry-time" value="08:00"></div>
+            <div id="end-time-wrap" style="flex:1;"><label>Ends (Optional)</label><input type="time" id="entry-end"></div>
+        </div>
+
+        <label>Repeat Weekly</label>
+        <div class="day-selector" id="day-selector">
+            <div class="day-chip on" onclick="this.classList.toggle('on')">S</div>
+            <div class="day-chip on" onclick="this.classList.toggle('on')">M</div>
+            <div class="day-chip on" onclick="this.classList.toggle('on')">T</div>
+            <div class="day-chip on" onclick="this.classList.toggle('on')">W</div>
+            <div class="day-chip on" onclick="this.classList.toggle('on')">T</div>
+            <div class="day-chip on" onclick="this.classList.toggle('on')">F</div>
+            <div class="day-chip on" onclick="this.classList.toggle('on')">S</div>
+        </div>
+
+        <button class="btn-gold" onclick="handleSave()" style="margin-top:20px;">SAVE TO TIMELINE</button>
+    </div>
+
+    <div id="page-more" class="page">
+        <label>Weekly Overview</label>
+        <div id="weekly-overview-area"></div>
+        
+        <label style="margin-top:25px;">Export & Data</label>
+        <button class="btn-gold" style="background:#3a3a3c; color:#fff;" onclick="exportPDF('timeline-list', 'Daily_Health_Routine')">📄 SAVE DAILY AS PDF</button>
+        <button class="btn-gold" style="background:#3a3a3c; color:#fff; margin-top:10px;" onclick="exportPDF('weekly-overview-area', 'Weekly_Medical_Schedule')">🗓️ SAVE WEEKLY AS PDF</button>
+        
+        <button class="btn-ghost" onclick="factoryReset()">🗑️ RESET ALL DATA</button>
     </div>
 </div>
 
-<nav id="main-nav" style="display:none">
-    <div class="nav-btn active" onclick="show('list')"><span>◈</span><span>ROUTINE</span></div>
-    <div class="nav-btn" onclick="show('add')"><span>⊕</span><span>ADD</span></div>
-    <div class="nav-btn" onclick="show('settings')"><span>⚙️</span><span>AURA</span></div>
+<nav>
+    <button class="nav-link active" onclick="nav('page-daily', this)"><span>📅</span><small>Timeline</small></button>
+    <button class="nav-link" onclick="nav('page-add', this)"><span>➕</span><small>Add</small></button>
+    <button class="nav-link" onclick="nav('page-more', this)"><span>⚙️</span><small>Manage</small></button>
 </nav>
 
 <script>
-    let rituals = JSON.parse(localStorage.getItem('rituals_elite_v5')) || [];
-    let userName = localStorage.getItem('user_name');
-    let savedTheme = localStorage.getItem('aura_theme') || '#6366f1';
-    let notifiedIds = [];
+    const EMOJIS = { "gym": "💪", "work": "💻", "cook": "🍳", "clean": "🧹", "read": "📚", "sleep": "😴", "pray": "🤲", "walk": "🚶", "coffee": "☕", "med": "💊", "drop": "💧" };
+    let store = JSON.parse(localStorage.getItem('pro_health_v8')) |
 
-    // Haptic feedback helper for Android
-    function haptic() { if(navigator.vibrate) navigator.vibrate(40); }
+| { entries:, medsTaken: {} };
+    let editingId = null;
 
     function init() {
-        applyTheme(savedTheme);
-        if (!userName) document.getElementById('onboarding').style.display = 'flex';
-        else launch();
-        
-        // Setup Day Pill click events
-        document.querySelectorAll('.day-pill').forEach(p => {
-            p.onclick = () => { haptic(); p.classList.toggle('active'); };
-        });
-
-        setInterval(tick, 1000);
-        tick();
+        updateClock();
+        renderDaily();
+        setInterval(updateClock, 1000);
     }
 
-    function applyTheme(color, el = null) {
-        document.documentElement.style.setProperty('--accent', color);
-        document.documentElement.style.setProperty('--accent-glow', color + '4d');
-        localStorage.setItem('aura_theme', color);
-        
-        if(el) {
-            haptic();
-            document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
+    function nav(id, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        el.classList.add('active');
+        if(id === 'page-daily') renderDaily();
+        if(id === 'page-more') renderWeekly();
+    }
+
+    function toggleFormFields() {
+        const type = document.getElementById('entry-type').value;
+        document.getElementById('med-fields').style.display = type === 'medicine'? 'block' : 'none';
+        document.getElementById('end-time-wrap').style.display = type === 'medicine'? 'none' : 'block';
+        document.getElementById('name-label').innerText = type === 'medicine'? 'Medicine / Supplement' : 'Task Name';
+    }
+
+    function handleSave() {
+        const type = document.getElementById('entry-type').value;
+        const name = document.getElementById('entry-name').value;
+        const start = document.getElementById('entry-time').value;
+        const end = document.getElementById('entry-end').value |
+
+| start;
+        const medUnit = document.getElementById('med-unit').value;
+        const medQty = document.getElementById('med-qty').value;
+        const days =;
+        document.querySelectorAll('.day-chip').forEach((c, i) => { if(c.classList.contains('on')) days.push(i); });
+
+        if(!name) return alert("Please enter a name.");
+
+        const entry = { id: editingId |
+
+| Date.now(), type, name, start, end, days, medUnit, medQty };
+        if(editingId) {
+            store.entries = store.entries.map(e => e.id === editingId? entry : e);
         } else {
-            document.querySelectorAll('.theme-btn').forEach(b => {
-                if(b.style.backgroundColor === color || b.style.backgroundColor.replace(/ /g, '') === color) b.classList.add('active');
-            });
+            store.entries.push(entry);
         }
+
+        store.entries.sort((a,b) => a.start.localeCompare(b.start));
+        saveStore();
+        resetForm();
+        nav('page-daily', document.querySelectorAll('.nav-link'));
     }
 
-    function setupApp() {
-        haptic();
-        const input = document.getElementById('name-input').value;
-        if(input.length < 2) return;
-        localStorage.setItem('user_name', input);
-        userName = input;
-        launch();
-    }
-
-    function launch() {
-        document.getElementById('onboarding').style.display = 'none';
-        ['main-header', 'main-content', 'main-nav'].forEach(id => document.getElementById(id).style.display = 'flex');
-        document.getElementById('main-content').style.display = 'block';
-        document.getElementById('user-greeting').innerText = `Hello, ${userName}`;
-        render();
-    }
-
-    function tick() {
-        const now = new Date();
-        document.getElementById('live-clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: true});
-        const days = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-        document.getElementById('current-day-label').innerText = days[now.getDay()];
-        render(); 
-    }
-
-    function format12(t) {
-        let [h, m] = t.split(':');
-        h = parseInt(h); let ampm = h >= 12 ? 'PM' : 'AM';
-        return `${h % 12 || 12}:${m} ${ampm}`;
-    }
-
-    function showNotification(task) {
-        if (notifiedIds.includes(task.id)) return;
-        notifiedIds.push(task.id);
+    function renderDaily() {
+        const container = document.getElementById('timeline-list');
+        const todayIdx = new Date().getDay();
+        const dateKey = new Date().toISOString().split('T');
+        const nowTotal = new Date().getHours() * 60 + new Date().getMinutes();
         
-        document.getElementById('banner-text').innerText = `${task.name} is starting!`;
-        document.getElementById('banner').classList.add('banner-show');
-        if (task.sound) document.getElementById('notify-sound').play().catch(()=>{});
-        
-        setTimeout(() => { document.getElementById('banner').classList.remove('banner-show'); }, 5000);
-    }
+        container.innerHTML = `<h2 style="font-weight:900; margin-bottom:20px;">Today's Timeline</h2>`;
+        const todaysEntries = store.entries.filter(e => e.days.includes(todayIdx));
 
-    function markDone(id) {
-        haptic();
-        const task = rituals.find(r => r.id === id);
-        if(task) task.isDone = true;
-        localStorage.setItem('rituals_elite_v5', JSON.stringify(rituals));
-        render();
-    }
-
-    function createParticles(cardId, progressPerc) {
-        if (progressPerc < 5 || Math.random() > 0.2) return; 
-        const card = document.getElementById(`card-${cardId}`);
-        if(!card) return;
-
-        const p = document.createElement('div');
-        p.className = 'particle';
-        const size = Math.random() * 3 + 2;
-        p.style.width = `${size}px`; p.style.height = `${size}px`;
-        p.style.left = `calc(${progressPerc}% - 5px)`;
-        p.style.bottom = '0px';
-        p.style.animation = `float-particle ${Math.random() * 1.5 + 1}s forwards`;
-        
-        card.appendChild(p);
-        setTimeout(() => { if(p.parentNode) p.parentNode.removeChild(p); }, 2500);
-    }
-
-    function render() {
-        const list = document.getElementById('page-list');
-        const now = new Date();
-        const currentSecs = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
-        const todayIdx = now.getDay();
-
-        // Filter for today AND sort by time
-        const sorted = rituals.filter(r => r.days && r.days.includes(todayIdx)).sort((a,b) => a.start.localeCompare(b.start));
-
-        if(sorted.length === 0) {
-            list.innerHTML = `<div style="text-align:center; padding-top:60px; color:var(--dim); font-weight:700;">No rituals assigned for today.<br><br><span style="font-size:2rem;">☁️</span></div>`;
+        if(todaysEntries.length === 0) {
+            container.innerHTML += `<p style="color:var(--muted)">No entries for today.</p>`;
             return;
         }
 
-        list.innerHTML = sorted.map(r => {
-            const [sh, sm] = r.start.split(':').map(Number);
-            const [eh, em] = r.end.split(':').map(Number);
-            const startSecs = (sh * 3600) + (sm * 60);
-            const endSecs = (eh * 3600) + (em * 60);
+        todaysEntries.forEach(e => {
+            const startM = toMins(e.start);
+            const endM = toMins(e.end);
+            const isActive = nowTotal >= startM && nowTotal < endM;
+            const isTaken = store.medsTaken[dateKey]?.includes(e.id);
             
-            const isFuture = currentSecs < startSecs;
-            const isActive = currentSecs >= startSecs && currentSecs < endSecs;
-            const isPast = currentSecs >= endSecs;
-
-            let statusHTML = '';
-            let opacity = 1;
-            let actionBtn = `<button class="btn-outline" onclick="editRitual('${r.id}')">Manage</button>`;
-
-            if (r.isDone) {
-                statusHTML = `<span class="status-badge status-completed">COMPLETED</span>`;
-                opacity = 0.5;
-            } else if (isPast) {
-                statusHTML = `<span class="status-badge status-pending">PENDING</span>`;
-                actionBtn = `<button class="btn-done" onclick="markDone('${r.id}')">Mark Done</button> ` + actionBtn;
-            } else if (isActive) {
-                statusHTML = `<span class="status-badge" style="color:var(--accent); background:var(--accent-glow);">ACTIVE NOW</span>`;
-                actionBtn = `<button class="btn-done" onclick="markDone('${r.id}')">Complete</button> ` + actionBtn;
-                if(r.remind) showNotification(r);
-            }
-
-            let progressHTML = '';
-            let countdownHTML = '';
-            if (isActive && !r.isDone) {
-                const totalDur = endSecs - startSecs;
-                const passedDur = currentSecs - startSecs;
-                const perc = (passedDur / totalDur) * 100;
-                const secsLeft = totalDur - passedDur;
-                
-                const mLeft = Math.floor(secsLeft / 60);
-                const sLeft = secsLeft % 60;
-                countdownHTML = `<div style="font-size:0.75rem; font-weight:800; color:var(--text); margin-top:10px;">⏳ ${mLeft}m ${sLeft}s remaining</div>`;
-                progressHTML = `<div class="aura-progress" style="width:${perc}%"></div>`;
-                createParticles(r.id, perc);
-            }
-
-            return `
-                <div class="card ${isActive && !r.isDone ? 'active-task' : ''}" id="card-${r.id}" style="opacity: ${opacity}">
-                    <div class="card-header">
-                        <span class="card-time">${format12(r.start)} — ${format12(r.end)}</span>
-                        ${statusHTML}
+            const emoji = e.type === 'medicine'? (e.medUnit === 'ml'? '💧' : '💊') : getEmoji(e.name);
+            
+            container.innerHTML += `
+                <div class="card-pro ${isActive? 'card-active' : ''} ${e.type === 'medicine'? 'card-med' : ''}">
+                    <span class="time-tag">${fmt12(e.start)} ${e.type!== 'medicine'? '— ' + fmt12(e.end) : ''}</span>
+                    <div class="activity-main">
+                        <span class="activity-icon">${emoji}</span>
+                        <div>
+                            <div class="activity-name">${e.name}</div>
+                            ${e.type === 'medicine'? `<div class="med-qty">${e.medQty} ${e.medUnit}</div>` : ''}
+                        </div>
                     </div>
-                    <div class="card-name">${r.name}</div>
-                    <div style="display:flex; gap:10px;">${actionBtn}</div>
-                    ${countdownHTML}
-                    ${progressHTML}
+                    
+                    ${e.type === 'medicine'? `
+                        <div class="med-actions">
+                            <button class="btn-med btn-take" onclick="markTaken(${e.id})">${isTaken? '✅ TAKEN' : 'TAKE NOW'}</button>
+                            <button class="btn-med btn-later" onclick="alert('Reminder snoozed 15 mins')">LATER</button>
+                        </div>
+                    ` : ''}
+
+                    <div style="position:absolute; top:20px; right:20px; display:flex; gap:10px;">
+                        <button onclick="editEntry(${e.id})" style="background:none; border:none; color:var(--muted); font-size:1.1rem;">✏️</button>
+                        <button onclick="deleteEntry(${e.id})" style="background:none; border:none; color:var(--red); font-size:1.1rem; opacity:0.6;">✕</button>
+                    </div>
                 </div>
             `;
-        }).join('');
-    }
-
-    function show(p) {
-        haptic();
-        document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-        document.getElementById('page-' + p).classList.add('active');
-        document.querySelectorAll('.nav-btn').forEach((b, i) => b.classList.toggle('active', ['list', 'add', 'settings'][i] === p));
-        if(p !== 'add') resetForm();
-        else {
-            // Default to ALL days selected for new task
-            if(!document.getElementById('edit-id').value) {
-                document.querySelectorAll('.day-pill').forEach(pill => pill.classList.add('active'));
-            }
-        }
-    }
-
-    function saveRitual() {
-        haptic();
-        const id = document.getElementById('edit-id').value;
-        const name = document.getElementById('task-name').value;
-        const start = document.getElementById('task-start').value;
-        const end = document.getElementById('task-end').value;
-        const remind = document.getElementById('task-remind').checked;
-        const sound = document.getElementById('task-sound').checked;
-        
-        // Extract selected days
-        const days = Array.from(document.querySelectorAll('.day-pill'))
-                          .filter(p => p.classList.contains('active'))
-                          .map(p => parseInt(p.dataset.day));
-
-        if(!name || !start || !end) return alert("Please fill all fields.");
-        if(days.length === 0) return alert("Please select at least one day.");
-
-        const data = { id: id || Date.now().toString(), name, start, end, remind, sound, days, isDone: false };
-
-        if(id) rituals = rituals.map(r => r.id === id ? {...data, isDone: r.isDone} : r);
-        else rituals.push(data);
-
-        localStorage.setItem('rituals_elite_v5', JSON.stringify(rituals));
-        resetForm();
-        show('list');
-        render();
-    }
-
-    function editRitual(id) {
-        const r = rituals.find(x => x.id === id);
-        show('add');
-        document.getElementById('form-title').innerText = "Modify Ritual";
-        document.getElementById('edit-id').value = r.id;
-        document.getElementById('task-name').value = r.name;
-        document.getElementById('task-start').value = r.start;
-        document.getElementById('task-end').value = r.end;
-        document.getElementById('task-remind').checked = r.remind;
-        document.getElementById('task-sound').checked = r.sound;
-        document.getElementById('del-btn').style.display = 'block';
-        
-        // Load assigned days
-        document.querySelectorAll('.day-pill').forEach(p => {
-            p.classList.toggle('active', r.days && r.days.includes(parseInt(p.dataset.day)));
         });
     }
 
-    function deleteRitual() {
-        haptic();
-        const id = document.getElementById('edit-id').value;
-        rituals = rituals.filter(r => r.id !== id);
-        localStorage.setItem('rituals_elite_v5', JSON.stringify(rituals));
-        show('list');
-        render();
+    function renderWeekly() {
+        const container = document.getElementById('weekly-overview-area');
+        const dayNames =;
+        container.innerHTML = '';
+        dayNames.forEach((name, idx) => {
+            const dayEntries = store.entries.filter(e => e.days.includes(idx));
+            let html = `<div style="background:#000; border-radius:20px; padding:15px; margin-bottom:12px; border:1px solid var(--glass);">
+                <div style="font-weight:900; color:var(--accent); margin-bottom:10px;">${name}</div>`;
+            dayEntries.forEach(e => {
+                html += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;">
+                    <span>${fmt12(e.start)}</span> <b>${e.name}</b>
+                </div>`;
+            });
+            html += `</div>`;
+            container.innerHTML += html;
+        });
+    }
+
+    function markTaken(id) {
+        const dateKey = new Date().toISOString().split('T');
+        if(!store.medsTaken[dateKey]) store.medsTaken[dateKey] =;
+        if(!store.medsTaken[dateKey].includes(id)) {
+            store.medsTaken[dateKey].push(id);
+            if('vibrate' in navigator) navigator.vibrate([50, 30, 50]); // Professional haptic [4, 5]
+        }
+        saveStore();
+        renderDaily();
+    }
+
+    function deleteEntry(id) {
+        if(!confirm("Remove from schedule?")) return;
+        store.entries = store.entries.filter(e => e.id!== id);
+        saveStore();
+        renderDaily();
+    }
+
+    function editEntry(id) {
+        const e = store.entries.find(item => item.id === id);
+        editingId = id;
+        document.getElementById('entry-type').value = e.type;
+        document.getElementById('entry-name').value = e.name;
+        document.getElementById('entry-time').value = e.start;
+        document.getElementById('entry-end').value = e.end;
+        document.getElementById('med-unit').value = e.medUnit |
+
+| 'Capsule(s)';
+        document.getElementById('med-qty').value = e.medQty |
+
+| 1;
+        document.querySelectorAll('.day-chip').forEach((c, i) => {
+            c.classList.toggle('on', e.days.includes(i));
+        });
+        toggleFormFields();
+        nav('page-add', document.querySelectorAll('.nav-link')[1]);
     }
 
     function resetForm() {
-        document.getElementById('edit-id').value = '';
-        document.getElementById('task-name').value = '';
-        document.getElementById('task-start').value = '';
-        document.getElementById('task-end').value = '';
-        document.getElementById('del-btn').style.display = 'none';
-        document.getElementById('form-title').innerText = "New Ritual";
-        document.querySelectorAll('.day-pill').forEach(pill => pill.classList.add('active')); // Reset to all
+        editingId = null;
+        document.getElementById('entry-name').value = '';
+        document.querySelectorAll('.day-chip').forEach(c => c.classList.add('on'));
     }
 
-    function resetApp() {
-        haptic();
-        if(confirm("Erase all data and settings?")) { localStorage.clear(); location.reload(); }
+    function saveStore() { localStorage.setItem('pro_health_v8', JSON.stringify(store)); }
+    function toMins(t) { return parseInt(t.split(':')) * 60 + parseInt(t.split(':')[1]); }
+    function fmt12(t) { let [h,m] = t.split(':'); h=parseInt(h); return `${h%12||12}:${m} ${h>=12?'PM':'AM'}`; }
+    function getEmoji(t) { t=t.toLowerCase(); for(let k in EMOJIS) if(t.includes(k)) return EMOJIS[k]; return "⭐"; }
+
+    function updateClock() {
+        const now = new Date();
+        const days =;
+        document.getElementById('header-day').innerText = days;
+        document.getElementById('clock').innerText = now.toLocaleTimeString(, {hour:'2-digit', minute:'2-digit'});
+        if(now.getSeconds() === 0) renderDaily();
     }
+
+    function exportPDF(id, name) {
+        const opt = { margin:10, filename:name+'.pdf', html2canvas:{scale:2, backgroundColor:'#0f1117'}, jsPDF:{unit:'mm', format:'a4'} };
+        html2pdf().set(opt).from(document.getElementById(id)).save();
+    }
+
+    function factoryReset() { if(confirm("Delete all?")) { localStorage.clear(); location.reload(); } }
 
     init();
 </script>
