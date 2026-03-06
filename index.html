@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0f1117">
     <title>Routine & Med Pro</title>
     <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
@@ -23,9 +24,9 @@
             color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* 2026 MOTION SYSTEM */
+        /* ANIMATIONS */
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        @keyframes glow { 0% { box-shadow: 0 0 5px var(--accent); } 50% { box-shadow: 0 0 25px rgba(240,165,0,0.3); } 100% { box-shadow: 0 0 5px var(--accent); } }
+        @keyframes border-glow { 0%, 100% { border-color: var(--glass); } 50% { border-color: var(--accent); } }
         @keyframes slideIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         header {
@@ -34,145 +35,141 @@
             display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass);
         }
        .user-info h2 { margin: 0; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; }
-       .user-info h1 { margin: 0; font-size: 1.4rem; font-weight: 900; }
-       .clock-pro { background: var(--glass); padding: 8px 15px; border-radius: 12px; font-weight: 900; color: var(--accent); border: 1px solid rgba(240,165,0,0.2); }
+       .user-info h1 { margin: 0; font-size: 1.2rem; font-weight: 900; }
+       .clock-v2 { background: var(--glass); padding: 8px 15px; border-radius: 12px; font-weight: 800; color: var(--accent); border: 1px solid rgba(240,165,0,0.2); }
 
-       .content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 120px; }
+       .content { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 120px; }
        .page { display: none; animation: slideIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
        .page.active { display: block; }
 
-        /* MULTI-PURPOSE PRO CARDS */
-       .card-pro { background: var(--card); border-radius: 28px; padding: 22px; margin-bottom: 20px; border: 1px solid var(--glass); position: relative; transition: 0.3s; }
-       .card-active { border: 2.5px solid var(--accent); animation: glow 3s infinite; }
+        /* PROFESSIONAL CARDS */
+       .card-pro { background: var(--card); border-radius: 28px; padding: 22px; margin-bottom: 18px; border: 1px solid var(--glass); position: relative; transition: 0.3s; }
+       .card-active { border: 2.5px solid var(--accent); animation: border-glow 3s infinite; }
        .card-med { border-left: 5px solid var(--blue); }
         
-       .time-tag { font-size: 0.85rem; font-weight: 800; color: var(--accent); margin-bottom: 10px; display: block; }
+       .time-header { font-size: 0.85rem; font-weight: 800; color: var(--accent); margin-bottom: 10px; display: block; }
        .activity-main { display: flex; align-items: center; gap: 18px; }
-       .activity-icon { font-size: 2.8rem; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4)); }
-       .activity-name { font-size: 2.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: -1.2px; line-height: 1; }
-       .card-active.activity-name { animation: float 3s infinite ease-in-out; color: var(--accent); }
+       .activity-icon { font-size: 2.5rem; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4)); }
+       .activity-name { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; line-height: 1.1; }
+       .card-active.activity-name { animation: float 3s infinite ease-in-out; }
 
-        /* MEDICINE UI ELEMENTS */
-       .med-qty { font-size: 0.9rem; font-weight: 700; color: var(--blue); margin-top: 5px; }
-       .med-actions { display: flex; gap: 10px; margin-top: 15px; }
-       .btn-med { flex: 1; padding: 12px; border-radius: 14px; border: none; font-weight: 800; font-size: 0.8rem; cursor: pointer; }
+        /* MEDICINE UI */
+       .med-details { font-size: 0.9rem; font-weight: 700; color: var(--blue); margin-top: 5px; }
+       .med-btns { display: flex; gap: 10px; margin-top: 15px; }
+       .btn-med { flex: 1; padding: 12px; border-radius: 14px; border: none; font-weight: 800; font-size: 0.8rem; }
        .btn-take { background: var(--green); color: #000; }
        .btn-later { background: var(--glass); color: #fff; }
 
         /* FORM INPUTS */
-       .input-wrap { margin-bottom: 22px; }
-        label { display: block; font-size: 0.7rem; font-weight: 900; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        input, select { 
-            width: 100%; background: rgba(0,0,0,0.3); border: 1.5px solid var(--glass); 
-            padding: 16px; border-radius: 16px; color: #fff; font-size: 1rem; font-weight: 700;
-        }
+       .input-group { margin-bottom: 18px; }
+        label { display: block; font-size: 0.7rem; font-weight: 800; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; }
+        input, select { width: 100%; background: rgba(0,0,0,0.3); border: 1.5px solid var(--glass); padding: 15px; border-radius: 16px; color: #fff; font-size: 1rem; font-weight: 600; }
         input:focus { border-color: var(--accent); }
-       .day-selector { display: flex; gap: 6px; overflow-x: auto; padding: 5px 0; }
-       .day-chip { flex: 1; text-align: center; background: var(--glass); padding: 12px 0; border-radius: 12px; font-size: 0.75rem; font-weight: 900; }
-       .day-chip.on { background: var(--accent); color: #000; box-shadow: 0 5px 15px rgba(240,165,0,0.2); }
 
-        /* NAV ENGINE */
+       .day-picker { display: flex; gap: 5px; margin-bottom: 15px; overflow-x: auto; }
+       .day-btn { flex: 1; text-align: center; background: var(--glass); padding: 12px 0; border-radius: 12px; font-size: 0.7rem; font-weight: 800; }
+       .day-btn.on { background: var(--accent); color: #000; }
+
+        /* NAV BAR */
         nav {
-            position: fixed; bottom: 0; width: 100%; height: 95px;
-            background: rgba(26, 29, 39, 0.95); backdrop-filter: blur(25px);
+            position: fixed; bottom: 0; width: 100%; height: 85px;
+            background: rgba(26, 29, 39, 0.96); backdrop-filter: blur(20px);
             border-top: 1px solid var(--glass); display: flex; justify-content: space-around;
             padding-bottom: env(safe-area-inset-bottom); z-index: 1000;
         }
-       .nav-link { background: none; border: none; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; transition: 0.3s; }
-       .nav-link.active { color: var(--accent); }
-       .nav-link span { font-size: 1.6rem; margin-bottom: 5px; }
-       .nav-link small { font-size: 0.6rem; font-weight: 900; text-transform: uppercase; }
+       .nav-link { background: none; border: none; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; transition: 0.2s; }
+       .nav-link.active { color: var(--accent); transform: translateY(-3px); }
+       .nav-link span { font-size: 1.5rem; margin-bottom: 3px; }
+       .nav-link small { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; }
 
-        /* ACTIONS */
-       .btn-gold { background: var(--accent); color: #000; border: none; padding: 20px; border-radius: 20px; font-weight: 900; width: 100%; cursor: pointer; font-size: 1.1rem; }
-       .btn-ghost { background: var(--glass); color: var(--red); border: 1px solid rgba(255,69,58,0.2); padding: 15px; border-radius: 15px; width: 100%; margin-top: 15px; font-weight: 800; }
+        /* BUTTONS */
+       .btn-prime { background: var(--accent); color: #000; border: none; padding: 18px; border-radius: 18px; font-weight: 800; width: 100%; margin-top: 10px; cursor: pointer; }
+       .btn-sec { background: var(--glass); color: #fff; border: 1px solid var(--glass); padding: 14px; border-radius: 14px; width: 100%; margin-top: 10px; font-weight: 700; }
+       .btn-delete { background: none; border: none; color: var(--red); opacity: 0.6; padding: 5px; }
+
+        /* WEEKLY LOGS */
+       .week-card { background: #000; border-radius: 18px; padding: 15px; margin-bottom: 12px; border: 1px solid var(--glass); }
+       .week-day-title { color: var(--accent); font-weight: 900; margin-bottom: 8px; font-size: 1rem; border-bottom: 1px solid var(--glass); padding-bottom: 5px; }
     </style>
 </head>
 <body>
 
 <header>
     <div class="user-info">
-        <h2 id="header-day">Loading...</h2>
-        <h1>HEALTH & ROUTINE</h1>
+        <h2 id="header-day">--</h2>
+        <h1>ROUTINE & HEALTH</h1>
     </div>
-    <div class="clock-pro" id="clock">00:00</div>
+    <div class="clock-v2" id="clock">00:00</div>
 </header>
 
 <div class="content">
     <div id="page-daily" class="page active">
-        <div id="timeline-list"></div>
+        <div id="daily-list"></div>
     </div>
 
     <div id="page-add" class="page">
-        <div class="input-wrap">
-            <label>Entry Type</label>
-            <select id="entry-type" onchange="toggleFormFields()">
+        <h2 style="font-weight:900; margin-bottom:20px;">Plan Entry</h2>
+        <div class="input-group">
+            <label>Category</label>
+            <select id="item-type" onchange="toggleForm()">
                 <option value="routine">Routine Task</option>
                 <option value="medicine">Medicine / Supplement</option>
             </select>
         </div>
-
-        <div class="input-wrap">
+        <div class="input-group">
             <label id="name-label">Task Name</label>
-            <input type="text" id="entry-name" placeholder="e.g. Gym or Vitamin C">
+            <input type="text" id="item-name" placeholder="e.g. Gym or Vitamin C">
         </div>
-
-        <div id="med-fields" style="display:none;">
-            <div style="display:flex; gap:10px; margin-bottom:20px;">
-                <div style="flex:1;"><label>Type</label>
+        <div id="med-specific" style="display:none;">
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <div style="flex:1;"><label>Unit</label>
                     <select id="med-unit">
                         <option value="Capsule(s)">Capsules</option>
                         <option value="ml">Drops (ml)</option>
                     </select>
                 </div>
-                <div style="flex:1;"><label>Quantity</label>
-                    <input type="number" id="med-qty" value="1">
-                </div>
+                <div style="flex:1;"><label>Quantity</label><input type="number" id="med-qty" value="1"></div>
             </div>
         </div>
-
-        <div style="display:flex; gap:10px; margin-bottom:20px;">
-            <div style="flex:1;"><label>Time</label><input type="time" id="entry-time" value="08:00"></div>
-            <div id="end-time-wrap" style="flex:1;"><label>Ends (Optional)</label><input type="time" id="entry-end"></div>
+        <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <div style="flex:1;"><label>Time</label><input type="time" id="item-time" value="08:00"></div>
+            <div id="item-end-wrap" style="flex:1;"><label>Ends</label><input type="time" id="item-end"></div>
         </div>
-
         <label>Repeat Weekly</label>
-        <div class="day-selector" id="day-selector">
-            <div class="day-chip on" onclick="this.classList.toggle('on')">S</div>
-            <div class="day-chip on" onclick="this.classList.toggle('on')">M</div>
-            <div class="day-chip on" onclick="this.classList.toggle('on')">T</div>
-            <div class="day-chip on" onclick="this.classList.toggle('on')">W</div>
-            <div class="day-chip on" onclick="this.classList.toggle('on')">T</div>
-            <div class="day-chip on" onclick="this.classList.toggle('on')">F</div>
-            <div class="day-chip on" onclick="this.classList.toggle('on')">S</div>
+        <div class="day-picker" id="day-picker">
+            <div class="day-btn on" onclick="this.classList.toggle('on')">S</div>
+            <div class="day-btn on" onclick="this.classList.toggle('on')">M</div>
+            <div class="day-btn on" onclick="this.classList.toggle('on')">T</div>
+            <div class="day-btn on" onclick="this.classList.toggle('on')">W</div>
+            <div class="day-btn on" onclick="this.classList.toggle('on')">T</div>
+            <div class="day-btn on" onclick="this.classList.toggle('on')">F</div>
+            <div class="day-btn on" onclick="this.classList.toggle('on')">S</div>
         </div>
-
-        <button class="btn-gold" onclick="handleSave()" style="margin-top:20px;">SAVE TO TIMELINE</button>
+        <button class="btn-prime" onclick="saveItem()">SAVE TO TIMELINE</button>
+        <button id="btn-cancel-edit" class="btn-sec" style="display:none;" onclick="cancelEdit()">CANCEL EDIT</button>
     </div>
 
-    <div id="page-more" class="page">
-        <label>Weekly Overview</label>
-        <div id="weekly-overview-area"></div>
-        
-        <label style="margin-top:25px;">Export & Data</label>
-        <button class="btn-gold" style="background:#3a3a3c; color:#fff;" onclick="exportPDF('timeline-list', 'Daily_Health_Routine')">📄 SAVE DAILY AS PDF</button>
-        <button class="btn-gold" style="background:#3a3a3c; color:#fff; margin-top:10px;" onclick="exportPDF('weekly-overview-area', 'Weekly_Medical_Schedule')">🗓️ SAVE WEEKLY AS PDF</button>
-        
-        <button class="btn-ghost" onclick="factoryReset()">🗑️ RESET ALL DATA</button>
+    <div id="page-manage" class="page">
+        <h2 style="font-weight:900;">Weekly Summary</h2>
+        <div id="weekly-scroll"></div>
+        <hr style="border:0; border-top:1px solid var(--glass); margin:25px 0;">
+        <button class="btn-sec" onclick="exportPDF('daily-list', 'Daily_Report')">📄 SAVE DAILY PDF</button>
+        <button class="btn-sec" onclick="exportPDF('weekly-scroll', 'Weekly_Report')">🗓️ SAVE WEEKLY PDF</button>
+        <button class="btn-sec" style="color:var(--red);" onclick="clearAll()">🗑️ RESET ALL DATA</button>
     </div>
 </div>
 
 <nav>
-    <button class="nav-link active" onclick="nav('page-daily', this)"><span>📅</span><small>Timeline</small></button>
-    <button class="nav-link" onclick="nav('page-add', this)"><span>➕</span><small>Add</small></button>
-    <button class="nav-link" onclick="nav('page-more', this)"><span>⚙️</span><small>Manage</small></button>
+    <button class="nav-link active" onclick="nav('page-daily', this)"><span>📅</span><small>DAILY</small></button>
+    <button class="nav-link" onclick="nav('page-add', this)"><span>➕</span><small>ADD</small></button>
+    <button class="nav-link" onclick="nav('page-manage', this)"><span>⚙️</span><small>MANAGE</small></button>
 </nav>
 
 <script>
-    const EMOJIS = { "gym": "💪", "work": "💻", "cook": "🍳", "clean": "🧹", "read": "📚", "sleep": "😴", "pray": "🤲", "walk": "🚶", "coffee": "☕", "med": "💊", "drop": "💧" };
-    let store = JSON.parse(localStorage.getItem('pro_health_v8')) |
+    const EMOJIS = { "gym": "💪", "work": "💻", "cook": "🍳", "clean": "🧹", "read": "📚", "sleep": "😴", "pray": "🤲", "bath": "🚿", "walk": "🚶", "coffee": "☕" };
+    let db = JSON.parse(localStorage.getItem('pro_health_v9')) |
 
-| { entries:, medsTaken: {} };
+| { items:, logs: {} };
     let editingId = null;
 
     function init() {
@@ -181,94 +178,92 @@
         setInterval(updateClock, 1000);
     }
 
-    function nav(id, el) {
+    function nav(id, btn) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        el.classList.add('active');
+        btn.classList.add('active');
         if(id === 'page-daily') renderDaily();
-        if(id === 'page-more') renderWeekly();
+        if(id === 'page-manage') renderWeekly();
     }
 
-    function toggleFormFields() {
-        const type = document.getElementById('entry-type').value;
-        document.getElementById('med-fields').style.display = type === 'medicine'? 'block' : 'none';
-        document.getElementById('end-time-wrap').style.display = type === 'medicine'? 'none' : 'block';
+    function toggleForm() {
+        const type = document.getElementById('item-type').value;
+        document.getElementById('med-specific').style.display = type === 'medicine'? 'block' : 'none';
+        document.getElementById('item-end-wrap').style.display = type === 'medicine'? 'none' : 'block';
         document.getElementById('name-label').innerText = type === 'medicine'? 'Medicine / Supplement' : 'Task Name';
     }
 
-    function handleSave() {
-        const type = document.getElementById('entry-type').value;
-        const name = document.getElementById('entry-name').value;
-        const start = document.getElementById('entry-time').value;
-        const end = document.getElementById('entry-end').value |
+    function saveItem() {
+        const type = document.getElementById('item-type').value;
+        const name = document.getElementById('item-name').value;
+        const start = document.getElementById('item-time').value;
+        const end = document.getElementById('item-end').value |
 
 | start;
-        const medUnit = document.getElementById('med-unit').value;
-        const medQty = document.getElementById('med-qty').value;
+        const unit = document.getElementById('med-unit').value;
+        const qty = document.getElementById('med-qty').value;
         const days =;
-        document.querySelectorAll('.day-chip').forEach((c, i) => { if(c.classList.contains('on')) days.push(i); });
+        document.querySelectorAll('.day-btn').forEach((b, i) => { if(b.classList.contains('on')) days.push(i); });
 
-        if(!name) return alert("Please enter a name.");
+        if(!name) return alert("Enter a name");
 
-        const entry = { id: editingId |
+        const newItem = { id: editingId |
 
-| Date.now(), type, name, start, end, days, medUnit, medQty };
+| Date.now(), type, name, start, end, days, unit, qty };
+        
         if(editingId) {
-            store.entries = store.entries.map(e => e.id === editingId? entry : e);
+            db.items = db.items.map(i => i.id === editingId? newItem : i);
         } else {
-            store.entries.push(entry);
+            db.items.push(newItem);
         }
 
-        store.entries.sort((a,b) => a.start.localeCompare(b.start));
-        saveStore();
-        resetForm();
+        db.items.sort((a,b) => a.start.localeCompare(b.start));
+        saveDb();
+        cancelEdit();
         nav('page-daily', document.querySelectorAll('.nav-link'));
     }
 
     function renderDaily() {
-        const container = document.getElementById('timeline-list');
-        const todayIdx = new Date().getDay();
+        const list = document.getElementById('daily-list');
+        const today = new Date().getDay();
         const dateKey = new Date().toISOString().split('T');
         const nowTotal = new Date().getHours() * 60 + new Date().getMinutes();
         
-        container.innerHTML = `<h2 style="font-weight:900; margin-bottom:20px;">Today's Timeline</h2>`;
-        const todaysEntries = store.entries.filter(e => e.days.includes(todayIdx));
+        list.innerHTML = '<h2 style="font-weight:900; margin-bottom:20px;">Today\'s Timeline</h2>';
+        const todaysItems = db.items.filter(i => i.days.includes(today));
 
-        if(todaysEntries.length === 0) {
-            container.innerHTML += `<p style="color:var(--muted)">No entries for today.</p>`;
+        if(todaysItems.length === 0) {
+            list.innerHTML += '<p style="color:var(--muted)">No tasks planned.</p>';
             return;
         }
 
-        todaysEntries.forEach(e => {
-            const startM = toMins(e.start);
-            const endM = toMins(e.end);
+        todaysItems.forEach(i => {
+            const startM = toMins(i.start);
+            const endM = toMins(i.end);
             const isActive = nowTotal >= startM && nowTotal < endM;
-            const isTaken = store.medsTaken[dateKey]?.includes(e.id);
+            const isTaken = db.logs[dateKey] && db.logs[dateKey].includes(i.id);
+            const emoji = i.type === 'medicine'? (i.unit === 'ml'? '💧' : '💊') : getEmoji(i.name);
             
-            const emoji = e.type === 'medicine'? (e.medUnit === 'ml'? '💧' : '💊') : getEmoji(e.name);
-            
-            container.innerHTML += `
-                <div class="card-pro ${isActive? 'card-active' : ''} ${e.type === 'medicine'? 'card-med' : ''}">
-                    <span class="time-tag">${fmt12(e.start)} ${e.type!== 'medicine'? '— ' + fmt12(e.end) : ''}</span>
+            list.innerHTML += `
+                <div class="card-pro ${isActive? 'card-active' : ''} ${i.type === 'medicine'? 'card-med' : ''}">
+                    <span class="time-header">${fmt12(i.start)} ${i.type!== 'medicine'? '— ' + fmt12(i.end) : ''}</span>
                     <div class="activity-main">
                         <span class="activity-icon">${emoji}</span>
                         <div>
-                            <div class="activity-name">${e.name}</div>
-                            ${e.type === 'medicine'? `<div class="med-qty">${e.medQty} ${e.medUnit}</div>` : ''}
+                            <div class="activity-name">${i.name}</div>
+                            ${i.type === 'medicine'? `<div class="med-details">${i.qty} ${i.unit}</div>` : ''}
                         </div>
                     </div>
-                    
-                    ${e.type === 'medicine'? `
-                        <div class="med-actions">
-                            <button class="btn-med btn-take" onclick="markTaken(${e.id})">${isTaken? '✅ TAKEN' : 'TAKE NOW'}</button>
-                            <button class="btn-med btn-later" onclick="alert('Reminder snoozed 15 mins')">LATER</button>
+                    ${i.type === 'medicine'? `
+                        <div class="med-btns">
+                            <button class="btn-med btn-take" onclick="markLog(${i.id})">${isTaken? '✅ LOGGED' : 'MARK TAKEN'}</button>
+                            <button class="btn-med btn-later" onclick="alert('Reminding in 15m')">LATER</button>
                         </div>
                     ` : ''}
-
-                    <div style="position:absolute; top:20px; right:20px; display:flex; gap:10px;">
-                        <button onclick="editEntry(${e.id})" style="background:none; border:none; color:var(--muted); font-size:1.1rem;">✏️</button>
-                        <button onclick="deleteEntry(${e.id})" style="background:none; border:none; color:var(--red); font-size:1.1rem; opacity:0.6;">✕</button>
+                    <div style="position:absolute; top:20px; right:15px; display:flex; gap:12px;">
+                        <button class="btn-delete" onclick="editItem(${i.id})" style="color:var(--text)">✏️</button>
+                        <button class="btn-delete" onclick="deleteItem(${i.id})">✕</button>
                     </div>
                 </div>
             `;
@@ -276,86 +271,87 @@
     }
 
     function renderWeekly() {
-        const container = document.getElementById('weekly-overview-area');
+        const area = document.getElementById('weekly-scroll');
         const dayNames =;
-        container.innerHTML = '';
+        area.innerHTML = '';
         dayNames.forEach((name, idx) => {
-            const dayEntries = store.entries.filter(e => e.days.includes(idx));
-            let html = `<div style="background:#000; border-radius:20px; padding:15px; margin-bottom:12px; border:1px solid var(--glass);">
-                <div style="font-weight:900; color:var(--accent); margin-bottom:10px;">${name}</div>`;
-            dayEntries.forEach(e => {
+            const items = db.items.filter(i => i.days.includes(idx));
+            let html = `<div class="week-card"><div class="week-day-title">${name}</div>`;
+            items.forEach(i => {
                 html += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;">
-                    <span>${fmt12(e.start)}</span> <b>${e.name}</b>
+                    <span>${fmt12(i.start)}</span> <b>${i.name}</b>
                 </div>`;
             });
             html += `</div>`;
-            container.innerHTML += html;
+            area.innerHTML += html;
         });
     }
 
-    function markTaken(id) {
-        const dateKey = new Date().toISOString().split('T');
-        if(!store.medsTaken[dateKey]) store.medsTaken[dateKey] =;
-        if(!store.medsTaken[dateKey].includes(id)) {
-            store.medsTaken[dateKey].push(id);
-            if('vibrate' in navigator) navigator.vibrate([50, 30, 50]); // Professional haptic [4, 5]
-        }
-        saveStore();
-        renderDaily();
-    }
-
-    function deleteEntry(id) {
-        if(!confirm("Remove from schedule?")) return;
-        store.entries = store.entries.filter(e => e.id!== id);
-        saveStore();
-        renderDaily();
-    }
-
-    function editEntry(id) {
-        const e = store.entries.find(item => item.id === id);
+    function editItem(id) {
+        const item = db.items.find(x => x.id === id);
         editingId = id;
-        document.getElementById('entry-type').value = e.type;
-        document.getElementById('entry-name').value = e.name;
-        document.getElementById('entry-time').value = e.start;
-        document.getElementById('entry-end').value = e.end;
-        document.getElementById('med-unit').value = e.medUnit |
+        document.getElementById('item-type').value = item.type;
+        document.getElementById('item-name').value = item.name;
+        document.getElementById('item-time').value = item.start;
+        document.getElementById('item-end').value = item.end;
+        document.getElementById('med-unit').value = item.unit |
 
 | 'Capsule(s)';
-        document.getElementById('med-qty').value = e.medQty |
+        document.getElementById('med-qty').value = item.qty |
 
 | 1;
-        document.querySelectorAll('.day-chip').forEach((c, i) => {
-            c.classList.toggle('on', e.days.includes(i));
-        });
-        toggleFormFields();
+        document.querySelectorAll('.day-btn').forEach((b, i) => b.classList.toggle('on', item.days.includes(i)));
+        document.getElementById('btn-cancel-edit').style.display = 'block';
+        toggleForm();
         nav('page-add', document.querySelectorAll('.nav-link')[1]);
     }
 
-    function resetForm() {
-        editingId = null;
-        document.getElementById('entry-name').value = '';
-        document.querySelectorAll('.day-chip').forEach(c => c.classList.add('on'));
+    function deleteItem(id) {
+        if(!confirm("Delete this entry?")) return;
+        db.items = db.items.filter(x => x.id!== id);
+        saveDb();
+        renderDaily();
     }
 
-    function saveStore() { localStorage.setItem('pro_health_v8', JSON.stringify(store)); }
-    function toMins(t) { return parseInt(t.split(':')) * 60 + parseInt(t.split(':')[1]); }
-    function fmt12(t) { let [h,m] = t.split(':'); h=parseInt(h); return `${h%12||12}:${m} ${h>=12?'PM':'AM'}`; }
-    function getEmoji(t) { t=t.toLowerCase(); for(let k in EMOJIS) if(t.includes(k)) return EMOJIS[k]; return "⭐"; }
+    function cancelEdit() {
+        editingId = null;
+        document.getElementById('item-name').value = '';
+        document.getElementById('btn-cancel-edit').style.display = 'none';
+        document.querySelectorAll('.day-btn').forEach(b => b.classList.add('on'));
+    }
+
+    function markLog(id) {
+        const dateKey = new Date().toISOString().split('T');
+        if(!db.logs[dateKey]) db.logs[dateKey] =;
+        if(!db.logs[dateKey].includes(id)) {
+            db.logs[dateKey].push(id);
+            if('vibrate' in navigator) navigator.vibrate([40, 20, 40]);
+        }
+        saveDb();
+        renderDaily();
+    }
 
     function updateClock() {
         const now = new Date();
         const days =;
         document.getElementById('header-day').innerText = days;
-        document.getElementById('clock').innerText = now.toLocaleTimeString(, {hour:'2-digit', minute:'2-digit'});
+        let h = now.getHours();
+        let m = now.getMinutes().toString().padStart(2, '0');
+        let ampm = h >= 12? 'PM' : 'AM';
+        document.getElementById('clock').innerText = `${h % 12 |
+
+| 12}:${m} ${ampm}`;
         if(now.getSeconds() === 0) renderDaily();
     }
 
-    function exportPDF(id, name) {
-        const opt = { margin:10, filename:name+'.pdf', html2canvas:{scale:2, backgroundColor:'#0f1117'}, jsPDF:{unit:'mm', format:'a4'} };
-        html2pdf().set(opt).from(document.getElementById(id)).save();
-    }
+    function toMins(t) { const s = t.split(':'); return parseInt(s) * 60 + parseInt(s[1]); }
+    function fmt12(t) { let [h, m] = t.split(':'); h = parseInt(h); return `${h % 12 |
 
-    function factoryReset() { if(confirm("Delete all?")) { localStorage.clear(); location.reload(); } }
+| 12}:${m} ${h >= 12? 'PM' : 'AM'}`; }
+    function getEmoji(t) { t = t.toLowerCase(); for(let k in EMOJIS) if(t.includes(k)) return EMOJIS[k]; return "⭐"; }
+    function saveDb() { localStorage.setItem('pro_health_v9', JSON.stringify(db)); }
+    function clearAll() { if(confirm("Clear all data?")) { localStorage.clear(); location.reload(); } }
+    function exportPDF(id, name) { html2pdf().set({ margin: 10, filename: name + '.pdf', html2canvas: { scale: 2, backgroundColor: '#0f1117' }, jsPDF: { unit: 'mm', format: 'a4' } }).from(document.getElementById(id)).save(); }
 
     init();
 </script>
