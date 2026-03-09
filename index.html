@@ -1,359 +1,1526 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0f1117">
-    <title>Routine & Med Pro</title>
-    <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        :root {
-            --bg: #0f1117; --card: #1a1d27; --accent: #f0a500;
-            --text: #ffffff; --muted: #94a3b8; --red: #ff453a;
-            --blue: #007aff; --green: #34c759;
-            --glass: rgba(255, 255, 255, 0.04); --safe-top: env(safe-area-inset-top);
-        }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { 
-            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); 
-            color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0f1e">
+<title>DayFlow — Routine & Reminder</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07080f;
+    --surface: #0e1120;
+    --surface2: #141829;
+    --surface3: #1c2236;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --accent: #6c63ff;
+    --accent2: #a78bfa;
+    --mint: #34d399;
+    --coral: #fb7185;
+    --amber: #fbbf24;
+    --sky: #38bdf8;
+    --text: #f0f2ff;
+    --text2: #8892b0;
+    --text3: #4a5278;
+    --radius: 20px;
+    --radius-sm: 12px;
+    --shadow: 0 8px 32px rgba(0,0,0,0.4);
+    --glow: 0 0 24px rgba(108,99,255,0.25);
+  }
 
-        /* ANIMATIONS */
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        @keyframes border-glow { 0%, 100% { border-color: var(--glass); } 50% { border-color: var(--accent); } }
-        @keyframes slideIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+- { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        header {
-            padding: calc(var(--safe-top) + 20px) 20px 20px;
-            background: linear-gradient(to bottom, var(--card), var(--bg));
-            display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass);
-        }
-       .user-info h2 { margin: 0; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; }
-       .user-info h1 { margin: 0; font-size: 1.2rem; font-weight: 900; }
-       .clock-v2 { background: var(--glass); padding: 8px 15px; border-radius: 12px; font-weight: 800; color: var(--accent); border: 1px solid rgba(240,165,0,0.2); }
+html, body {
+height: 100%;
+background: var(–bg);
+color: var(–text);
+font-family: ‘DM Sans’, sans-serif;
+font-size: 16px;
+overflow: hidden;
+}
 
-       .content { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 120px; }
-       .page { display: none; animation: slideIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
-       .page.active { display: block; }
+/* === APP SHELL === */
+#app {
+display: flex;
+flex-direction: column;
+height: 100dvh;
+max-width: 480px;
+margin: 0 auto;
+position: relative;
+background: var(–bg);
+}
 
-        /* PROFESSIONAL CARDS */
-       .card-pro { background: var(--card); border-radius: 28px; padding: 22px; margin-bottom: 18px; border: 1px solid var(--glass); position: relative; transition: 0.3s; }
-       .card-active { border: 2.5px solid var(--accent); animation: border-glow 3s infinite; }
-       .card-med { border-left: 5px solid var(--blue); }
-        
-       .time-header { font-size: 0.85rem; font-weight: 800; color: var(--accent); margin-bottom: 10px; display: block; }
-       .activity-main { display: flex; align-items: center; gap: 18px; }
-       .activity-icon { font-size: 2.5rem; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4)); }
-       .activity-name { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; line-height: 1.1; }
-       .card-active.activity-name { animation: float 3s infinite ease-in-out; }
+/* === HEADER === */
+.header {
+padding: 52px 24px 16px;
+background: linear-gradient(180deg, #0e1120 0%, transparent 100%);
+position: relative;
+z-index: 10;
+}
 
-        /* MEDICINE UI */
-       .med-details { font-size: 0.9rem; font-weight: 700; color: var(--blue); margin-top: 5px; }
-       .med-btns { display: flex; gap: 10px; margin-top: 15px; }
-       .btn-med { flex: 1; padding: 12px; border-radius: 14px; border: none; font-weight: 800; font-size: 0.8rem; }
-       .btn-take { background: var(--green); color: #000; }
-       .btn-later { background: var(--glass); color: #fff; }
+.header-top {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 6px;
+}
 
-        /* FORM INPUTS */
-       .input-group { margin-bottom: 18px; }
-        label { display: block; font-size: 0.7rem; font-weight: 800; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; }
-        input, select { width: 100%; background: rgba(0,0,0,0.3); border: 1.5px solid var(--glass); padding: 15px; border-radius: 16px; color: #fff; font-size: 1rem; font-weight: 600; }
-        input:focus { border-color: var(--accent); }
+.logo {
+font-family: ‘Syne’, sans-serif;
+font-weight: 800;
+font-size: 26px;
+letter-spacing: -0.5px;
+background: linear-gradient(135deg, #6c63ff, #a78bfa, #38bdf8);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
 
-       .day-picker { display: flex; gap: 5px; margin-bottom: 15px; overflow-x: auto; }
-       .day-btn { flex: 1; text-align: center; background: var(--glass); padding: 12px 0; border-radius: 12px; font-size: 0.7rem; font-weight: 800; }
-       .day-btn.on { background: var(--accent); color: #000; }
+.header-date {
+font-size: 12px;
+color: var(–text3);
+font-weight: 500;
+letter-spacing: 0.5px;
+text-transform: uppercase;
+}
 
-        /* NAV BAR */
-        nav {
-            position: fixed; bottom: 0; width: 100%; height: 85px;
-            background: rgba(26, 29, 39, 0.96); backdrop-filter: blur(20px);
-            border-top: 1px solid var(--glass); display: flex; justify-content: space-around;
-            padding-bottom: env(safe-area-inset-bottom); z-index: 1000;
-        }
-       .nav-link { background: none; border: none; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; transition: 0.2s; }
-       .nav-link.active { color: var(--accent); transform: translateY(-3px); }
-       .nav-link span { font-size: 1.5rem; margin-bottom: 3px; }
-       .nav-link small { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; }
+.header-greeting {
+font-size: 13px;
+color: var(–text2);
+font-weight: 400;
+}
 
-        /* BUTTONS */
-       .btn-prime { background: var(--accent); color: #000; border: none; padding: 18px; border-radius: 18px; font-weight: 800; width: 100%; margin-top: 10px; cursor: pointer; }
-       .btn-sec { background: var(--glass); color: #fff; border: 1px solid var(--glass); padding: 14px; border-radius: 14px; width: 100%; margin-top: 10px; font-weight: 700; }
-       .btn-delete { background: none; border: none; color: var(--red); opacity: 0.6; padding: 5px; }
+.time-display {
+font-family: ‘Syne’, sans-serif;
+font-size: 42px;
+font-weight: 700;
+letter-spacing: -2px;
+color: var(–text);
+line-height: 1;
+margin: 8px 0 4px;
+}
 
-        /* WEEKLY LOGS */
-       .week-card { background: #000; border-radius: 18px; padding: 15px; margin-bottom: 12px; border: 1px solid var(--glass); }
-       .week-day-title { color: var(--accent); font-weight: 900; margin-bottom: 8px; font-size: 1rem; border-bottom: 1px solid var(--glass); padding-bottom: 5px; }
-    </style>
+/* === PROGRESS RING === */
+.day-progress {
+display: flex;
+align-items: center;
+gap: 12px;
+margin-top: 12px;
+padding: 12px 14px;
+background: var(–surface);
+border-radius: var(–radius-sm);
+border: 1px solid var(–border);
+}
+
+.progress-ring-wrap { position: relative; width: 44px; height: 44px; flex-shrink: 0; }
+
+.progress-ring-wrap svg { transform: rotate(-90deg); }
+
+.ring-bg { fill: none; stroke: var(–surface3); stroke-width: 4; }
+.ring-fg { fill: none; stroke: var(–accent); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.8s cubic-bezier(.4,0,.2,1); }
+
+.ring-label {
+position: absolute; inset: 0;
+display: flex; align-items: center; justify-content: center;
+font-size: 9px; font-weight: 700; color: var(–accent2);
+letter-spacing: -0.2px;
+}
+
+.day-stats { flex: 1; }
+.day-stats-title { font-size: 13px; font-weight: 600; color: var(–text); }
+.day-stats-sub { font-size: 11px; color: var(–text3); margin-top: 2px; }
+
+.stat-pills { display: flex; gap: 6px; margin-top: 6px; }
+
+.pill {
+font-size: 10px; font-weight: 600;
+padding: 2px 8px;
+border-radius: 20px;
+letter-spacing: 0.2px;
+}
+.pill-green { background: rgba(52,211,153,0.12); color: var(–mint); }
+.pill-amber { background: rgba(251,191,36,0.12); color: var(–amber); }
+.pill-coral { background: rgba(251,113,133,0.12); color: var(–coral); }
+
+/* === TABS === */
+.tabs {
+display: flex;
+padding: 0 24px;
+gap: 6px;
+margin-top: 8px;
+margin-bottom: 4px;
+}
+
+.tab-btn {
+flex: 1;
+padding: 9px 0;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 12px;
+color: var(–text3);
+font-family: ‘DM Sans’, sans-serif;
+font-size: 12px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s ease;
+letter-spacing: 0.2px;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 5px;
+}
+
+.tab-btn .tab-icon { font-size: 14px; }
+
+.tab-btn.active {
+background: linear-gradient(135deg, var(–accent), #5b52e8);
+border-color: transparent;
+color: #fff;
+box-shadow: var(–glow);
+}
+
+/* === SCROLL AREA === */
+.scroll-area {
+flex: 1;
+overflow-y: auto;
+padding: 8px 24px 100px;
+scroll-behavior: smooth;
+-webkit-overflow-scrolling: touch;
+}
+
+.scroll-area::-webkit-scrollbar { display: none; }
+
+/* === SECTION HEADER === */
+.section-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin: 16px 0 10px;
+}
+
+.section-title {
+font-family: ‘Syne’, sans-serif;
+font-size: 14px;
+font-weight: 700;
+color: var(–text2);
+text-transform: uppercase;
+letter-spacing: 1px;
+}
+
+.section-count {
+font-size: 11px;
+color: var(–text3);
+background: var(–surface2);
+padding: 2px 8px;
+border-radius: 20px;
+}
+
+/* === TASK CARD === */
+.task-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+padding: 14px 16px;
+margin-bottom: 10px;
+display: flex;
+align-items: center;
+gap: 14px;
+cursor: pointer;
+transition: all 0.2s ease;
+position: relative;
+overflow: hidden;
+}
+
+.task-card::before {
+content: ‘’;
+position: absolute;
+left: 0; top: 0; bottom: 0;
+width: 3px;
+border-radius: 0 2px 2px 0;
+background: var(–card-color, var(–accent));
+}
+
+.task-card:active { transform: scale(0.98); opacity: 0.9; }
+
+.task-card.done {
+opacity: 0.5;
+}
+
+.task-card.done .task-name { text-decoration: line-through; color: var(–text3); }
+
+.task-time-badge {
+display: flex;
+flex-direction: column;
+align-items: center;
+min-width: 44px;
+}
+
+.task-time {
+font-family: ‘Syne’, sans-serif;
+font-size: 15px;
+font-weight: 700;
+color: var(–text);
+line-height: 1;
+}
+
+.task-ampm {
+font-size: 9px;
+color: var(–text3);
+text-transform: uppercase;
+letter-spacing: 0.5px;
+margin-top: 2px;
+}
+
+.task-body { flex: 1; min-width: 0; }
+
+.task-name {
+font-size: 14px;
+font-weight: 500;
+color: var(–text);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.task-meta {
+font-size: 11px;
+color: var(–text3);
+margin-top: 3px;
+display: flex;
+align-items: center;
+gap: 6px;
+}
+
+.task-cat {
+font-size: 9px;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+padding: 2px 6px;
+border-radius: 4px;
+background: rgba(108,99,255,0.12);
+color: var(–accent2);
+}
+
+.task-check {
+width: 28px; height: 28px;
+border-radius: 50%;
+border: 2px solid var(–border2);
+display: flex; align-items: center; justify-content: center;
+font-size: 14px;
+flex-shrink: 0;
+transition: all 0.2s ease;
+background: transparent;
+}
+
+.task-card.done .task-check {
+background: var(–mint);
+border-color: var(–mint);
+color: #fff;
+}
+
+/* === MEDICINE CARD === */
+.med-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+padding: 14px 16px;
+margin-bottom: 10px;
+position: relative;
+overflow: hidden;
+transition: all 0.2s ease;
+}
+
+.med-card::before {
+content: ‘’;
+position: absolute;
+left: 0; top: 0; bottom: 0;
+width: 3px;
+background: var(–card-color, var(–coral));
+border-radius: 0 2px 2px 0;
+}
+
+.med-card:active { transform: scale(0.98); }
+
+.med-header {
+display: flex;
+align-items: center;
+gap: 12px;
+margin-bottom: 10px;
+}
+
+.med-icon-wrap {
+width: 40px; height: 40px;
+border-radius: 12px;
+display: flex; align-items: center; justify-content: center;
+font-size: 20px;
+flex-shrink: 0;
+background: rgba(251,113,133,0.1);
+}
+
+.med-info { flex: 1; }
+
+.med-name {
+font-size: 15px;
+font-weight: 600;
+color: var(–text);
+}
+
+.med-dose {
+font-size: 12px;
+color: var(–text3);
+margin-top: 2px;
+}
+
+.med-times {
+display: flex;
+gap: 6px;
+flex-wrap: wrap;
+}
+
+.med-time-chip {
+display: flex;
+align-items: center;
+gap: 5px;
+padding: 5px 10px;
+border-radius: 10px;
+border: 1px solid var(–border2);
+font-size: 12px;
+font-weight: 500;
+color: var(–text2);
+cursor: pointer;
+transition: all 0.2s ease;
+background: var(–surface2);
+}
+
+.med-time-chip .chip-time { font-family: ‘Syne’, sans-serif; font-size: 13px; font-weight: 700; color: var(–text); }
+
+.med-time-chip.taken {
+background: rgba(52,211,153,0.1);
+border-color: rgba(52,211,153,0.3);
+color: var(–mint);
+}
+
+.med-time-chip.taken .chip-time { color: var(–mint); }
+
+.med-time-chip:active { transform: scale(0.96); }
+
+/* === FAB === */
+.fab {
+position: fixed;
+bottom: 80px;
+right: 24px;
+width: 56px; height: 56px;
+border-radius: 18px;
+background: linear-gradient(135deg, var(–accent), #5b52e8);
+box-shadow: 0 8px 24px rgba(108,99,255,0.4);
+display: flex; align-items: center; justify-content: center;
+font-size: 24px;
+cursor: pointer;
+border: none;
+color: white;
+z-index: 100;
+transition: all 0.2s ease;
+}
+
+.fab:active { transform: scale(0.92); box-shadow: 0 4px 12px rgba(108,99,255,0.3); }
+
+/* === BOTTOM NAV === */
+.bottom-nav {
+position: fixed;
+bottom: 0; left: 50%;
+transform: translateX(-50%);
+width: 100%;
+max-width: 480px;
+background: rgba(14,17,32,0.92);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border-top: 1px solid var(–border);
+display: flex;
+padding: 10px 16px;
+padding-bottom: calc(10px + env(safe-area-inset-bottom));
+z-index: 50;
+}
+
+.nav-item {
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 3px;
+padding: 6px;
+border: none;
+background: transparent;
+cursor: pointer;
+transition: all 0.2s ease;
+border-radius: 10px;
+}
+
+.nav-icon { font-size: 20px; line-height: 1; }
+
+.nav-label {
+font-size: 9px;
+font-weight: 600;
+letter-spacing: 0.5px;
+text-transform: uppercase;
+color: var(–text3);
+transition: color 0.2s;
+}
+
+.nav-item.active .nav-label { color: var(–accent2); }
+.nav-item.active .nav-icon { filter: drop-shadow(0 0 6px rgba(108,99,255,0.6)); }
+
+/* === MODAL === */
+.modal-overlay {
+position: fixed; inset: 0;
+background: rgba(0,0,0,0.6);
+backdrop-filter: blur(8px);
+-webkit-backdrop-filter: blur(8px);
+z-index: 200;
+display: flex;
+align-items: flex-end;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.3s ease;
+}
+
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+
+.modal {
+width: 100%;
+max-width: 480px;
+margin: 0 auto;
+background: var(–surface2);
+border-radius: 24px 24px 0 0;
+padding: 24px;
+padding-bottom: calc(24px + env(safe-area-inset-bottom));
+transform: translateY(100%);
+transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+border-top: 1px solid var(–border2);
+max-height: 85dvh;
+overflow-y: auto;
+}
+
+.modal-overlay.open .modal { transform: translateY(0); }
+
+.modal-handle {
+width: 36px; height: 4px;
+background: var(–border2);
+border-radius: 2px;
+margin: 0 auto 20px;
+}
+
+.modal-title {
+font-family: ‘Syne’, sans-serif;
+font-size: 20px;
+font-weight: 700;
+color: var(–text);
+margin-bottom: 20px;
+}
+
+.form-group { margin-bottom: 14px; }
+
+.form-label {
+font-size: 11px;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.8px;
+color: var(–text3);
+margin-bottom: 6px;
+display: block;
+}
+
+.form-input {
+width: 100%;
+background: var(–surface3);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+padding: 12px 14px;
+color: var(–text);
+font-family: ‘DM Sans’, sans-serif;
+font-size: 14px;
+outline: none;
+transition: border-color 0.2s;
+-webkit-appearance: none;
+}
+
+.form-input:focus { border-color: var(–accent); }
+
+.form-row { display: flex; gap: 10px; }
+.form-row .form-group { flex: 1; }
+
+.type-selector { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.type-chip {
+padding: 7px 14px;
+border-radius: 20px;
+font-size: 12px;
+font-weight: 600;
+border: 1px solid var(–border);
+background: var(–surface3);
+color: var(–text3);
+cursor: pointer;
+transition: all 0.2s;
+}
+
+.type-chip.selected {
+background: var(–accent);
+border-color: var(–accent);
+color: white;
+}
+
+.color-selector { display: flex; gap: 8px; }
+
+.color-dot {
+width: 28px; height: 28px;
+border-radius: 50%;
+cursor: pointer;
+transition: transform 0.2s;
+border: 2px solid transparent;
+}
+
+.color-dot.selected { border-color: white; transform: scale(1.15); }
+
+.modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+.btn {
+flex: 1;
+padding: 14px;
+border-radius: var(–radius-sm);
+font-family: ‘DM Sans’, sans-serif;
+font-size: 14px;
+font-weight: 600;
+cursor: pointer;
+border: none;
+transition: all 0.2s ease;
+}
+
+.btn-primary {
+background: linear-gradient(135deg, var(–accent), #5b52e8);
+color: white;
+box-shadow: 0 4px 16px rgba(108,99,255,0.3);
+}
+
+.btn-secondary {
+background: var(–surface3);
+color: var(–text2);
+border: 1px solid var(–border);
+}
+
+.btn:active { transform: scale(0.97); }
+
+/* === EMPTY STATE === */
+.empty-state {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 40px 20px;
+text-align: center;
+}
+
+.empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+
+.empty-text {
+font-size: 14px;
+color: var(–text3);
+line-height: 1.6;
+}
+
+/* === TODAY TIMELINE === */
+.timeline-item {
+position: relative;
+padding-left: 24px;
+margin-bottom: 8px;
+}
+
+.timeline-item::before {
+content: ‘’;
+position: absolute;
+left: 7px; top: 18px; bottom: -8px;
+width: 1px;
+background: var(–border);
+}
+
+.timeline-item:last-child::before { display: none; }
+
+.timeline-dot {
+position: absolute;
+left: 0; top: 12px;
+width: 14px; height: 14px;
+border-radius: 50%;
+background: var(–surface3);
+border: 2px solid var(–border2);
+z-index: 1;
+}
+
+.timeline-item.active-now .timeline-dot {
+background: var(–accent);
+border-color: var(–accent);
+box-shadow: 0 0 10px rgba(108,99,255,0.5);
+}
+
+/* === TOAST === */
+.toast {
+position: fixed;
+top: 20px;
+left: 50%;
+transform: translateX(-50%) translateY(-80px);
+background: var(–surface2);
+border: 1px solid var(–border2);
+border-radius: 16px;
+padding: 12px 20px;
+font-size: 13px;
+font-weight: 500;
+color: var(–text);
+z-index: 500;
+transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+box-shadow: var(–shadow);
+white-space: nowrap;
+display: flex;
+align-items: center;
+gap: 8px;
+max-width: calc(100vw - 48px);
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* === SETTINGS PAGE === */
+.settings-section {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+overflow: hidden;
+margin-bottom: 14px;
+}
+
+.settings-item {
+display: flex;
+align-items: center;
+gap: 14px;
+padding: 14px 16px;
+border-bottom: 1px solid var(–border);
+cursor: pointer;
+transition: background 0.15s;
+}
+
+.settings-item:last-child { border-bottom: none; }
+.settings-item:active { background: var(–surface2); }
+
+.settings-icon {
+width: 36px; height: 36px;
+border-radius: 10px;
+display: flex; align-items: center; justify-content: center;
+font-size: 17px;
+flex-shrink: 0;
+}
+
+.settings-label { flex: 1; font-size: 14px; font-weight: 500; color: var(–text); }
+.settings-value { font-size: 12px; color: var(–text3); }
+
+.toggle {
+width: 44px; height: 26px;
+border-radius: 13px;
+background: var(–surface3);
+border: 1px solid var(–border2);
+position: relative;
+cursor: pointer;
+transition: background 0.2s;
+flex-shrink: 0;
+}
+
+.toggle.on { background: var(–accent); border-color: var(–accent); }
+
+.toggle::after {
+content: ‘’;
+position: absolute;
+top: 2px; left: 2px;
+width: 20px; height: 20px;
+border-radius: 50%;
+background: white;
+transition: transform 0.2s ease;
+}
+
+.toggle.on::after { transform: translateX(18px); }
+
+/* === ANIMATIONS === */
+@keyframes slideIn {
+from { transform: translateY(12px); opacity: 0; }
+to { transform: translateY(0); opacity: 1; }
+}
+
+.task-card, .med-card { animation: slideIn 0.3s ease both; }
+
+@keyframes checkPop {
+0% { transform: scale(1); }
+50% { transform: scale(1.3); }
+100% { transform: scale(1); }
+}
+
+.check-pop { animation: checkPop 0.3s ease; }
+
+/* iOS safe area */
+@supports (padding-top: env(safe-area-inset-top)) {
+.header { padding-top: calc(env(safe-area-inset-top) + 16px); }
+}
+
+/* === PAGE TRANSITIONS === */
+.page { display: none; }
+.page.active { display: block; }
+
+/* Scrollbar hide */
+.modal::-webkit-scrollbar { display: none; }
+
+/* Times row for medicine */
+.times-add-row {
+display: flex; gap: 8px; align-items: center; margin-top: 6px;
+}
+
+.times-list { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+
+.removable-time {
+display: flex; align-items: center; gap: 4px;
+padding: 4px 10px;
+background: var(–surface3);
+border: 1px solid var(–border);
+border-radius: 8px;
+font-size: 12px; color: var(–text2);
+}
+
+.remove-x {
+font-size: 14px; color: var(–text3); cursor: pointer;
+line-height: 1;
+}
+</style>
+
 </head>
 <body>
 
-<header>
-    <div class="user-info">
-        <h2 id="header-day">--</h2>
-        <h1>ROUTINE & HEALTH</h1>
-    </div>
-    <div class="clock-v2" id="clock">00:00</div>
-</header>
+<div id="app">
 
-<div class="content">
-    <div id="page-daily" class="page active">
-        <div id="daily-list"></div>
-    </div>
+  <!-- HEADER -->
 
-    <div id="page-add" class="page">
-        <h2 style="font-weight:900; margin-bottom:20px;">Plan Entry</h2>
-        <div class="input-group">
-            <label>Category</label>
-            <select id="item-type" onchange="toggleForm()">
-                <option value="routine">Routine Task</option>
-                <option value="medicine">Medicine / Supplement</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label id="name-label">Task Name</label>
-            <input type="text" id="item-name" placeholder="e.g. Gym or Vitamin C">
-        </div>
-        <div id="med-specific" style="display:none;">
-            <div style="display:flex; gap:10px; margin-bottom:15px;">
-                <div style="flex:1;"><label>Unit</label>
-                    <select id="med-unit">
-                        <option value="Capsule(s)">Capsules</option>
-                        <option value="ml">Drops (ml)</option>
-                    </select>
-                </div>
-                <div style="flex:1;"><label>Quantity</label><input type="number" id="med-qty" value="1"></div>
-            </div>
-        </div>
-        <div style="display:flex; gap:10px; margin-bottom:15px;">
-            <div style="flex:1;"><label>Time</label><input type="time" id="item-time" value="08:00"></div>
-            <div id="item-end-wrap" style="flex:1;"><label>Ends</label><input type="time" id="item-end"></div>
-        </div>
-        <label>Repeat Weekly</label>
-        <div class="day-picker" id="day-picker">
-            <div class="day-btn on" onclick="this.classList.toggle('on')">S</div>
-            <div class="day-btn on" onclick="this.classList.toggle('on')">M</div>
-            <div class="day-btn on" onclick="this.classList.toggle('on')">T</div>
-            <div class="day-btn on" onclick="this.classList.toggle('on')">W</div>
-            <div class="day-btn on" onclick="this.classList.toggle('on')">T</div>
-            <div class="day-btn on" onclick="this.classList.toggle('on')">F</div>
-            <div class="day-btn on" onclick="this.classList.toggle('on')">S</div>
-        </div>
-        <button class="btn-prime" onclick="saveItem()">SAVE TO TIMELINE</button>
-        <button id="btn-cancel-edit" class="btn-sec" style="display:none;" onclick="cancelEdit()">CANCEL EDIT</button>
+  <div class="header">
+    <div class="header-top">
+      <div class="logo">DayFlow</div>
+      <div class="header-date" id="headerDate"></div>
     </div>
+    <div class="time-display" id="clockDisplay">00:00</div>
+    <div class="header-greeting" id="greeting">Good morning ✨</div>
+    <div class="day-progress">
+      <div class="progress-ring-wrap">
+        <svg width="44" height="44" viewBox="0 0 44 44">
+          <circle class="ring-bg" cx="22" cy="22" r="18"/>
+          <circle class="ring-fg" id="progressRing" cx="22" cy="22" r="18" stroke-dasharray="113" stroke-dashoffset="113"/>
+        </svg>
+        <div class="ring-label" id="progressPct">0%</div>
+      </div>
+      <div class="day-stats">
+        <div class="day-stats-title" id="statsTitle">Today's Progress</div>
+        <div class="day-stats-sub" id="statsSub">Get started with your routine</div>
+        <div class="stat-pills">
+          <span class="pill pill-green" id="doneCount">0 done</span>
+          <span class="pill pill-amber" id="pendingCount">0 pending</span>
+          <span class="pill pill-coral" id="medCount">0 meds</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <div id="page-manage" class="page">
-        <h2 style="font-weight:900;">Weekly Summary</h2>
-        <div id="weekly-scroll"></div>
-        <hr style="border:0; border-top:1px solid var(--glass); margin:25px 0;">
-        <button class="btn-sec" onclick="exportPDF('daily-list', 'Daily_Report')">📄 SAVE DAILY PDF</button>
-        <button class="btn-sec" onclick="exportPDF('weekly-scroll', 'Weekly_Report')">🗓️ SAVE WEEKLY PDF</button>
-        <button class="btn-sec" style="color:var(--red);" onclick="clearAll()">🗑️ RESET ALL DATA</button>
-    </div>
+  <!-- TABS -->
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('routine')" id="tab-routine">
+      <span class="tab-icon">📋</span> Routine
+    </button>
+    <button class="tab-btn" onclick="switchTab('meds')" id="tab-meds">
+      <span class="tab-icon">💊</span> Meds
+    </button>
+    <button class="tab-btn" onclick="switchTab('settings')" id="tab-settings">
+      <span class="tab-icon">⚙️</span> Settings
+    </button>
+  </div>
+
+  <!-- SCROLL AREA -->
+
+  <div class="scroll-area" id="scrollArea">
+
+```
+<!-- ROUTINE PAGE -->
+<div class="page active" id="page-routine">
+  <div id="routineList"></div>
 </div>
 
-<nav>
-    <button class="nav-link active" onclick="nav('page-daily', this)"><span>📅</span><small>DAILY</small></button>
-    <button class="nav-link" onclick="nav('page-add', this)"><span>➕</span><small>ADD</small></button>
-    <button class="nav-link" onclick="nav('page-manage', this)"><span>⚙️</span><small>MANAGE</small></button>
-</nav>
+<!-- MEDS PAGE -->
+<div class="page" id="page-meds">
+  <div id="medsList"></div>
+</div>
+
+<!-- SETTINGS PAGE -->
+<div class="page" id="page-settings">
+  <div style="height:12px"></div>
+  <div class="section-header"><div class="section-title">Notifications</div></div>
+  <div class="settings-section">
+    <div class="settings-item" onclick="toggleSetting('notifs')">
+      <div class="settings-icon" style="background:rgba(108,99,255,0.1)">🔔</div>
+      <div class="settings-label">Enable Reminders</div>
+      <div class="toggle" id="toggle-notifs"></div>
+    </div>
+    <div class="settings-item" onclick="toggleSetting('sound')">
+      <div class="settings-icon" style="background:rgba(56,189,248,0.1)">🔊</div>
+      <div class="settings-label">Sound Alerts</div>
+      <div class="toggle on" id="toggle-sound"></div>
+    </div>
+    <div class="settings-item" onclick="toggleSetting('vibrate')">
+      <div class="settings-icon" style="background:rgba(52,211,153,0.1)">📳</div>
+      <div class="settings-label">Vibration</div>
+      <div class="toggle on" id="toggle-vibrate"></div>
+    </div>
+  </div>
+
+  <div class="section-header"><div class="section-title">Display</div></div>
+  <div class="settings-section">
+    <div class="settings-item" onclick="toggleSetting('24h')">
+      <div class="settings-icon" style="background:rgba(251,191,36,0.1)">🕐</div>
+      <div class="settings-label">24-Hour Clock</div>
+      <div class="toggle" id="toggle-24h"></div>
+    </div>
+    <div class="settings-item">
+      <div class="settings-icon" style="background:rgba(251,113,133,0.1)">🌟</div>
+      <div class="settings-label">App Version</div>
+      <div class="settings-value">DayFlow v1.0</div>
+    </div>
+  </div>
+
+  <div class="section-header"><div class="section-title">Data</div></div>
+  <div class="settings-section">
+    <div class="settings-item" onclick="clearTodayDone()">
+      <div class="settings-icon" style="background:rgba(251,191,36,0.1)">🔄</div>
+      <div class="settings-label">Reset Today's Progress</div>
+      <div class="settings-value">↩</div>
+    </div>
+    <div class="settings-item" onclick="clearAll()">
+      <div class="settings-icon" style="background:rgba(251,113,133,0.1)">🗑️</div>
+      <div class="settings-label">Clear All Data</div>
+      <div class="settings-value" style="color:var(--coral)">Delete</div>
+    </div>
+  </div>
+  <div style="height:20px"></div>
+  <div style="text-align:center;font-size:11px;color:var(--text3);line-height:1.8">
+    Built for GitHub Pages<br>DayFlow — Daily Routine & Reminder<br>© 2025 Jithin
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- FAB -->
+
+<button class="fab" id="fabBtn" onclick="openAddModal()">+</button>
+
+</div>
+
+<!-- ADD MODAL -->
+
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modalTitle">Add Routine Task</div>
+
+```
+<div class="form-group">
+  <label class="form-label">Type</label>
+  <div class="type-selector">
+    <div class="type-chip selected" onclick="selectType('routine')" id="typeRoutine">📋 Routine</div>
+    <div class="type-chip" onclick="selectType('medicine')" id="typeMedicine">💊 Medicine</div>
+    <div class="type-chip" onclick="selectType('supplement')" id="typeSupplement">🧴 Supplement</div>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="form-label">Name</label>
+  <input class="form-input" id="taskName" placeholder="e.g. Morning Walk, Vitamin D..." />
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label class="form-label">Time</label>
+    <input class="form-input" type="time" id="taskTime" />
+  </div>
+  <div class="form-group" id="doseGroup">
+    <label class="form-label">Dose / Notes</label>
+    <input class="form-input" id="taskDose" placeholder="e.g. 500mg, 1 tab" />
+  </div>
+</div>
+
+<!-- Multi-time for meds -->
+<div class="form-group" id="multiTimeGroup" style="display:none">
+  <label class="form-label">Reminder Times</label>
+  <div class="times-list" id="timesList"></div>
+  <div class="times-add-row">
+    <input class="form-input" type="time" id="addTimeInput" style="flex:1" />
+    <button class="btn btn-secondary" style="flex:0;padding:11px 14px;font-size:18px" onclick="addTimeToList()">+</button>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="form-label">Category</label>
+  <select class="form-input" id="taskCategory">
+    <option value="Morning">🌅 Morning</option>
+    <option value="Afternoon">☀️ Afternoon</option>
+    <option value="Evening">🌆 Evening</option>
+    <option value="Night">🌙 Night</option>
+    <option value="Anytime">⏰ Anytime</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label class="form-label">Colour</label>
+  <div class="color-selector">
+    <div class="color-dot selected" style="background:#6c63ff" data-color="#6c63ff" onclick="selectColor('#6c63ff')"></div>
+    <div class="color-dot" style="background:#fb7185" data-color="#fb7185" onclick="selectColor('#fb7185')"></div>
+    <div class="color-dot" style="background:#34d399" data-color="#34d399" onclick="selectColor('#34d399')"></div>
+    <div class="color-dot" style="background:#fbbf24" data-color="#fbbf24" onclick="selectColor('#fbbf24')"></div>
+    <div class="color-dot" style="background:#38bdf8" data-color="#38bdf8" onclick="selectColor('#38bdf8')"></div>
+    <div class="color-dot" style="background:#f472b6" data-color="#f472b6" onclick="selectColor('#f472b6')"></div>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="form-label">Repeat</label>
+  <select class="form-input" id="taskRepeat">
+    <option value="daily">Every Day</option>
+    <option value="weekdays">Weekdays Only</option>
+    <option value="weekends">Weekends Only</option>
+    <option value="once">Just Today</option>
+  </select>
+</div>
+
+<div class="modal-actions">
+  <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+  <button class="btn btn-primary" onclick="saveItem()">Save</button>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- TOAST -->
+
+<div class="toast" id="toast">
+  <span id="toastIcon">✅</span>
+  <span id="toastMsg">Done!</span>
+</div>
 
 <script>
-    const EMOJIS = { "gym": "💪", "work": "💻", "cook": "🍳", "clean": "🧹", "read": "📚", "sleep": "😴", "pray": "🤲", "bath": "🚿", "walk": "🚶", "coffee": "☕" };
-    let db = JSON.parse(localStorage.getItem('pro_health_v9')) |
+// ═══════════════════════════════════════
+// DATA STORE
+// ═══════════════════════════════════════
+let state = {
+  items: [],
+  done: {},       // { itemId: [timeIndex or true] }
+  settings: { notifs: false, sound: true, vibrate: true, '24h': false },
+  editId: null,
+  selectedType: 'routine',
+  selectedColor: '#6c63ff',
+  medTimes: [],
+  currentTab: 'routine'
+};
 
-| { items:, logs: {} };
-    let editingId = null;
+const STORE_KEY = 'dayflow_v1';
+const DONE_KEY = 'dayflow_done_v1';
+const DONE_DATE_KEY = 'dayflow_done_date';
 
-    function init() {
-        updateClock();
-        renderDaily();
-        setInterval(updateClock, 1000);
+function save() {
+  localStorage.setItem(STORE_KEY, JSON.stringify({ items: state.items, settings: state.settings }));
+  localStorage.setItem(DONE_KEY, JSON.stringify(state.done));
+  localStorage.setItem(DONE_DATE_KEY, todayStr());
+}
+
+function load() {
+  try {
+    const d = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+    state.items = d.items || [];
+    state.settings = Object.assign(state.settings, d.settings || {});
+    const doneDate = localStorage.getItem(DONE_DATE_KEY);
+    if (doneDate === todayStr()) {
+      state.done = JSON.parse(localStorage.getItem(DONE_KEY) || '{}');
+    } else {
+      state.done = {};
     }
+  } catch(e) { console.warn(e); }
+  if (!state.items.length) seedDefaults();
+}
 
-    function nav(id, btn) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        btn.classList.add('active');
-        if(id === 'page-daily') renderDaily();
-        if(id === 'page-manage') renderWeekly();
+function todayStr() {
+  return new Date().toISOString().slice(0,10);
+}
+
+function seedDefaults() {
+  const defaults = [
+    { id: uid(), type:'routine', name:'Morning Walk / Exercise', time:'06:30', dose:'', category:'Morning', color:'#34d399', repeat:'daily', times:[] },
+    { id: uid(), type:'routine', name:'Breakfast', time:'07:30', dose:'', category:'Morning', color:'#fbbf24', repeat:'daily', times:[] },
+    { id: uid(), type:'supplement', name:'Vitamin D3', time:'08:00', dose:'1 tab (1000 IU)', category:'Morning', color:'#fbbf24', repeat:'daily', times:['08:00'] },
+    { id: uid(), type:'medicine', name:'Omega-3 Fish Oil', time:'08:00', dose:'1 capsule (1000mg)', category:'Morning', color:'#38bdf8', repeat:'daily', times:['08:00','20:00'] },
+    { id: uid(), type:'routine', name:'Work / Focus Block', time:'09:00', dose:'', category:'Morning', color:'#6c63ff', repeat:'weekdays', times:[] },
+    { id: uid(), type:'routine', name:'Lunch', time:'13:00', dose:'', category:'Afternoon', color:'#fbbf24', repeat:'daily', times:[] },
+    { id: uid(), type:'routine', name:'Evening Prayer', time:'18:00', dose:'', category:'Evening', color:'#a78bfa', repeat:'daily', times:[] },
+    { id: uid(), type:'routine', name:'Family Time / Dinner', time:'19:30', dose:'', category:'Evening', color:'#f472b6', repeat:'daily', times:[] },
+    { id: uid(), type:'supplement', name:'Magnesium Glycinate', time:'21:00', dose:'400mg', category:'Night', color:'#6c63ff', repeat:'daily', times:['21:00'] },
+    { id: uid(), type:'routine', name:'Reading / Wind Down', time:'22:00', dose:'', category:'Night', color:'#38bdf8', repeat:'daily', times:[] },
+    { id: uid(), type:'routine', name:'Sleep', time:'23:00', dose:'', category:'Night', color:'#a78bfa', repeat:'daily', times:[] },
+  ];
+  state.items = defaults;
+  save();
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+// ═══════════════════════════════════════
+// CLOCK & DATE
+// ═══════════════════════════════════════
+function updateClock() {
+  const now = new Date();
+  const h = now.getHours(), m = now.getMinutes();
+  const is24 = state.settings['24h'];
+  let display;
+  if (is24) {
+    display = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+  } else {
+    const hh = h % 12 || 12;
+    const ampm = h < 12 ? 'AM' : 'PM';
+    display = String(hh).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ' ' + ampm;
+  }
+  document.getElementById('clockDisplay').textContent = display;
+
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('headerDate').textContent =
+    days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
+
+  let gr = 'Good night 🌙';
+  if (h >= 5 && h < 12) gr = 'Good morning ✨';
+  else if (h >= 12 && h < 17) gr = 'Good afternoon ☀️';
+  else if (h >= 17 && h < 21) gr = 'Good evening 🌆';
+  document.getElementById('greeting').textContent = gr;
+}
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+const CAT_ORDER = ['Morning','Afternoon','Evening','Night','Anytime'];
+const EMOJI = { routine:'📋', medicine:'💊', supplement:'🧴' };
+
+function getVisibleItems() {
+  const dow = new Date().getDay(); // 0=sun
+  const isWeekend = dow === 0 || dow === 6;
+  return state.items.filter(it => {
+    if (it.repeat === 'weekdays' && isWeekend) return false;
+    if (it.repeat === 'weekends' && !isWeekend) return false;
+    return true;
+  });
+}
+
+function isItemDone(item) {
+  return !!state.done[item.id];
+}
+
+function renderRoutine() {
+  const visible = getVisibleItems().filter(it => it.type === 'routine');
+  const byCat = {};
+  CAT_ORDER.forEach(c => byCat[c] = []);
+  visible.forEach(it => { (byCat[it.category] = byCat[it.category] || []).push(it); });
+
+  let html = '';
+  let totalDone = 0, totalRoutine = 0, totalMeds = 0;
+
+  // Stat counts
+  getVisibleItems().forEach(it => {
+    if (it.type === 'routine') {
+      totalRoutine++;
+      if (isItemDone(it)) totalDone++;
     }
-
-    function toggleForm() {
-        const type = document.getElementById('item-type').value;
-        document.getElementById('med-specific').style.display = type === 'medicine'? 'block' : 'none';
-        document.getElementById('item-end-wrap').style.display = type === 'medicine'? 'none' : 'block';
-        document.getElementById('name-label').innerText = type === 'medicine'? 'Medicine / Supplement' : 'Task Name';
+    if (it.type === 'medicine' || it.type === 'supplement') {
+      const times = it.times && it.times.length ? it.times : [it.time];
+      const doneArr = state.done[it.id] || [];
+      times.forEach((t,i) => { if (doneArr[i]) totalMeds++; });
     }
+  });
 
-    function saveItem() {
-        const type = document.getElementById('item-type').value;
-        const name = document.getElementById('item-name').value;
-        const start = document.getElementById('item-time').value;
-        const end = document.getElementById('item-end').value |
+  // Update header stats
+  const pct = totalRoutine ? Math.round(totalDone / totalRoutine * 100) : 0;
+  const circum = 113;
+  const offset = circum - (pct / 100) * circum;
+  document.getElementById('progressRing').style.strokeDashoffset = offset;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('doneCount').textContent = totalDone + ' done';
+  document.getElementById('pendingCount').textContent = (totalRoutine - totalDone) + ' pending';
+  document.getElementById('medCount').textContent = totalMeds + ' med doses';
+  document.getElementById('statsTitle').textContent = pct === 100 ? '🎉 All done today!' : "Today's Progress";
+  document.getElementById('statsSub').textContent = pct === 100 ? 'Amazing discipline!' : totalRoutine + ' tasks today';
 
-| start;
-        const unit = document.getElementById('med-unit').value;
-        const qty = document.getElementById('med-qty').value;
-        const days =;
-        document.querySelectorAll('.day-btn').forEach((b, i) => { if(b.classList.contains('on')) days.push(i); });
+  CAT_ORDER.forEach(cat => {
+    const items = (byCat[cat] || []).sort((a,b) => a.time.localeCompare(b.time));
+    if (!items.length) return;
+    html += `<div class="section-header">
+      <div class="section-title">${cat}</div>
+      <div class="section-count">${items.length}</div>
+    </div>`;
+    items.forEach(it => {
+      const done = isItemDone(it);
+      const [hh,mm] = it.time.split(':').map(Number);
+      const is24 = state.settings['24h'];
+      let timeDisp, ampm;
+      if (is24) { timeDisp = it.time; ampm = ''; }
+      else {
+        const h12 = hh % 12 || 12;
+        timeDisp = String(h12).padStart(2,'0') + ':' + String(mm).padStart(2,'0');
+        ampm = hh < 12 ? 'AM' : 'PM';
+      }
+      html += `<div class="task-card${done?' done':''}" style="--card-color:${it.color}" onclick="toggleDone('${it.id}')">
+        <div class="task-time-badge">
+          <div class="task-time">${timeDisp}</div>
+          ${ampm ? `<div class="task-ampm">${ampm}</div>` : ''}
+        </div>
+        <div class="task-body">
+          <div class="task-name">${it.name}</div>
+          <div class="task-meta">
+            <span class="task-cat">${EMOJI[it.type]} ${it.type}</span>
+            ${it.dose ? `<span>${it.dose}</span>` : ''}
+          </div>
+        </div>
+        <div class="task-check" id="check-${it.id}">${done ? '✓' : ''}</div>
+      </div>`;
+    });
+  });
 
-        if(!name) return alert("Enter a name");
+  if (!visible.length) {
+    html = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">No routine tasks yet.<br>Tap + to add your first task.</div></div>`;
+  }
 
-        const newItem = { id: editingId |
+  document.getElementById('routineList').innerHTML = html;
+}
 
-| Date.now(), type, name, start, end, days, unit, qty };
-        
-        if(editingId) {
-            db.items = db.items.map(i => i.id === editingId? newItem : i);
-        } else {
-            db.items.push(newItem);
-        }
+function renderMeds() {
+  const visible = getVisibleItems().filter(it => it.type === 'medicine' || it.type === 'supplement');
+  const byCat = {};
+  CAT_ORDER.forEach(c => byCat[c] = []);
+  visible.forEach(it => { (byCat[it.category] = byCat[it.category] || []).push(it); });
 
-        db.items.sort((a,b) => a.start.localeCompare(b.start));
-        saveDb();
-        cancelEdit();
-        nav('page-daily', document.querySelectorAll('.nav-link'));
-    }
+  let html = '';
+  CAT_ORDER.forEach(cat => {
+    const items = (byCat[cat] || []).sort((a,b) => a.time.localeCompare(b.time));
+    if (!items.length) return;
+    html += `<div class="section-header">
+      <div class="section-title">${cat}</div>
+      <div class="section-count">${items.length}</div>
+    </div>`;
+    items.forEach(it => {
+      const times = it.times && it.times.length ? it.times : [it.time];
+      const doneArr = state.done[it.id] || [];
+      const allDone = times.every((_,i) => doneArr[i]);
+      const is24 = state.settings['24h'];
 
-    function renderDaily() {
-        const list = document.getElementById('daily-list');
-        const today = new Date().getDay();
-        const dateKey = new Date().toISOString().split('T');
-        const nowTotal = new Date().getHours() * 60 + new Date().getMinutes();
-        
-        list.innerHTML = '<h2 style="font-weight:900; margin-bottom:20px;">Today\'s Timeline</h2>';
-        const todaysItems = db.items.filter(i => i.days.includes(today));
+      let chipsHtml = times.map((t,i) => {
+        const [hh,mm] = t.split(':').map(Number);
+        let timeLabel;
+        if (is24) { timeLabel = t; }
+        else { const h12 = hh%12||12; timeLabel = h12+':'+String(mm).padStart(2,'0')+(hh<12?' AM':' PM'); }
+        const taken = !!doneArr[i];
+        return `<div class="med-time-chip${taken?' taken':''}" onclick="toggleMedDose('${it.id}',${i})">
+          <span>${taken ? '✓' : '⏰'}</span>
+          <span class="chip-time">${timeLabel}</span>
+        </div>`;
+      }).join('');
 
-        if(todaysItems.length === 0) {
-            list.innerHTML += '<p style="color:var(--muted)">No tasks planned.</p>';
-            return;
-        }
+      html += `<div class="med-card" style="--card-color:${it.color}">
+        <div class="med-header">
+          <div class="med-icon-wrap" style="background:${it.color}1a">${EMOJI[it.type]}</div>
+          <div class="med-info">
+            <div class="med-name">${it.name}</div>
+            <div class="med-dose">${it.dose || 'No dose info'} · ${it.repeat}</div>
+          </div>
+          <div onclick="deleteItem('${it.id}')" style="font-size:18px;color:var(--text3);padding:4px;cursor:pointer">🗑</div>
+        </div>
+        <div class="med-times">${chipsHtml}</div>
+      </div>`;
+    });
+  });
 
-        todaysItems.forEach(i => {
-            const startM = toMins(i.start);
-            const endM = toMins(i.end);
-            const isActive = nowTotal >= startM && nowTotal < endM;
-            const isTaken = db.logs[dateKey] && db.logs[dateKey].includes(i.id);
-            const emoji = i.type === 'medicine'? (i.unit === 'ml'? '💧' : '💊') : getEmoji(i.name);
-            
-            list.innerHTML += `
-                <div class="card-pro ${isActive? 'card-active' : ''} ${i.type === 'medicine'? 'card-med' : ''}">
-                    <span class="time-header">${fmt12(i.start)} ${i.type!== 'medicine'? '— ' + fmt12(i.end) : ''}</span>
-                    <div class="activity-main">
-                        <span class="activity-icon">${emoji}</span>
-                        <div>
-                            <div class="activity-name">${i.name}</div>
-                            ${i.type === 'medicine'? `<div class="med-details">${i.qty} ${i.unit}</div>` : ''}
-                        </div>
-                    </div>
-                    ${i.type === 'medicine'? `
-                        <div class="med-btns">
-                            <button class="btn-med btn-take" onclick="markLog(${i.id})">${isTaken? '✅ LOGGED' : 'MARK TAKEN'}</button>
-                            <button class="btn-med btn-later" onclick="alert('Reminding in 15m')">LATER</button>
-                        </div>
-                    ` : ''}
-                    <div style="position:absolute; top:20px; right:15px; display:flex; gap:12px;">
-                        <button class="btn-delete" onclick="editItem(${i.id})" style="color:var(--text)">✏️</button>
-                        <button class="btn-delete" onclick="deleteItem(${i.id})">✕</button>
-                    </div>
-                </div>
-            `;
-        });
-    }
+  if (!visible.length) {
+    html = `<div class="empty-state"><div class="empty-icon">💊</div><div class="empty-text">No medicines or supplements.<br>Tap + to add a reminder.</div></div>`;
+  }
+  document.getElementById('medsList').innerHTML = html;
+}
 
-    function renderWeekly() {
-        const area = document.getElementById('weekly-scroll');
-        const dayNames =;
-        area.innerHTML = '';
-        dayNames.forEach((name, idx) => {
-            const items = db.items.filter(i => i.days.includes(idx));
-            let html = `<div class="week-card"><div class="week-day-title">${name}</div>`;
-            items.forEach(i => {
-                html += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;">
-                    <span>${fmt12(i.start)}</span> <b>${i.name}</b>
-                </div>`;
+function renderSettings() {
+  ['notifs','sound','vibrate','24h'].forEach(k => {
+    const el = document.getElementById('toggle-' + k);
+    if (el) el.className = 'toggle ' + (state.settings[k] ? 'on' : '');
+  });
+}
+
+function renderAll() {
+  renderRoutine();
+  renderMeds();
+  renderSettings();
+}
+
+// ═══════════════════════════════════════
+// INTERACTIONS
+// ═══════════════════════════════════════
+function toggleDone(id) {
+  state.done[id] = !state.done[id];
+  save();
+  renderAll();
+  if (state.done[id]) {
+    showToast('✅', 'Task completed!');
+    vibrate();
+  }
+}
+
+function toggleMedDose(id, idx) {
+  if (!state.done[id]) state.done[id] = [];
+  state.done[id][idx] = !state.done[id][idx];
+  save();
+  renderMeds();
+  if (state.done[id][idx]) {
+    showToast('💊', 'Dose taken!');
+    vibrate();
+  }
+}
+
+function deleteItem(id) {
+  if (confirm('Remove this item?')) {
+    state.items = state.items.filter(it => it.id !== id);
+    delete state.done[id];
+    save();
+    renderAll();
+    showToast('🗑️', 'Removed');
+  }
+}
+
+function switchTab(tab) {
+  state.currentTab = tab;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('fabBtn').style.display = tab === 'settings' ? 'none' : 'flex';
+}
+
+function toggleSetting(key) {
+  state.settings[key] = !state.settings[key];
+  if (key === 'notifs' && state.settings[key]) requestNotifPermission();
+  save();
+  renderSettings();
+}
+
+function clearTodayDone() {
+  if (confirm('Reset all done marks for today?')) {
+    state.done = {};
+    save();
+    renderAll();
+    showToast('🔄', 'Progress reset');
+  }
+}
+
+function clearAll() {
+  if (confirm('Delete ALL data? This cannot be undone.')) {
+    state.items = [];
+    state.done = {};
+    save();
+    seedDefaults();
+    renderAll();
+    showToast('🗑️', 'Data cleared, defaults restored');
+  }
+}
+
+// ═══════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════
+let currentType = 'routine';
+let currentColor = '#6c63ff';
+let medTimes = [];
+
+function openAddModal() {
+  currentType = state.currentTab === 'meds' ? 'medicine' : 'routine';
+  currentColor = '#6c63ff';
+  medTimes = [];
+  state.editId = null;
+
+  document.getElementById('taskName').value = '';
+  document.getElementById('taskTime').value = '';
+  document.getElementById('taskDose').value = '';
+  document.getElementById('taskCategory').value = 'Morning';
+  document.getElementById('taskRepeat').value = 'daily';
+  document.getElementById('modalTitle').textContent = 'Add New Item';
+  document.getElementById('timesList').innerHTML = '';
+
+  selectType(currentType);
+  selectColor(currentColor);
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function selectType(type) {
+  currentType = type;
+  ['routine','medicine','supplement'].forEach(t => {
+    document.getElementById('type' + t.charAt(0).toUpperCase() + t.slice(1))
+      .classList.toggle('selected', t === type);
+  });
+  const isMed = type === 'medicine' || type === 'supplement';
+  document.getElementById('multiTimeGroup').style.display = isMed ? 'block' : 'none';
+  document.getElementById('doseGroup').style.display = isMed ? 'flex' : 'flex';
+}
+
+function selectColor(color) {
+  currentColor = color;
+  document.querySelectorAll('.color-dot').forEach(d => {
+    d.classList.toggle('selected', d.dataset.color === color);
+  });
+}
+
+function addTimeToList() {
+  const t = document.getElementById('addTimeInput').value;
+  if (!t) return;
+  if (medTimes.includes(t)) { showToast('⚠️', 'Time already added'); return; }
+  medTimes.push(t);
+  renderMedTimes();
+  document.getElementById('addTimeInput').value = '';
+}
+
+function removeMedTime(t) {
+  medTimes = medTimes.filter(x => x !== t);
+  renderMedTimes();
+}
+
+function renderMedTimes() {
+  document.getElementById('timesList').innerHTML = medTimes.map(t =>
+    `<div class="removable-time">${t} <span class="remove-x" onclick="removeMedTime('${t}')">×</span></div>`
+  ).join('');
+}
+
+function saveItem() {
+  const name = document.getElementById('taskName').value.trim();
+  const time = document.getElementById('taskTime').value;
+  const dose = document.getElementById('taskDose').value.trim();
+  const category = document.getElementById('taskCategory').value;
+  const repeat = document.getElementById('taskRepeat').value;
+
+  if (!name) { showToast('⚠️', 'Please enter a name'); return; }
+  if (!time && medTimes.length === 0) { showToast('⚠️', 'Please set a time'); return; }
+
+  const isMed = currentType === 'medicine' || currentType === 'supplement';
+  const times = isMed ? (medTimes.length ? medTimes : (time ? [time] : [])) : [];
+
+  const item = {
+    id: state.editId || uid(),
+    type: currentType,
+    name, time: time || (times[0] || '08:00'),
+    dose, category, color: currentColor, repeat, times
+  };
+
+  if (state.editId) {
+    state.items = state.items.map(it => it.id === state.editId ? item : it);
+  } else {
+    state.items.push(item);
+  }
+
+  save();
+  renderAll();
+  closeModal();
+  showToast('✅', (state.editId ? 'Updated' : 'Added') + ': ' + name);
+}
+
+// ═══════════════════════════════════════
+// NOTIFICATIONS
+// ═══════════════════════════════════════
+function requestNotifPermission() {
+  if ('Notification' in window) {
+    Notification.requestPermission().then(p => {
+      if (p !== 'granted') {
+        state.settings.notifs = false;
+        save(); renderSettings();
+        showToast('⚠️', 'Notifications blocked');
+      } else {
+        showToast('🔔', 'Reminders enabled!');
+        scheduleReminders();
+      }
+    });
+  }
+}
+
+function scheduleReminders() {
+  if (!state.settings.notifs) return;
+  const now = new Date();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+  getVisibleItems().forEach(it => {
+    const checkTimes = it.times && it.times.length ? it.times : [it.time];
+    checkTimes.forEach((t,i) => {
+      const [h,m] = t.split(':').map(Number);
+      const itemMins = h*60+m;
+      const diff = itemMins - nowMins;
+      if (diff > 0 && diff < 60) {
+        setTimeout(() => {
+          if (!state.settings.notifs) return;
+          const doneArr = state.done[it.id] || [];
+          if (!doneArr[i] && !state.done[it.id]) {
+            new Notification('DayFlow Reminder', {
+              body: it.name + (it.dose ? ' — ' + it.dose : ''),
+              icon: 'icon.png'
             });
-            html += `</div>`;
-            area.innerHTML += html;
-        });
-    }
+          }
+        }, diff * 60 * 1000);
+      }
+    });
+  });
+}
 
-    function editItem(id) {
-        const item = db.items.find(x => x.id === id);
-        editingId = id;
-        document.getElementById('item-type').value = item.type;
-        document.getElementById('item-name').value = item.name;
-        document.getElementById('item-time').value = item.start;
-        document.getElementById('item-end').value = item.end;
-        document.getElementById('med-unit').value = item.unit |
+// ═══════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════
+function vibrate() {
+  if (state.settings.vibrate && navigator.vibrate) navigator.vibrate(40);
+}
 
-| 'Capsule(s)';
-        document.getElementById('med-qty').value = item.qty |
+let toastTimer;
+function showToast(icon, msg) {
+  const el = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastMsg').textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
 
-| 1;
-        document.querySelectorAll('.day-btn').forEach((b, i) => b.classList.toggle('on', item.days.includes(i)));
-        document.getElementById('btn-cancel-edit').style.display = 'block';
-        toggleForm();
-        nav('page-add', document.querySelectorAll('.nav-link')[1]);
-    }
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+load();
+renderAll();
+updateClock();
+setInterval(updateClock, 10000);
+setInterval(() => { renderAll(); scheduleReminders(); }, 60000);
 
-    function deleteItem(id) {
-        if(!confirm("Delete this entry?")) return;
-        db.items = db.items.filter(x => x.id!== id);
-        saveDb();
-        renderDaily();
-    }
-
-    function cancelEdit() {
-        editingId = null;
-        document.getElementById('item-name').value = '';
-        document.getElementById('btn-cancel-edit').style.display = 'none';
-        document.querySelectorAll('.day-btn').forEach(b => b.classList.add('on'));
-    }
-
-    function markLog(id) {
-        const dateKey = new Date().toISOString().split('T');
-        if(!db.logs[dateKey]) db.logs[dateKey] =;
-        if(!db.logs[dateKey].includes(id)) {
-            db.logs[dateKey].push(id);
-            if('vibrate' in navigator) navigator.vibrate([40, 20, 40]);
-        }
-        saveDb();
-        renderDaily();
-    }
-
-    function updateClock() {
-        const now = new Date();
-        const days =;
-        document.getElementById('header-day').innerText = days;
-        let h = now.getHours();
-        let m = now.getMinutes().toString().padStart(2, '0');
-        let ampm = h >= 12? 'PM' : 'AM';
-        document.getElementById('clock').innerText = `${h % 12 |
-
-| 12}:${m} ${ampm}`;
-        if(now.getSeconds() === 0) renderDaily();
-    }
-
-    function toMins(t) { const s = t.split(':'); return parseInt(s) * 60 + parseInt(s[1]); }
-    function fmt12(t) { let [h, m] = t.split(':'); h = parseInt(h); return `${h % 12 |
-
-| 12}:${m} ${h >= 12? 'PM' : 'AM'}`; }
-    function getEmoji(t) { t = t.toLowerCase(); for(let k in EMOJIS) if(t.includes(k)) return EMOJIS[k]; return "⭐"; }
-    function saveDb() { localStorage.setItem('pro_health_v9', JSON.stringify(db)); }
-    function clearAll() { if(confirm("Clear all data?")) { localStorage.clear(); location.reload(); } }
-    function exportPDF(id, name) { html2pdf().set({ margin: 10, filename: name + '.pdf', html2canvas: { scale: 2, backgroundColor: '#0f1117' }, jsPDF: { unit: 'mm', format: 'a4' } }).from(document.getElementById(id)).save(); }
-
-    init();
+// Register service worker for PWA
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
 </script>
+
 </body>
 </html>
