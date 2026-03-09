@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -34,778 +33,776 @@
     --glow: 0 0 24px rgba(108,99,255,0.25);
   }
 
-- { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-html, body {
-height: 100%;
-background: var(–bg);
-color: var(–text);
-font-family: ‘DM Sans’, sans-serif;
-font-size: 16px;
-overflow: hidden;
-}
-
-/* === APP SHELL === */
-#app {
-display: flex;
-flex-direction: column;
-height: 100dvh;
-max-width: 480px;
-margin: 0 auto;
-position: relative;
-background: var(–bg);
-}
-
-/* === HEADER === */
-.header {
-padding: 52px 24px 16px;
-background: linear-gradient(180deg, #0e1120 0%, transparent 100%);
-position: relative;
-z-index: 10;
-}
-
-.header-top {
-display: flex;
-align-items: center;
-justify-content: space-between;
-margin-bottom: 6px;
-}
-
-.logo {
-font-family: ‘Syne’, sans-serif;
-font-weight: 800;
-font-size: 26px;
-letter-spacing: -0.5px;
-background: linear-gradient(135deg, #6c63ff, #a78bfa, #38bdf8);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-}
-
-.header-date {
-font-size: 12px;
-color: var(–text3);
-font-weight: 500;
-letter-spacing: 0.5px;
-text-transform: uppercase;
-}
-
-.header-greeting {
-font-size: 13px;
-color: var(–text2);
-font-weight: 400;
-}
-
-.time-display {
-font-family: ‘Syne’, sans-serif;
-font-size: 42px;
-font-weight: 700;
-letter-spacing: -2px;
-color: var(–text);
-line-height: 1;
-margin: 8px 0 4px;
-}
-
-/* === PROGRESS RING === */
-.day-progress {
-display: flex;
-align-items: center;
-gap: 12px;
-margin-top: 12px;
-padding: 12px 14px;
-background: var(–surface);
-border-radius: var(–radius-sm);
-border: 1px solid var(–border);
-}
-
-.progress-ring-wrap { position: relative; width: 44px; height: 44px; flex-shrink: 0; }
-
-.progress-ring-wrap svg { transform: rotate(-90deg); }
-
-.ring-bg { fill: none; stroke: var(–surface3); stroke-width: 4; }
-.ring-fg { fill: none; stroke: var(–accent); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.8s cubic-bezier(.4,0,.2,1); }
-
-.ring-label {
-position: absolute; inset: 0;
-display: flex; align-items: center; justify-content: center;
-font-size: 9px; font-weight: 700; color: var(–accent2);
-letter-spacing: -0.2px;
-}
-
-.day-stats { flex: 1; }
-.day-stats-title { font-size: 13px; font-weight: 600; color: var(–text); }
-.day-stats-sub { font-size: 11px; color: var(–text3); margin-top: 2px; }
-
-.stat-pills { display: flex; gap: 6px; margin-top: 6px; }
-
-.pill {
-font-size: 10px; font-weight: 600;
-padding: 2px 8px;
-border-radius: 20px;
-letter-spacing: 0.2px;
-}
-.pill-green { background: rgba(52,211,153,0.12); color: var(–mint); }
-.pill-amber { background: rgba(251,191,36,0.12); color: var(–amber); }
-.pill-coral { background: rgba(251,113,133,0.12); color: var(–coral); }
-
-/* === TABS === */
-.tabs {
-display: flex;
-padding: 0 24px;
-gap: 6px;
-margin-top: 8px;
-margin-bottom: 4px;
-}
-
-.tab-btn {
-flex: 1;
-padding: 9px 0;
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: 12px;
-color: var(–text3);
-font-family: ‘DM Sans’, sans-serif;
-font-size: 12px;
-font-weight: 600;
-cursor: pointer;
-transition: all 0.2s ease;
-letter-spacing: 0.2px;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 5px;
-}
-
-.tab-btn .tab-icon { font-size: 14px; }
-
-.tab-btn.active {
-background: linear-gradient(135deg, var(–accent), #5b52e8);
-border-color: transparent;
-color: #fff;
-box-shadow: var(–glow);
-}
-
-/* === SCROLL AREA === */
-.scroll-area {
-flex: 1;
-overflow-y: auto;
-padding: 8px 24px 100px;
-scroll-behavior: smooth;
--webkit-overflow-scrolling: touch;
-}
-
-.scroll-area::-webkit-scrollbar { display: none; }
-
-/* === SECTION HEADER === */
-.section-header {
-display: flex;
-align-items: center;
-justify-content: space-between;
-margin: 16px 0 10px;
-}
-
-.section-title {
-font-family: ‘Syne’, sans-serif;
-font-size: 14px;
-font-weight: 700;
-color: var(–text2);
-text-transform: uppercase;
-letter-spacing: 1px;
-}
-
-.section-count {
-font-size: 11px;
-color: var(–text3);
-background: var(–surface2);
-padding: 2px 8px;
-border-radius: 20px;
-}
-
-/* === TASK CARD === */
-.task-card {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: var(–radius);
-padding: 14px 16px;
-margin-bottom: 10px;
-display: flex;
-align-items: center;
-gap: 14px;
-cursor: pointer;
-transition: all 0.2s ease;
-position: relative;
-overflow: hidden;
-}
-
-.task-card::before {
-content: ‘’;
-position: absolute;
-left: 0; top: 0; bottom: 0;
-width: 3px;
-border-radius: 0 2px 2px 0;
-background: var(–card-color, var(–accent));
-}
-
-.task-card:active { transform: scale(0.98); opacity: 0.9; }
-
-.task-card.done {
-opacity: 0.5;
-}
-
-.task-card.done .task-name { text-decoration: line-through; color: var(–text3); }
-
-.task-time-badge {
-display: flex;
-flex-direction: column;
-align-items: center;
-min-width: 44px;
-}
-
-.task-time {
-font-family: ‘Syne’, sans-serif;
-font-size: 15px;
-font-weight: 700;
-color: var(–text);
-line-height: 1;
-}
-
-.task-ampm {
-font-size: 9px;
-color: var(–text3);
-text-transform: uppercase;
-letter-spacing: 0.5px;
-margin-top: 2px;
-}
-
-.task-body { flex: 1; min-width: 0; }
-
-.task-name {
-font-size: 14px;
-font-weight: 500;
-color: var(–text);
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-}
-
-.task-meta {
-font-size: 11px;
-color: var(–text3);
-margin-top: 3px;
-display: flex;
-align-items: center;
-gap: 6px;
-}
-
-.task-cat {
-font-size: 9px;
-font-weight: 700;
-text-transform: uppercase;
-letter-spacing: 0.5px;
-padding: 2px 6px;
-border-radius: 4px;
-background: rgba(108,99,255,0.12);
-color: var(–accent2);
-}
-
-.task-check {
-width: 28px; height: 28px;
-border-radius: 50%;
-border: 2px solid var(–border2);
-display: flex; align-items: center; justify-content: center;
-font-size: 14px;
-flex-shrink: 0;
-transition: all 0.2s ease;
-background: transparent;
-}
-
-.task-card.done .task-check {
-background: var(–mint);
-border-color: var(–mint);
-color: #fff;
-}
-
-/* === MEDICINE CARD === */
-.med-card {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: var(–radius);
-padding: 14px 16px;
-margin-bottom: 10px;
-position: relative;
-overflow: hidden;
-transition: all 0.2s ease;
-}
-
-.med-card::before {
-content: ‘’;
-position: absolute;
-left: 0; top: 0; bottom: 0;
-width: 3px;
-background: var(–card-color, var(–coral));
-border-radius: 0 2px 2px 0;
-}
-
-.med-card:active { transform: scale(0.98); }
-
-.med-header {
-display: flex;
-align-items: center;
-gap: 12px;
-margin-bottom: 10px;
-}
-
-.med-icon-wrap {
-width: 40px; height: 40px;
-border-radius: 12px;
-display: flex; align-items: center; justify-content: center;
-font-size: 20px;
-flex-shrink: 0;
-background: rgba(251,113,133,0.1);
-}
-
-.med-info { flex: 1; }
-
-.med-name {
-font-size: 15px;
-font-weight: 600;
-color: var(–text);
-}
-
-.med-dose {
-font-size: 12px;
-color: var(–text3);
-margin-top: 2px;
-}
-
-.med-times {
-display: flex;
-gap: 6px;
-flex-wrap: wrap;
-}
-
-.med-time-chip {
-display: flex;
-align-items: center;
-gap: 5px;
-padding: 5px 10px;
-border-radius: 10px;
-border: 1px solid var(–border2);
-font-size: 12px;
-font-weight: 500;
-color: var(–text2);
-cursor: pointer;
-transition: all 0.2s ease;
-background: var(–surface2);
-}
-
-.med-time-chip .chip-time { font-family: ‘Syne’, sans-serif; font-size: 13px; font-weight: 700; color: var(–text); }
-
-.med-time-chip.taken {
-background: rgba(52,211,153,0.1);
-border-color: rgba(52,211,153,0.3);
-color: var(–mint);
-}
-
-.med-time-chip.taken .chip-time { color: var(–mint); }
-
-.med-time-chip:active { transform: scale(0.96); }
-
-/* === FAB === */
-.fab {
-position: fixed;
-bottom: 80px;
-right: 24px;
-width: 56px; height: 56px;
-border-radius: 18px;
-background: linear-gradient(135deg, var(–accent), #5b52e8);
-box-shadow: 0 8px 24px rgba(108,99,255,0.4);
-display: flex; align-items: center; justify-content: center;
-font-size: 24px;
-cursor: pointer;
-border: none;
-color: white;
-z-index: 100;
-transition: all 0.2s ease;
-}
-
-.fab:active { transform: scale(0.92); box-shadow: 0 4px 12px rgba(108,99,255,0.3); }
-
-/* === BOTTOM NAV === */
-.bottom-nav {
-position: fixed;
-bottom: 0; left: 50%;
-transform: translateX(-50%);
-width: 100%;
-max-width: 480px;
-background: rgba(14,17,32,0.92);
-backdrop-filter: blur(20px);
--webkit-backdrop-filter: blur(20px);
-border-top: 1px solid var(–border);
-display: flex;
-padding: 10px 16px;
-padding-bottom: calc(10px + env(safe-area-inset-bottom));
-z-index: 50;
-}
-
-.nav-item {
-flex: 1;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 3px;
-padding: 6px;
-border: none;
-background: transparent;
-cursor: pointer;
-transition: all 0.2s ease;
-border-radius: 10px;
-}
-
-.nav-icon { font-size: 20px; line-height: 1; }
-
-.nav-label {
-font-size: 9px;
-font-weight: 600;
-letter-spacing: 0.5px;
-text-transform: uppercase;
-color: var(–text3);
-transition: color 0.2s;
-}
-
-.nav-item.active .nav-label { color: var(–accent2); }
-.nav-item.active .nav-icon { filter: drop-shadow(0 0 6px rgba(108,99,255,0.6)); }
-
-/* === MODAL === */
-.modal-overlay {
-position: fixed; inset: 0;
-background: rgba(0,0,0,0.6);
-backdrop-filter: blur(8px);
--webkit-backdrop-filter: blur(8px);
-z-index: 200;
-display: flex;
-align-items: flex-end;
-opacity: 0;
-pointer-events: none;
-transition: opacity 0.3s ease;
-}
-
-.modal-overlay.open { opacity: 1; pointer-events: all; }
-
-.modal {
-width: 100%;
-max-width: 480px;
-margin: 0 auto;
-background: var(–surface2);
-border-radius: 24px 24px 0 0;
-padding: 24px;
-padding-bottom: calc(24px + env(safe-area-inset-bottom));
-transform: translateY(100%);
-transition: transform 0.35s cubic-bezier(.4,0,.2,1);
-border-top: 1px solid var(–border2);
-max-height: 85dvh;
-overflow-y: auto;
-}
-
-.modal-overlay.open .modal { transform: translateY(0); }
-
-.modal-handle {
-width: 36px; height: 4px;
-background: var(–border2);
-border-radius: 2px;
-margin: 0 auto 20px;
-}
-
-.modal-title {
-font-family: ‘Syne’, sans-serif;
-font-size: 20px;
-font-weight: 700;
-color: var(–text);
-margin-bottom: 20px;
-}
-
-.form-group { margin-bottom: 14px; }
-
-.form-label {
-font-size: 11px;
-font-weight: 700;
-text-transform: uppercase;
-letter-spacing: 0.8px;
-color: var(–text3);
-margin-bottom: 6px;
-display: block;
-}
-
-.form-input {
-width: 100%;
-background: var(–surface3);
-border: 1px solid var(–border);
-border-radius: var(–radius-sm);
-padding: 12px 14px;
-color: var(–text);
-font-family: ‘DM Sans’, sans-serif;
-font-size: 14px;
-outline: none;
-transition: border-color 0.2s;
--webkit-appearance: none;
-}
-
-.form-input:focus { border-color: var(–accent); }
-
-.form-row { display: flex; gap: 10px; }
-.form-row .form-group { flex: 1; }
-
-.type-selector { display: flex; gap: 8px; flex-wrap: wrap; }
-
-.type-chip {
-padding: 7px 14px;
-border-radius: 20px;
-font-size: 12px;
-font-weight: 600;
-border: 1px solid var(–border);
-background: var(–surface3);
-color: var(–text3);
-cursor: pointer;
-transition: all 0.2s;
-}
-
-.type-chip.selected {
-background: var(–accent);
-border-color: var(–accent);
-color: white;
-}
-
-.color-selector { display: flex; gap: 8px; }
-
-.color-dot {
-width: 28px; height: 28px;
-border-radius: 50%;
-cursor: pointer;
-transition: transform 0.2s;
-border: 2px solid transparent;
-}
-
-.color-dot.selected { border-color: white; transform: scale(1.15); }
-
-.modal-actions { display: flex; gap: 10px; margin-top: 20px; }
-
-.btn {
-flex: 1;
-padding: 14px;
-border-radius: var(–radius-sm);
-font-family: ‘DM Sans’, sans-serif;
-font-size: 14px;
-font-weight: 600;
-cursor: pointer;
-border: none;
-transition: all 0.2s ease;
-}
-
-.btn-primary {
-background: linear-gradient(135deg, var(–accent), #5b52e8);
-color: white;
-box-shadow: 0 4px 16px rgba(108,99,255,0.3);
-}
-
-.btn-secondary {
-background: var(–surface3);
-color: var(–text2);
-border: 1px solid var(–border);
-}
-
-.btn:active { transform: scale(0.97); }
-
-/* === EMPTY STATE === */
-.empty-state {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-padding: 40px 20px;
-text-align: center;
-}
-
-.empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
-
-.empty-text {
-font-size: 14px;
-color: var(–text3);
-line-height: 1.6;
-}
-
-/* === TODAY TIMELINE === */
-.timeline-item {
-position: relative;
-padding-left: 24px;
-margin-bottom: 8px;
-}
-
-.timeline-item::before {
-content: ‘’;
-position: absolute;
-left: 7px; top: 18px; bottom: -8px;
-width: 1px;
-background: var(–border);
-}
-
-.timeline-item:last-child::before { display: none; }
-
-.timeline-dot {
-position: absolute;
-left: 0; top: 12px;
-width: 14px; height: 14px;
-border-radius: 50%;
-background: var(–surface3);
-border: 2px solid var(–border2);
-z-index: 1;
-}
-
-.timeline-item.active-now .timeline-dot {
-background: var(–accent);
-border-color: var(–accent);
-box-shadow: 0 0 10px rgba(108,99,255,0.5);
-}
-
-/* === TOAST === */
-.toast {
-position: fixed;
-top: 20px;
-left: 50%;
-transform: translateX(-50%) translateY(-80px);
-background: var(–surface2);
-border: 1px solid var(–border2);
-border-radius: 16px;
-padding: 12px 20px;
-font-size: 13px;
-font-weight: 500;
-color: var(–text);
-z-index: 500;
-transition: transform 0.35s cubic-bezier(.4,0,.2,1);
-box-shadow: var(–shadow);
-white-space: nowrap;
-display: flex;
-align-items: center;
-gap: 8px;
-max-width: calc(100vw - 48px);
-}
-
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-/* === SETTINGS PAGE === */
-.settings-section {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: var(–radius);
-overflow: hidden;
-margin-bottom: 14px;
-}
-
-.settings-item {
-display: flex;
-align-items: center;
-gap: 14px;
-padding: 14px 16px;
-border-bottom: 1px solid var(–border);
-cursor: pointer;
-transition: background 0.15s;
-}
-
-.settings-item:last-child { border-bottom: none; }
-.settings-item:active { background: var(–surface2); }
-
-.settings-icon {
-width: 36px; height: 36px;
-border-radius: 10px;
-display: flex; align-items: center; justify-content: center;
-font-size: 17px;
-flex-shrink: 0;
-}
-
-.settings-label { flex: 1; font-size: 14px; font-weight: 500; color: var(–text); }
-.settings-value { font-size: 12px; color: var(–text3); }
-
-.toggle {
-width: 44px; height: 26px;
-border-radius: 13px;
-background: var(–surface3);
-border: 1px solid var(–border2);
-position: relative;
-cursor: pointer;
-transition: background 0.2s;
-flex-shrink: 0;
-}
-
-.toggle.on { background: var(–accent); border-color: var(–accent); }
-
-.toggle::after {
-content: ‘’;
-position: absolute;
-top: 2px; left: 2px;
-width: 20px; height: 20px;
-border-radius: 50%;
-background: white;
-transition: transform 0.2s ease;
-}
-
-.toggle.on::after { transform: translateX(18px); }
-
-/* === ANIMATIONS === */
-@keyframes slideIn {
-from { transform: translateY(12px); opacity: 0; }
-to { transform: translateY(0); opacity: 1; }
-}
-
-.task-card, .med-card { animation: slideIn 0.3s ease both; }
-
-@keyframes checkPop {
-0% { transform: scale(1); }
-50% { transform: scale(1.3); }
-100% { transform: scale(1); }
-}
-
-.check-pop { animation: checkPop 0.3s ease; }
-
-/* iOS safe area */
-@supports (padding-top: env(safe-area-inset-top)) {
-.header { padding-top: calc(env(safe-area-inset-top) + 16px); }
-}
-
-/* === PAGE TRANSITIONS === */
-.page { display: none; }
-.page.active { display: block; }
-
-/* Scrollbar hide */
-.modal::-webkit-scrollbar { display: none; }
-
-/* Times row for medicine */
-.times-add-row {
-display: flex; gap: 8px; align-items: center; margin-top: 6px;
-}
-
-.times-list { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
-
-.removable-time {
-display: flex; align-items: center; gap: 4px;
-padding: 4px 10px;
-background: var(–surface3);
-border: 1px solid var(–border);
-border-radius: 8px;
-font-size: 12px; color: var(–text2);
-}
-
-.remove-x {
-font-size: 14px; color: var(–text3); cursor: pointer;
-line-height: 1;
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    overflow: hidden;
+  }
+
+  /* === APP SHELL === */
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    background: var(--bg);
+  }
+
+  /* === HEADER === */
+  .header {
+    padding: 52px 24px 16px;
+    background: linear-gradient(180deg, #0e1120 0%, transparent 100%);
+    position: relative;
+    z-index: 10;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #6c63ff, #a78bfa, #38bdf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-date {
+    font-size: 12px;
+    color: var(--text3);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .header-greeting {
+    font-size: 13px;
+    color: var(--text2);
+    font-weight: 400;
+  }
+
+  .time-display {
+    font-family: 'Syne', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -2px;
+    color: var(--text);
+    line-height: 1;
+    margin: 8px 0 4px;
+  }
+
+  /* === PROGRESS RING === */
+  .day-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  .progress-ring-wrap { position: relative; width: 44px; height: 44px; flex-shrink: 0; }
+
+  .progress-ring-wrap svg { transform: rotate(-90deg); }
+
+  .ring-bg { fill: none; stroke: var(--surface3); stroke-width: 4; }
+  .ring-fg { fill: none; stroke: var(--accent); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.8s cubic-bezier(.4,0,.2,1); }
+
+  .ring-label {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700; color: var(--accent2);
+    letter-spacing: -0.2px;
+  }
+
+  .day-stats { flex: 1; }
+  .day-stats-title { font-size: 13px; font-weight: 600; color: var(--text); }
+  .day-stats-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+  .stat-pills { display: flex; gap: 6px; margin-top: 6px; }
+
+  .pill {
+    font-size: 10px; font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.2px;
+  }
+  .pill-green { background: rgba(52,211,153,0.12); color: var(--mint); }
+  .pill-amber { background: rgba(251,191,36,0.12); color: var(--amber); }
+  .pill-coral { background: rgba(251,113,133,0.12); color: var(--coral); }
+
+  /* === TABS === */
+  .tabs {
+    display: flex;
+    padding: 0 24px;
+    gap: 6px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 9px 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text3);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .tab-btn .tab-icon { font-size: 14px; }
+
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--accent), #5b52e8);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: var(--glow);
+  }
+
+  /* === SCROLL AREA === */
+  .scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 24px 100px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .scroll-area::-webkit-scrollbar { display: none; }
+
+  /* === SECTION HEADER === */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 16px 0 10px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .section-count {
+    font-size: 11px;
+    color: var(--text3);
+    background: var(--surface2);
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  /* === TASK CARD === */
+  .task-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .task-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 0 2px 2px 0;
+    background: var(--card-color, var(--accent));
+  }
+
+  .task-card:active { transform: scale(0.98); opacity: 0.9; }
+
+  .task-card.done {
+    opacity: 0.5;
+  }
+
+  .task-card.done .task-name { text-decoration: line-through; color: var(--text3); }
+
+  .task-time-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 44px;
+  }
+
+  .task-time {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .task-ampm {
+    font-size: 9px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+
+  .task-body { flex: 1; min-width: 0; }
+
+  .task-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .task-meta {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .task-cat {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(108,99,255,0.12);
+    color: var(--accent2);
+  }
+
+  .task-check {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    background: transparent;
+  }
+
+  .task-card.done .task-check {
+    background: var(--mint);
+    border-color: var(--mint);
+    color: #fff;
+  }
+
+  /* === MEDICINE CARD === */
+  .med-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease;
+  }
+
+  .med-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--card-color, var(--coral));
+    border-radius: 0 2px 2px 0;
+  }
+
+  .med-card:active { transform: scale(0.98); }
+
+  .med-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .med-icon-wrap {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    background: rgba(251,113,133,0.1);
+  }
+
+  .med-info { flex: 1; }
+
+  .med-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .med-dose {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+
+  .med-times {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .med-time-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border2);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--surface2);
+  }
+
+  .med-time-chip .chip-time { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
+
+  .med-time-chip.taken {
+    background: rgba(52,211,153,0.1);
+    border-color: rgba(52,211,153,0.3);
+    color: var(--mint);
+  }
+
+  .med-time-chip.taken .chip-time { color: var(--mint); }
+
+  .med-time-chip:active { transform: scale(0.96); }
+
+  /* === FAB === */
+  .fab {
+    position: fixed;
+    bottom: 80px;
+    right: 24px;
+    width: 56px; height: 56px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--accent), #5b52e8);
+    box-shadow: 0 8px 24px rgba(108,99,255,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    border: none;
+    color: white;
+    z-index: 100;
+    transition: all 0.2s ease;
+  }
+
+  .fab:active { transform: scale(0.92); box-shadow: 0 4px 12px rgba(108,99,255,0.3); }
+
+  /* === BOTTOM NAV === */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: rgba(14,17,32,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 10px 16px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    z-index: 50;
+  }
+
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 10px;
+  }
+
+  .nav-icon { font-size: 20px; line-height: 1; }
+
+  .nav-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text3);
+    transition: color 0.2s;
+  }
+
+  .nav-item.active .nav-label { color: var(--accent2); }
+  .nav-item.active .nav-icon { filter: drop-shadow(0 0 6px rgba(108,99,255,0.6)); }
+
+  /* === MODAL === */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--surface2);
+    border-radius: 24px 24px 0 0;
+    padding: 24px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+    border-top: 1px solid var(--border2);
+    max-height: 85dvh;
+    overflow-y: auto;
+  }
+
+  .modal-overlay.open .modal { transform: translateY(0); }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: var(--border2);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  .modal-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  .form-group { margin-bottom: 14px; }
+
+  .form-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text3);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .form-input {
+    width: 100%;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .form-input:focus { border-color: var(--accent); }
+
+  .form-row { display: flex; gap: 10px; }
+  .form-row .form-group { flex: 1; }
+
+  .type-selector { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .type-chip {
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--surface3);
+    color: var(--text3);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .type-chip.selected {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  .color-selector { display: flex; gap: 8px; }
+
+  .color-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+    border: 2px solid transparent;
+  }
+
+  .color-dot.selected { border-color: white; transform: scale(1.15); }
+
+  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #5b52e8);
+    color: white;
+    box-shadow: 0 4px 16px rgba(108,99,255,0.3);
+  }
+
+  .btn-secondary {
+    background: var(--surface3);
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  /* === EMPTY STATE === */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+
+  .empty-text {
+    font-size: 14px;
+    color: var(--text3);
+    line-height: 1.6;
+  }
+
+  /* === TODAY TIMELINE === */
+  .timeline-item {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 8px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 7px; top: 18px; bottom: -8px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .timeline-item:last-child::before { display: none; }
+
+  .timeline-dot {
+    position: absolute;
+    left: 0; top: 12px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--surface3);
+    border: 2px solid var(--border2);
+    z-index: 1;
+  }
+
+  .timeline-item.active-now .timeline-dot {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(108,99,255,0.5);
+  }
+
+  /* === TOAST === */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    z-index: 500;
+    transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+    box-shadow: var(--shadow);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: calc(100vw - 48px);
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* === SETTINGS PAGE === */
+  .settings-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+
+  .settings-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .settings-item:last-child { border-bottom: none; }
+  .settings-item:active { background: var(--surface2); }
+
+  .settings-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+
+  .settings-label { flex: 1; font-size: 14px; font-weight: 500; color: var(--text); }
+  .settings-value { font-size: 12px; color: var(--text3); }
+
+  .toggle {
+    width: 44px; height: 26px;
+    border-radius: 13px;
+    background: var(--surface3);
+    border: 1px solid var(--border2);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .toggle.on { background: var(--accent); border-color: var(--accent); }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: white;
+    transition: transform 0.2s ease;
+  }
+
+  .toggle.on::after { transform: translateX(18px); }
+
+  /* === ANIMATIONS === */
+  @keyframes slideIn {
+    from { transform: translateY(12px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .task-card, .med-card { animation: slideIn 0.3s ease both; }
+
+  @keyframes checkPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+  }
+
+  .check-pop { animation: checkPop 0.3s ease; }
+
+  /* iOS safe area */
+  @supports (padding-top: env(safe-area-inset-top)) {
+    .header { padding-top: calc(env(safe-area-inset-top) + 16px); }
+  }
+
+  /* === PAGE TRANSITIONS === */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Scrollbar hide */
+  .modal::-webkit-scrollbar { display: none; }
+
+  /* Times row for medicine */
+  .times-add-row {
+    display: flex; gap: 8px; align-items: center; margin-top: 6px;
+  }
+
+  .times-list { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+
+  .removable-time {
+    display: flex; align-items: center; gap: 4px;
+    padding: 4px 10px;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px; color: var(--text2);
+  }
+
+  .remove-x {
+    font-size: 14px; color: var(--text3); cursor: pointer;
+    line-height: 1;
+  }
 </style>
-
 </head>
 <body>
 
 <div id="app">
 
   <!-- HEADER -->
-
   <div class="header">
     <div class="header-top">
       <div class="logo">DayFlow</div>
@@ -834,7 +831,6 @@ line-height: 1;
   </div>
 
   <!-- TABS -->
-
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('routine')" id="tab-routine">
       <span class="tab-icon">📋</span> Routine
@@ -848,171 +844,162 @@ line-height: 1;
   </div>
 
   <!-- SCROLL AREA -->
-
   <div class="scroll-area" id="scrollArea">
 
-```
-<!-- ROUTINE PAGE -->
-<div class="page active" id="page-routine">
-  <div id="routineList"></div>
-</div>
+    <!-- ROUTINE PAGE -->
+    <div class="page active" id="page-routine">
+      <div id="routineList"></div>
+    </div>
 
-<!-- MEDS PAGE -->
-<div class="page" id="page-meds">
-  <div id="medsList"></div>
-</div>
+    <!-- MEDS PAGE -->
+    <div class="page" id="page-meds">
+      <div id="medsList"></div>
+    </div>
 
-<!-- SETTINGS PAGE -->
-<div class="page" id="page-settings">
-  <div style="height:12px"></div>
-  <div class="section-header"><div class="section-title">Notifications</div></div>
-  <div class="settings-section">
-    <div class="settings-item" onclick="toggleSetting('notifs')">
-      <div class="settings-icon" style="background:rgba(108,99,255,0.1)">🔔</div>
-      <div class="settings-label">Enable Reminders</div>
-      <div class="toggle" id="toggle-notifs"></div>
-    </div>
-    <div class="settings-item" onclick="toggleSetting('sound')">
-      <div class="settings-icon" style="background:rgba(56,189,248,0.1)">🔊</div>
-      <div class="settings-label">Sound Alerts</div>
-      <div class="toggle on" id="toggle-sound"></div>
-    </div>
-    <div class="settings-item" onclick="toggleSetting('vibrate')">
-      <div class="settings-icon" style="background:rgba(52,211,153,0.1)">📳</div>
-      <div class="settings-label">Vibration</div>
-      <div class="toggle on" id="toggle-vibrate"></div>
-    </div>
-  </div>
+    <!-- SETTINGS PAGE -->
+    <div class="page" id="page-settings">
+      <div style="height:12px"></div>
+      <div class="section-header"><div class="section-title">Notifications</div></div>
+      <div class="settings-section">
+        <div class="settings-item" onclick="toggleSetting('notifs')">
+          <div class="settings-icon" style="background:rgba(108,99,255,0.1)">🔔</div>
+          <div class="settings-label">Enable Reminders</div>
+          <div class="toggle" id="toggle-notifs"></div>
+        </div>
+        <div class="settings-item" onclick="toggleSetting('sound')">
+          <div class="settings-icon" style="background:rgba(56,189,248,0.1)">🔊</div>
+          <div class="settings-label">Sound Alerts</div>
+          <div class="toggle on" id="toggle-sound"></div>
+        </div>
+        <div class="settings-item" onclick="toggleSetting('vibrate')">
+          <div class="settings-icon" style="background:rgba(52,211,153,0.1)">📳</div>
+          <div class="settings-label">Vibration</div>
+          <div class="toggle on" id="toggle-vibrate"></div>
+        </div>
+      </div>
 
-  <div class="section-header"><div class="section-title">Display</div></div>
-  <div class="settings-section">
-    <div class="settings-item" onclick="toggleSetting('24h')">
-      <div class="settings-icon" style="background:rgba(251,191,36,0.1)">🕐</div>
-      <div class="settings-label">24-Hour Clock</div>
-      <div class="toggle" id="toggle-24h"></div>
-    </div>
-    <div class="settings-item">
-      <div class="settings-icon" style="background:rgba(251,113,133,0.1)">🌟</div>
-      <div class="settings-label">App Version</div>
-      <div class="settings-value">DayFlow v1.0</div>
-    </div>
-  </div>
+      <div class="section-header"><div class="section-title">Display</div></div>
+      <div class="settings-section">
+        <div class="settings-item" onclick="toggleSetting('24h')">
+          <div class="settings-icon" style="background:rgba(251,191,36,0.1)">🕐</div>
+          <div class="settings-label">24-Hour Clock</div>
+          <div class="toggle" id="toggle-24h"></div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-icon" style="background:rgba(251,113,133,0.1)">🌟</div>
+          <div class="settings-label">App Version</div>
+          <div class="settings-value">DayFlow v1.0</div>
+        </div>
+      </div>
 
-  <div class="section-header"><div class="section-title">Data</div></div>
-  <div class="settings-section">
-    <div class="settings-item" onclick="clearTodayDone()">
-      <div class="settings-icon" style="background:rgba(251,191,36,0.1)">🔄</div>
-      <div class="settings-label">Reset Today's Progress</div>
-      <div class="settings-value">↩</div>
+      <div class="section-header"><div class="section-title">Data</div></div>
+      <div class="settings-section">
+        <div class="settings-item" onclick="clearTodayDone()">
+          <div class="settings-icon" style="background:rgba(251,191,36,0.1)">🔄</div>
+          <div class="settings-label">Reset Today's Progress</div>
+          <div class="settings-value">↩</div>
+        </div>
+        <div class="settings-item" onclick="clearAll()">
+          <div class="settings-icon" style="background:rgba(251,113,133,0.1)">🗑️</div>
+          <div class="settings-label">Clear All Data</div>
+          <div class="settings-value" style="color:var(--coral)">Delete</div>
+        </div>
+      </div>
+      <div style="height:20px"></div>
+      <div style="text-align:center;font-size:11px;color:var(--text3);line-height:1.8">
+        Built for GitHub Pages<br>DayFlow — Daily Routine & Reminder<br>© 2025 <a href="https://github.com/jit8jit-arch" target="_blank" style="color:var(--accent2);text-decoration:none">@jit8jit-arch</a>
+      </div>
     </div>
-    <div class="settings-item" onclick="clearAll()">
-      <div class="settings-icon" style="background:rgba(251,113,133,0.1)">🗑️</div>
-      <div class="settings-label">Clear All Data</div>
-      <div class="settings-value" style="color:var(--coral)">Delete</div>
-    </div>
-  </div>
-  <div style="height:20px"></div>
-  <div style="text-align:center;font-size:11px;color:var(--text3);line-height:1.8">
-    Built for GitHub Pages<br>DayFlow — Daily Routine & Reminder<br>© 2025 Jithin
-  </div>
-</div>
-```
 
   </div>
 
   <!-- FAB -->
-
-<button class="fab" id="fabBtn" onclick="openAddModal()">+</button>
+  <button class="fab" id="fabBtn" onclick="openAddModal()">+</button>
 
 </div>
 
 <!-- ADD MODAL -->
-
 <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
   <div class="modal" id="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modalTitle">Add Routine Task</div>
 
-```
-<div class="form-group">
-  <label class="form-label">Type</label>
-  <div class="type-selector">
-    <div class="type-chip selected" onclick="selectType('routine')" id="typeRoutine">📋 Routine</div>
-    <div class="type-chip" onclick="selectType('medicine')" id="typeMedicine">💊 Medicine</div>
-    <div class="type-chip" onclick="selectType('supplement')" id="typeSupplement">🧴 Supplement</div>
-  </div>
-</div>
+    <div class="form-group">
+      <label class="form-label">Type</label>
+      <div class="type-selector">
+        <div class="type-chip selected" onclick="selectType('routine')" id="typeRoutine">📋 Routine</div>
+        <div class="type-chip" onclick="selectType('medicine')" id="typeMedicine">💊 Medicine</div>
+        <div class="type-chip" onclick="selectType('supplement')" id="typeSupplement">🧴 Supplement</div>
+      </div>
+    </div>
 
-<div class="form-group">
-  <label class="form-label">Name</label>
-  <input class="form-input" id="taskName" placeholder="e.g. Morning Walk, Vitamin D..." />
-</div>
+    <div class="form-group">
+      <label class="form-label">Name</label>
+      <input class="form-input" id="taskName" placeholder="e.g. Morning Walk, Vitamin D..." />
+    </div>
 
-<div class="form-row">
-  <div class="form-group">
-    <label class="form-label">Time</label>
-    <input class="form-input" type="time" id="taskTime" />
-  </div>
-  <div class="form-group" id="doseGroup">
-    <label class="form-label">Dose / Notes</label>
-    <input class="form-input" id="taskDose" placeholder="e.g. 500mg, 1 tab" />
-  </div>
-</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Time</label>
+        <input class="form-input" type="time" id="taskTime" />
+      </div>
+      <div class="form-group" id="doseGroup">
+        <label class="form-label">Dose / Notes</label>
+        <input class="form-input" id="taskDose" placeholder="e.g. 500mg, 1 tab" />
+      </div>
+    </div>
 
-<!-- Multi-time for meds -->
-<div class="form-group" id="multiTimeGroup" style="display:none">
-  <label class="form-label">Reminder Times</label>
-  <div class="times-list" id="timesList"></div>
-  <div class="times-add-row">
-    <input class="form-input" type="time" id="addTimeInput" style="flex:1" />
-    <button class="btn btn-secondary" style="flex:0;padding:11px 14px;font-size:18px" onclick="addTimeToList()">+</button>
-  </div>
-</div>
+    <!-- Multi-time for meds -->
+    <div class="form-group" id="multiTimeGroup" style="display:none">
+      <label class="form-label">Reminder Times</label>
+      <div class="times-list" id="timesList"></div>
+      <div class="times-add-row">
+        <input class="form-input" type="time" id="addTimeInput" style="flex:1" />
+        <button class="btn btn-secondary" style="flex:0;padding:11px 14px;font-size:18px" onclick="addTimeToList()">+</button>
+      </div>
+    </div>
 
-<div class="form-group">
-  <label class="form-label">Category</label>
-  <select class="form-input" id="taskCategory">
-    <option value="Morning">🌅 Morning</option>
-    <option value="Afternoon">☀️ Afternoon</option>
-    <option value="Evening">🌆 Evening</option>
-    <option value="Night">🌙 Night</option>
-    <option value="Anytime">⏰ Anytime</option>
-  </select>
-</div>
+    <div class="form-group">
+      <label class="form-label">Category</label>
+      <select class="form-input" id="taskCategory">
+        <option value="Morning">🌅 Morning</option>
+        <option value="Afternoon">☀️ Afternoon</option>
+        <option value="Evening">🌆 Evening</option>
+        <option value="Night">🌙 Night</option>
+        <option value="Anytime">⏰ Anytime</option>
+      </select>
+    </div>
 
-<div class="form-group">
-  <label class="form-label">Colour</label>
-  <div class="color-selector">
-    <div class="color-dot selected" style="background:#6c63ff" data-color="#6c63ff" onclick="selectColor('#6c63ff')"></div>
-    <div class="color-dot" style="background:#fb7185" data-color="#fb7185" onclick="selectColor('#fb7185')"></div>
-    <div class="color-dot" style="background:#34d399" data-color="#34d399" onclick="selectColor('#34d399')"></div>
-    <div class="color-dot" style="background:#fbbf24" data-color="#fbbf24" onclick="selectColor('#fbbf24')"></div>
-    <div class="color-dot" style="background:#38bdf8" data-color="#38bdf8" onclick="selectColor('#38bdf8')"></div>
-    <div class="color-dot" style="background:#f472b6" data-color="#f472b6" onclick="selectColor('#f472b6')"></div>
-  </div>
-</div>
+    <div class="form-group">
+      <label class="form-label">Colour</label>
+      <div class="color-selector">
+        <div class="color-dot selected" style="background:#6c63ff" data-color="#6c63ff" onclick="selectColor('#6c63ff')"></div>
+        <div class="color-dot" style="background:#fb7185" data-color="#fb7185" onclick="selectColor('#fb7185')"></div>
+        <div class="color-dot" style="background:#34d399" data-color="#34d399" onclick="selectColor('#34d399')"></div>
+        <div class="color-dot" style="background:#fbbf24" data-color="#fbbf24" onclick="selectColor('#fbbf24')"></div>
+        <div class="color-dot" style="background:#38bdf8" data-color="#38bdf8" onclick="selectColor('#38bdf8')"></div>
+        <div class="color-dot" style="background:#f472b6" data-color="#f472b6" onclick="selectColor('#f472b6')"></div>
+      </div>
+    </div>
 
-<div class="form-group">
-  <label class="form-label">Repeat</label>
-  <select class="form-input" id="taskRepeat">
-    <option value="daily">Every Day</option>
-    <option value="weekdays">Weekdays Only</option>
-    <option value="weekends">Weekends Only</option>
-    <option value="once">Just Today</option>
-  </select>
-</div>
+    <div class="form-group">
+      <label class="form-label">Repeat</label>
+      <select class="form-input" id="taskRepeat">
+        <option value="daily">Every Day</option>
+        <option value="weekdays">Weekdays Only</option>
+        <option value="weekends">Weekends Only</option>
+        <option value="once">Just Today</option>
+      </select>
+    </div>
 
-<div class="modal-actions">
-  <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-  <button class="btn btn-primary" onclick="saveItem()">Save</button>
-</div>
-```
-
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveItem()">Save</button>
+    </div>
   </div>
 </div>
 
 <!-- TOAST -->
-
 <div class="toast" id="toast">
   <span id="toastIcon">✅</span>
   <span id="toastMsg">Done!</span>
@@ -1521,6 +1508,5 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 </script>
-
 </body>
 </html>
