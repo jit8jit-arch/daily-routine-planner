@@ -2,7 +2,7 @@
   "name": "DayFlow — Routine & Reminder",
   "short_name": "DayFlow",
   "description": "Daily routine timetable and medicine / supplement reminder",
-  "start_url": "./index.html",
+  "start_url": "https://jit8jit-arch.github.io/dayflow/index.html",
   "display": "standalone",
   "background_color": "#07080f",
   "theme_color": "#0a0f1e",
