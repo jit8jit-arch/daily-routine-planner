@@ -27,7 +27,7 @@ _(Drag & drop them in the GitHub web interface)_
 4. Click **Save**
 
 Your app will be live at:
-**`https://YOUR_USERNAME.github.io/dayflow/`**
+**`https://jit8jit-arch.github.io/dayflow/`**
 
 ---
 
@@ -71,5 +71,5 @@ To reset to defaults, go to **Settings → Clear All Data**.
 
 ---
 
-Built for Jithin | Dubai, UAE  
+Built by [@jit8jit-arch](https://github.com/jit8jit-arch) | Dubai, UAE  
 © 2025 — Free to use
